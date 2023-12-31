@@ -18,7 +18,7 @@ public:
 	void Render(void);
 	void DrawMenu(void);
 	int	 AddItem(int nIndex, char szTitle[30], float* value, float flMin, float flMax, float flStep, bool isClassHead);
-
+    void HandleControls();
 	//private:
 	bool bMenuActive;
 	int iMenuIndex;

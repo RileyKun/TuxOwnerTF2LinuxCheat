@@ -507,7 +507,10 @@ public:
 	ClientModeShared *ClientMode;
 	CHLClient *Client;
 };
-
+//#include "CConfig.h"
+//#include "Colors.h"
+//extern CMenuConfig gMenuVar;
 extern CInterfaces gInts;
 extern CPlayerVariables gPlayerVars;
 extern COffsets gOffsets;
+//extern ShitColors gColors;

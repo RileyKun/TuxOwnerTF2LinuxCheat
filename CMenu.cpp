@@ -1,10 +1,11 @@
 #include "CMenu.h"
 #include "SDK.h"
 #include "CDrawManager.h"
-#include "Util.h"
-
+#include "Colors.h"
+#include "CConfig.h"
+#include <cstring>
 CCheatMenu gCheatMenu;
-
+CMenuConfig gMenuVar;
 int ScreenH;
 int ScreenW;
 
@@ -45,26 +46,26 @@ void CCheatMenu::Render(void)
 
 	int i = 0;
 
-	i = AddItem(i, "Aimbot", &gCvars.aimbot_switch, 0, 1, 1, true);
-	if (gCvars.aimbot_switch)
+	i = AddItem(i, "Aimbot", &gMenuVar.aimbot_switch, 0, 1, 1, true);
+	if (gMenuVar.aimbot_switch)
 	{
-		i = AddItem(i, " - Enabled", &gCvars.aimbot_active, 0, 1, 1, false);
-		i = AddItem(i, " - Silent", &gCvars.aimbot_silent, 0, 1, 1, false);
-		i = AddItem(i, " - Key", &gCvars.aimbot_key, 0, 8, 1, false);
-		i = AddItem(i, " - Hitscan", &gCvars.aimbot_hitscan, 0, 1, 1, false);
-		i = AddItem(i, " - Hitbox", &gCvars.aimbot_hitbox, 0, 18, 1, false);
-		i = AddItem(i, " - Autoshoot", &gCvars.aimbot_autoshoot, 0, 1, 1, false);
+		i = AddItem(i, " - Enabled", &gMenuVar.aimbot_active, 0, 1, 1, false);
+		i = AddItem(i, " - Silent", &gMenuVar.aimbot_silent, 0, 1, 1, false);
+		i = AddItem(i, " - Key", &gMenuVar.aimbot_key, 0, 8, 1, false);
+		i = AddItem(i, " - Hitscan", &gMenuVar.aimbot_hitscan, 0, 1, 1, false);
+		i = AddItem(i, " - Hitbox", &gMenuVar.aimbot_hitbox, 0, 18, 1, false);
+		i = AddItem(i, " - Autoshoot", &gMenuVar.aimbot_autoshoot, 0, 1, 1, false);
 	}
 
-	i = AddItem(i, "Triggerbot", &gCvars.triggerbot_switch, 0, 1, 1, true);
-	if (gCvars.triggerbot_switch)
+	i = AddItem(i, "Triggerbot", &gMenuVar.triggerbot_switch, 0, 1, 1, true);
+	if (gMenuVar.triggerbot_switch)
 	{
-		i = AddItem(i, " - Enabled", &gCvars.triggerbot_active, 0, 1, 1, false);
-		i = AddItem(i, " - Key", &gCvars.triggerbot_key, 0, 8, 1, false);
-		i = AddItem(i, " - Head Only", &gCvars.triggerbot_headonly, 0, 1, 1, false);
+		i = AddItem(i, " - Enabled", &gMenuVar.triggerbot_active, 0, 1, 1, false);
+		i = AddItem(i, " - Key", &gMenuVar.triggerbot_key, 0, 8, 1, false);
+		i = AddItem(i, " - Head Only", &gMenuVar.triggerbot_headonly, 0, 1, 1, false);
 	}
 
-	i = AddItem(i, "Player List", &gCvars.playerlist_switch, 0, 1, 1, true);
+	i = AddItem(i, "Player List", &gMenuVar.playerlist_switch, 0, 1, 1, true);
 	for (int p = 1; p <= gInts.Engine->GetMaxClients(); p++)
 	{
 		if (p == me)
@@ -81,69 +82,118 @@ void CCheatMenu::Render(void)
 		char szString[256];
 		sprintf(szString, " - %s", pInfo.name);
 
-		if (gCvars.playerlist_switch)
-			i = AddItem(i, szString, &gCvars.PlayerMode[pPlayer->GetIndex()], 0, 2, 1, false);
+		if (gMenuVar.playerlist_switch)
+			i = AddItem(i, szString, &gMenuVar.PlayerMode[pPlayer->GetIndex()], 0, 2, 1, false);
 	}
 
 
-	i = AddItem(i, "ESP", &gCvars.esp_switch, 0, 1, 1, true);
-	if (gCvars.esp_switch)
+	i = AddItem(i, "ESP", &gMenuVar.esp_switch, 0, 1, 1, true);
+	if (gMenuVar.esp_switch)
 	{
-		i = AddItem(i, " - Enabled", &gCvars.esp_active, 0, 1, 1, false);
-		i = AddItem(i, " - Enemies Only", &gCvars.esp_enemyonly, 0, 1, 1, false);
-		i = AddItem(i, " - Box", &gCvars.esp_box, 0, 1, 1, false);
-		i = AddItem(i, " - Name", &gCvars.esp_name, 0, 1, 1, false);
-		i = AddItem(i, " - Class", &gCvars.esp_class, 0, 1, 1, false);
-		i = AddItem(i, " - Health", &gCvars.esp_health, 0, 3, 1, false);
-		i = AddItem(i, " - Bones", &gCvars.esp_bones, 0, 3, 1, false);
+		i = AddItem(i, " - Enabled", &gMenuVar.esp_active, 0, 1, 1, false);
+		i = AddItem(i, " - Enemies Only", &gMenuVar.esp_enemyonly, 0, 1, 1, false);
+		i = AddItem(i, " - Box", &gMenuVar.esp_box, 0, 1, 1, false);
+		i = AddItem(i, " - Name", &gMenuVar.esp_name, 0, 1, 1, false);
+		i = AddItem(i, " - Class", &gMenuVar.esp_class, 0, 1, 1, false);
+		i = AddItem(i, " - Health", &gMenuVar.esp_health, 0, 3, 1, false);
+		i = AddItem(i, " - Bones", &gMenuVar.esp_bones, 0, 3, 1, false);
 	}
 
-	i = AddItem(i, "Settings", &gCvars.settings_switch, 0, 1, 1, true);
-	if (gCvars.settings_switch)
+	i = AddItem(i, "Settings", &gMenuVar.settings_switch, 0, 1, 1, true);
+	if (gMenuVar.settings_switch)
 	{
-		i = AddItem(i, " - Menu Postion X", &gCvars.iMenu_Pos_X, 0, ScreenW, 25, false);
-		i = AddItem(i, " - Menu Postion Y", &gCvars.iMenu_Pos_Y, 0, ScreenH, 25, false);
+		i = AddItem(i, " - Menu Postion X", &gMenuVar.iMenu_Pos_X, 0, ScreenW, 25, false);
+		i = AddItem(i, " - Menu Postion Y", &gMenuVar.iMenu_Pos_Y, 0, ScreenH, 25, false);
 	}
 
-	i = AddItem(i, "Misc", &gCvars.misc_switch, 0, 1, 1, true);
-	if (gCvars.misc_switch)
+	i = AddItem(i, "Misc", &gMenuVar.misc_switch, 0, 1, 1, true);
+	if (gMenuVar.misc_switch)
 	{
-		i = AddItem(i, " - Bunnyhop", &gCvars.misc_bunnyhop, 0, 1, 1, false);
-		i = AddItem(i, " - Autostrafe", &gCvars.misc_autostrafe, 0, 1, 1, false);
-		i = AddItem(i, " - Noisemaker Spam", &gCvars.misc_noisemaker_spam, 0, 1, 1, false);
-		i = AddItem(i, " - Anti Anti Aim", &gCvars.misc_anti_anti_aim, 0, 1, 1, false);
+		i = AddItem(i, " - Bunnyhop", &gMenuVar.misc_bunnyhop, 0, 1, 1, false);
+		i = AddItem(i, " - Autostrafe", &gMenuVar.misc_autostrafe, 0, 1, 1, false);
+		i = AddItem(i, " - Noisemaker Spam", &gMenuVar.misc_noisemaker_spam, 0, 1, 1, false);
+		i = AddItem(i, " - Anti Anti Aim", &gMenuVar.misc_anti_anti_aim, 0, 1, 1, false);
 
-		if (gCvars.misc_anti_anti_aim) {
-			i = AddItem(i, " - Allow Unsafe Pitch Correction", &gCvars.misc_anti_anti_aim_unsafe_x, 0, 1, 1, false);
+		if (gMenuVar.misc_anti_anti_aim) {
+			i = AddItem(i, " - Allow Unsafe Pitch Correction", &gMenuVar.misc_anti_anti_aim_unsafe_x, 0, 1, 1, false);
 		}
 	}
 
 	iMenuItems = i;
 }
+#include <SDL2/SDL.h>
+const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+void CCheatMenu::HandleControls(void)
+{
+    
+    //if (eventcode == 1)
+	//{
+	if (keystate[SDL_SCANCODE_INSERT]) //insert
+	{
+		gCheatMenu.bMenuActive = !gCheatMenu.bMenuActive;
+    }
+
+	if (gCheatMenu.bMenuActive)
+	{
+		if (keystate[SDL_SCANCODE_UP]) // Up
+		{
+
+			if (gCheatMenu.iMenuIndex > 0) gCheatMenu.iMenuIndex--;
+			else gCheatMenu.iMenuIndex = gCheatMenu.iMenuItems - 1;
+			//return 0;
+		}
+		if (keystate[SDL_SCANCODE_DOWN]) // Down
+		{
+			if (gCheatMenu.iMenuIndex < gCheatMenu.iMenuItems - 1) gCheatMenu.iMenuIndex++;
+			else gCheatMenu.iMenuIndex = 0;
+			//return 0;
+		}
+		if (keystate[SDL_SCANCODE_LEFT]) // Left
+		{
+			if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value)
+			{
+				gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] -= gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flStep;
+				if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] < gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMin)
+					gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] = gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMax;
+			}
+		}
+		if (keystate[SDL_SCANCODE_RIGHT]) // Right
+		{
+			if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value)
+			{
+				gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] += gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flStep;
+				if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] > gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMax)
+					gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] = gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMin;
+			}
+		}
+
+	}
+	//}
+}
 
 void CCheatMenu::DrawMenu(void)
 {
-	int x = gCvars.iMenu_Pos_X,
+	int x = gMenuVar.iMenu_Pos_X,
 		xx = x + 150,
-		y = gCvars.iMenu_Pos_Y,
+		y = gMenuVar.iMenu_Pos_Y,
 		w = 200,
 		h = 14;
 
 	CBaseEntity *pLocal = GetBaseEntity(me);
 
-	Color clrColor = gDrawManager.GetPlayerColor(pLocal);
+	int clrColor = COLORBLUTM;
 
-	gDrawManager.DrawRect(x, y - (h + 4), w, iMenuItems * h + 21, Color(20, 20, 20, 128));
+	gDrawManager.DrawRect(x, y - (h + 4), w, iMenuItems * h + 21, COLORCODE(20, 20, 20, 128));
 	gDrawManager.OutlineRect(x, y - (h + 4), w, (h + 4), clrColor);
 
 	gDrawManager.DrawRect(x + 2, y - (h + 4), w - 4, (h + 4), clrColor);
-	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), Color(0, 0, 0, 255)); // test
-	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), Color(0, 0, 0, 255)); // test
+	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
+	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 
 	gDrawManager.OutlineRect(x, y - (h + 4), w, iMenuItems * h + 21, clrColor);
 
-	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (iMenuItems * h + 21) + 2, Color(0, 0, 0, 255));
-	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (iMenuItems * h + 21) - 2, Color(0, 0, 0, 255));
+	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (iMenuItems * h + 21) + 2, COLORCODE(0, 0, 0, 255));
+	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (iMenuItems * h + 21) - 2, COLORCODE(0, 0, 0, 255));
 
 	gDrawManager.DrawString(x + 4, y - 16, clrColor, "Polly.xyz");
 
@@ -164,47 +214,47 @@ void CCheatMenu::DrawMenu(void)
 			}
 			else
 			{
-				gDrawManager.DrawString(x + 4, y + (h * i), Color::White(), pMenu[i].szTitle);
+				gDrawManager.DrawString(x + 4, y + (h * i), COLORWHITE, pMenu[i].szTitle);
 
 				if (!strcmp(pMenu[i].szTitle, " - Health"))
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::White() : Color(105, 105, 105, 255), "%s", szHealthModes[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szHealthModes[(int)pMenu[i].value[0]]);
 				}
 
 				else if (!strcmp(pMenu[i].szTitle, " - Bones"))
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::White() : Color(105, 105, 105, 255), "%s", szBoneModes[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szBoneModes[(int)pMenu[i].value[0]]);
 				}
 
 				else if (pMenu[i].flMax == 18)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), Color::White(), "%s", szHitboxes[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, "%s", szHitboxes[(int)pMenu[i].value[0]]);
 				}
 
 				else if (pMenu[i].flMax == 8)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), Color::White(), "%s", szKeyNames[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, "%s", szKeyNames[(int)pMenu[i].value[0]]);
 				}
 
 				else if (pMenu[i].flMax == 2)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), Color::White(), !pMenu[i].value[0] ? "Ignore" : pMenu[i].value[0] == 1 ? "Normal" : "Rage");
+					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, !pMenu[i].value[0] ? "Ignore" : pMenu[i].value[0] == 1 ? "Normal" : "Rage");
 				}
 
 				else if (pMenu[i].flMax == 1)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::White() : Color(105, 105, 105, 255), pMenu[i].value[0] ? "ON" : "OFF");
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), pMenu[i].value[0] ? "ON" : "OFF");
 				}
 
 				else if (pMenu[i].value[0] >= 1 && pMenu[i].flMax > 1)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] >= 1 ? Color::White() : Color(105, 105, 105, 255), "%0.0f", pMenu[i].value[0]);
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] >= 1 ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%0.0f", pMenu[i].value[0]);
 				}
 			}
 		}
 		else
 		{
-			gDrawManager.DrawRect(x + 1, y + (h * i), w - 2, h, Color(255, 255, 255, 80));
+			gDrawManager.DrawRect(x + 1, y + (h * i), w - 2, h, COLORCODE(255, 255, 255, 80));
 
 			if (pMenu[i].isClassSwitch)
 			{

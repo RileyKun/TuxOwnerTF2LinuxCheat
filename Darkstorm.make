@@ -16,14 +16,14 @@ ifeq ($(config),debug_x32)
   TARGET = $(TARGETDIR)/libDarkstorm.so
   OBJDIR = obj/x32/Debug
   DEFINES += -DDEBUG
-  INCLUDES +=
-  FORCE_INCLUDE +=
+  INCLUDES += -lSDL2
+  FORCE_INCLUDE += -lSDL2
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -fPIC -fpermissive -fPIC -std=c++11
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -fPIC -fpermissive -fPIC -std=c++11 -lSDL2
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS +=
-  LDDEPS +=
+  LIBS += -lSDL2
+  LDDEPS += -lSDL2
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -43,14 +43,14 @@ ifeq ($(config),release_x32)
   TARGET = $(TARGETDIR)/libDarkstorm.so
   OBJDIR = obj/x32/Release
   DEFINES += -DNDEBUG
-  INCLUDES +=
-  FORCE_INCLUDE +=
+  INCLUDES += -lSDL2
+  FORCE_INCLUDE += -lSDL2
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O2 -fPIC -fpermissive -fPIC -std=c++11
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O2 -fPIC -fpermissive -fPIC -std=c++11 -lSDL2
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS +=
-  LDDEPS +=
+  LDDEPS += -lSDL2
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -s -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -74,6 +74,7 @@ OBJECTS := \
 	$(OBJDIR)/VMTHooks.o \
   $(OBJDIR)/CNetVars.o \
   $(OBJDIR)/ESP.o \
+  $(OBJDIR)/CMenu.o \
 
 RESOURCES := \
 
@@ -156,6 +157,9 @@ $(OBJDIR)/CNetVars.o: CNetVars.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ESP.o: ESP.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/CMenu.o: CMenu.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

@@ -3,6 +3,7 @@
 #include "CDrawManager.h"
 #include "ESP.h"
 #include "CNetVars.h"
+#include "CMenu.h"
 CScreenSize gScreenSize;
 //===================================================================================
 void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepaint, bool allowForce )
@@ -26,6 +27,15 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 		
 		if ( vguiMatSystemTopPanel == vguiPanel ) //If we're on MatSystemTopPanel, call our drawing code.
 		{
+			/*
+			Draw the Menu on the menu. Doesnt really matter where we draw it tho lol
+			*/
+			gCheatMenu.HandleControls(); // call the Handle Controls function to handle controls of the menu.. Duh!
+			if (gCheatMenu.bMenuActive)
+			{
+				gCheatMenu.DrawMenu();
+				gCheatMenu.Render();
+			}
 			if( gInts.Engine->IsDrawingLoadingImage() || !gInts.Engine->IsInGame( ) || !gInts.Engine->IsConnected() || gInts.Engine->Con_IsVisible( ) || gInts.Engine->IsTakingScreenshot( ) )
 			{
 				return; //We don't want to draw at the menu.
