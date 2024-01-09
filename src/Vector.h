@@ -4,7 +4,12 @@
 
 #define CHECK_VALID( _v ) 0
 #define Assert( _exp ) ((void)0)
-
+#define PI 3.14159265358979323846f
+#define DEG2RAD(x) ((float)(x) * (float)((float)(PI) / 180.0f))
+#define RAD2DEG(x) ((float)(x) * (float)(180.0f / (float)(PI)))
+#define square(x) (x * x)
+#define RADPI 57.295779513082f
+#define SQUARE(a) a *a
 class Vector					
 {
 public:
@@ -329,4 +334,72 @@ inline float Vector::Dot( const Vector& vOther ) const
 	const Vector& a = *this;
 	
 	return( a.x*vOther.x + a.y*vOther.y + a.z*vOther.z ); 
+}
+inline void VectorAngles(Vector &forward, Vector &angles)
+{
+	float tmp, yaw, pitch;
+
+	if (forward.y == 0 && forward.x == 0)
+	{
+		yaw = 0;
+
+		if (forward.z > 0)
+			pitch = 270;
+		else
+			pitch = 90;
+	}
+	else
+	{
+		yaw = RAD2DEG(atan2f(forward.y, forward.x));
+
+		if (yaw < 0)
+			yaw += 360;
+
+		tmp = forward.Length2D();
+		pitch = RAD2DEG(atan2f(-forward.z, tmp));
+
+		if (pitch < 0)
+			pitch += 360;
+	}
+
+	angles[0] = pitch;
+	angles[1] = yaw;
+	angles[2] = 0;
+}
+
+inline void ClampAngle(Vector& qaAng)
+{
+	while (qaAng.x > 89)
+		qaAng.x -= 180;
+
+	while (qaAng.x < -89)
+		qaAng.x += 180;
+
+	while (qaAng.y > 180)
+		qaAng.y -= 360;
+
+	while (qaAng.y < -180)
+		qaAng.y += 360;
+
+	while (qaAng.z != 0)
+		qaAng.z = 0;
+}
+
+inline void AngleVectors(const Vector &angles, Vector *forward)
+{
+
+	Assert(s_bMathlibInitialized);
+	Assert(forward);
+
+	float sp, sy, cp, cy;
+
+	sy = sinf(DEG2RAD(angles[1])); // yaw
+	cy = cosf(DEG2RAD(angles[1]));
+
+	sp = sinf(DEG2RAD(angles[0])); // pitch
+	cp = cosf(DEG2RAD(angles[0]));
+
+	forward->x = cp * cy;
+	forward->y = cp * sy;
+	forward->z = -sp;
 }

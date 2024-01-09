@@ -5,7 +5,6 @@
 #include "CConfig.h"
 #include <cstring>
 CCheatMenu gCheatMenu;
-CMenuConfig gMenuVar;
 int ScreenH;
 int ScreenW;
 
@@ -46,26 +45,26 @@ void CCheatMenu::Render(void)
 
 	int i = 0;
 
-	i = AddItem(i, "Aimbot", &gMenuVar.aimbot_switch, 0, 1, 1, true);
-	if (gMenuVar.aimbot_switch)
+	i = AddItem(i, "Aimbot", &gCheatMenu.aimbot_switch, 0, 1, 1, true);
+	if (gCheatMenu.aimbot_switch)
 	{
-		i = AddItem(i, " - Enabled", &gMenuVar.aimbot_active, 0, 1, 1, false);
-		i = AddItem(i, " - Silent", &gMenuVar.aimbot_silent, 0, 1, 1, false);
-		i = AddItem(i, " - Key", &gMenuVar.aimbot_key, 0, 8, 1, false);
-		i = AddItem(i, " - Hitscan", &gMenuVar.aimbot_hitscan, 0, 1, 1, false);
-		i = AddItem(i, " - Hitbox", &gMenuVar.aimbot_hitbox, 0, 18, 1, false);
-		i = AddItem(i, " - Autoshoot", &gMenuVar.aimbot_autoshoot, 0, 1, 1, false);
+		i = AddItem(i, " - Enabled", &gCheatMenu.aimbot_active, 0, 1, 1, false);
+		i = AddItem(i, " - Silent", &gCheatMenu.aimbot_silent, 0, 1, 1, false);
+		i = AddItem(i, " - Key", &gCheatMenu.aimbot_key, 0, 8, 1, false);
+		i = AddItem(i, " - Hitscan", &gCheatMenu.aimbot_hitscan, 0, 1, 1, false);
+		i = AddItem(i, " - Hitbox", &gCheatMenu.aimbot_hitbox, 0, 18, 1, false);
+		i = AddItem(i, " - Autoshoot", &gCheatMenu.aimbot_autoshoot, 0, 1, 1, false);
 	}
 
-	i = AddItem(i, "Triggerbot", &gMenuVar.triggerbot_switch, 0, 1, 1, true);
-	if (gMenuVar.triggerbot_switch)
+	i = AddItem(i, "Triggerbot", &gCheatMenu.triggerbot_switch, 0, 1, 1, true);
+	if (gCheatMenu.triggerbot_switch)
 	{
-		i = AddItem(i, " - Enabled", &gMenuVar.triggerbot_active, 0, 1, 1, false);
-		i = AddItem(i, " - Key", &gMenuVar.triggerbot_key, 0, 8, 1, false);
-		i = AddItem(i, " - Head Only", &gMenuVar.triggerbot_headonly, 0, 1, 1, false);
+		i = AddItem(i, " - Enabled", &gCheatMenu.triggerbot_active, 0, 1, 1, false);
+		i = AddItem(i, " - Key", &gCheatMenu.triggerbot_key, 0, 8, 1, false);
+		i = AddItem(i, " - Head Only", &gCheatMenu.triggerbot_headonly, 0, 1, 1, false);
 	}
 
-	i = AddItem(i, "Player List", &gMenuVar.playerlist_switch, 0, 1, 1, true);
+	i = AddItem(i, "Player List", &gCheatMenu.playerlist_switch, 0, 1, 1, true);
 	for (int p = 1; p <= gInts.Engine->GetMaxClients(); p++)
 	{
 		if (p == me)
@@ -82,40 +81,40 @@ void CCheatMenu::Render(void)
 		char szString[256];
 		sprintf(szString, " - %s", pInfo.name);
 
-		if (gMenuVar.playerlist_switch)
-			i = AddItem(i, szString, &gMenuVar.PlayerMode[pPlayer->GetIndex()], 0, 2, 1, false);
+		if (gCheatMenu.playerlist_switch)
+			i = AddItem(i, szString, &gCheatMenu.PlayerMode[pPlayer->GetIndex()], 0, 2, 1, false);
 	}
 
 
-	i = AddItem(i, "ESP", &gMenuVar.esp_switch, 0, 1, 1, true);
-	if (gMenuVar.esp_switch)
+	i = AddItem(i, "ESP", &gCheatMenu.esp_switch, 0, 1, 1, true);
+	if (gCheatMenu.esp_switch)
 	{
-		i = AddItem(i, " - Enabled", &gMenuVar.esp_active, 0, 1, 1, false);
-		i = AddItem(i, " - Enemies Only", &gMenuVar.esp_enemyonly, 0, 1, 1, false);
-		i = AddItem(i, " - Box", &gMenuVar.esp_box, 0, 1, 1, false);
-		i = AddItem(i, " - Name", &gMenuVar.esp_name, 0, 1, 1, false);
-		i = AddItem(i, " - Class", &gMenuVar.esp_class, 0, 1, 1, false);
-		i = AddItem(i, " - Health", &gMenuVar.esp_health, 0, 3, 1, false);
-		i = AddItem(i, " - Bones", &gMenuVar.esp_bones, 0, 3, 1, false);
+		i = AddItem(i, " - Enabled", &gCheatMenu.esp_active, 0, 1, 1, false);
+		i = AddItem(i, " - Enemies Only", &gCheatMenu.esp_enemyonly, 0, 1, 1, false);
+		i = AddItem(i, " - Box", &gCheatMenu.esp_box, 0, 1, 1, false);
+		i = AddItem(i, " - Name", &gCheatMenu.esp_name, 0, 1, 1, false);
+		i = AddItem(i, " - Class", &gCheatMenu.esp_class, 0, 1, 1, false);
+		i = AddItem(i, " - Health", &gCheatMenu.esp_health, 0, 3, 1, false);
+		i = AddItem(i, " - Bones", &gCheatMenu.esp_bones, 0, 3, 1, false);
 	}
 
-	i = AddItem(i, "Settings", &gMenuVar.settings_switch, 0, 1, 1, true);
-	if (gMenuVar.settings_switch)
+	i = AddItem(i, "Settings", &gCheatMenu.settings_switch, 0, 1, 1, true);
+	if (gCheatMenu.settings_switch)
 	{
-		i = AddItem(i, " - Menu Postion X", &gMenuVar.iMenu_Pos_X, 0, ScreenW, 25, false);
-		i = AddItem(i, " - Menu Postion Y", &gMenuVar.iMenu_Pos_Y, 0, ScreenH, 25, false);
+		i = AddItem(i, " - Menu Postion X", &gCheatMenu.iMenu_Pos_X, 0, ScreenW, 25, false);
+		i = AddItem(i, " - Menu Postion Y", &gCheatMenu.iMenu_Pos_Y, 0, ScreenH, 25, false);
 	}
 
-	i = AddItem(i, "Misc", &gMenuVar.misc_switch, 0, 1, 1, true);
-	if (gMenuVar.misc_switch)
+	i = AddItem(i, "Misc", &gCheatMenu.misc_switch, 0, 1, 1, true);
+	if (gCheatMenu.misc_switch)
 	{
-		i = AddItem(i, " - Bunnyhop", &gMenuVar.misc_bunnyhop, 0, 1, 1, false);
-		i = AddItem(i, " - Autostrafe", &gMenuVar.misc_autostrafe, 0, 1, 1, false);
-		i = AddItem(i, " - Noisemaker Spam", &gMenuVar.misc_noisemaker_spam, 0, 1, 1, false);
-		i = AddItem(i, " - Anti Anti Aim", &gMenuVar.misc_anti_anti_aim, 0, 1, 1, false);
+		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
+		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
+		i = AddItem(i, " - Noisemaker Spam", &gCheatMenu.misc_noisemaker_spam, 0, 1, 1, false);
+		i = AddItem(i, " - Anti Anti Aim", &gCheatMenu.misc_anti_anti_aim, 0, 1, 1, false);
 
-		if (gMenuVar.misc_anti_anti_aim) {
-			i = AddItem(i, " - Allow Unsafe Pitch Correction", &gMenuVar.misc_anti_anti_aim_unsafe_x, 0, 1, 1, false);
+		if (gCheatMenu.misc_anti_anti_aim) {
+			i = AddItem(i, " - Allow Unsafe Pitch Correction", &gCheatMenu.misc_anti_anti_aim_unsafe_x, 0, 1, 1, false);
 		}
 	}
 
@@ -173,9 +172,9 @@ void CCheatMenu::HandleControls(void)
 
 void CCheatMenu::DrawMenu(void)
 {
-	int x = gMenuVar.iMenu_Pos_X,
+	int x = iMenu_Pos_X,
 		xx = x + 150,
-		y = gMenuVar.iMenu_Pos_Y,
+		y = iMenu_Pos_Y,
 		w = 200,
 		h = 14;
 

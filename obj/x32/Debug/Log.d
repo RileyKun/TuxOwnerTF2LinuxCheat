@@ -1,15 +1,17 @@
-obj/x32/Debug/Log.o: Log.cpp SDK.h windowsTypes.h CGlobalVars.h \
- CSignature.h Log.h VMTHooks.h Vector.h WeaponList.h dt_recv2.h \
- dt_common2.h getvfunc.h CNetVars.h
-SDK.h:
-windowsTypes.h:
-CGlobalVars.h:
-CSignature.h:
-Log.h:
-VMTHooks.h:
-Vector.h:
-WeaponList.h:
-dt_recv2.h:
-dt_common2.h:
-getvfunc.h:
-CNetVars.h:
+obj/x32/Debug/Log.o: src/Log.cpp src/SDK.h src/windowsTypes.h \
+ src/CGlobalVars.h src/CSignature.h src/Log.h src/VMTHooks.h src/Vector.h \
+ src/WeaponList.h src/dt_recv2.h src/dt_common2.h src/getvfunc.h \
+ src/CNetVars.h src/SDK/studiohd.h
+src/SDK.h:
+src/windowsTypes.h:
+src/CGlobalVars.h:
+src/CSignature.h:
+src/Log.h:
+src/VMTHooks.h:
+src/Vector.h:
+src/WeaponList.h:
+src/dt_recv2.h:
+src/dt_common2.h:
+src/getvfunc.h:
+src/CNetVars.h:
+src/SDK/studiohd.h:

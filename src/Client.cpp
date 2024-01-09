@@ -1,6 +1,6 @@
 #include "SDK.h"
 #include "Client.h"
-
+#include "Features/Triggerbot/Triggerbotterino.h"
 //============================================================================================
 bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd *pCommand)
 {
@@ -21,6 +21,7 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 		//{
 		//	pCommand->buttons |= IN_ATTACK; //Set the IN_ATTACK flag.
 		//} ^ no one wants this shit ffs
+		gTrigger.Run(pLocal, pCommand);
 	}
 	catch(...)
 	{

@@ -16,6 +16,7 @@
 #include <thread>
 #include <wchar.h>
 #include "CNetVars.h"
+#include "SDK/studiohd.h"
 using namespace std;
 
 typedef void *(*CreateInterface_t)(const char *, int *);
@@ -24,7 +25,9 @@ typedef void *(*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 using namespace toolkit;
 class CNetVars;
 typedef float matrix3x4[3][4];
-
+class CGameTrace;
+typedef CGameTrace trace_t;
+class CBaseCombatWeapon;
 #define me gInts.Engine->GetLocalPlayer()
 #define GetBaseEntity gInts.EntList->GetClientEntity
 #define MASK_AIMBOT 0x200400B
@@ -113,67 +116,73 @@ public:
 
 class CBaseEntity
 {
-public:
-    Vector &GetAbsOrigin()
-    {
-        typedef Vector &(*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 11)(this);
-    }
-    Vector &GetAbsAngles()
-    {
-        typedef Vector &(*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 12)(this);
-    }
-    void GetWorldSpaceCenter(Vector &vWorldSpaceCenter)
-    {
-        Vector vMin, vMax;
-        this->GetRenderBounds(vMin, vMax);
-        vWorldSpaceCenter = this->GetAbsOrigin();
-        vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
-    }
-    void *GetModel()
-    {
-        typedef void *(*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 55)(this);
-    }
-    bool SetupBones(matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask,
-                    float currentTime)
-    {
-        typedef bool (*OriginalFn)(void *, matrix3x4 *, int, int, float);
-        return getvfunc<OriginalFn>(this, 96)(
-            this, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
-    }
-    ClientClass *GetClientClass()
-    {
-        typedef ClientClass *(*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 17)(this);
-    }
-    bool IsDormant()
-    {
-        typedef bool (*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 75)(this);
-    }
-	bool IsAlive() /*From 8dcc/tf2-cheat*/
-    {
-        typedef bool (*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 183)(this);
-    }
-    int GetIndex()
-    {
-        typedef int (*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 79)(this);
-    }
-	int GetHealth() /* From 8dcc/tf2-cheat */ /* there's a netvar for it but im too lazy.*/
-    {
-        typedef int (*OriginalFn)(void *);
-        return getvfunc<OriginalFn>(this, 152)(this);
-    }
-    void GetRenderBounds(Vector &mins, Vector &maxs)
-    {
-        typedef void (*OriginalFn)(void *, Vector &, Vector &);
-        getvfunc<OriginalFn>(this, 60)(this, mins, maxs);
-    }
-
+public: // everything is defined on CBaseEntity.cpp
+	Vector &CBaseEntity::GetAbsOrigin()
+	{
+    	typedef Vector &(*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 11)(this);
+	}
+	bool IsDormant()
+	{
+		void* pNetworkable = (void*)(this + 0x8);
+		typedef bool(*OriginalFn)(void*);
+		return getvfunc<OriginalFn>(pNetworkable, 8)(pNetworkable);
+	}
+	Vector &CBaseEntity::GetAbsAngles()
+	{
+    	typedef Vector &(*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 12)(this);
+	}
+	void CBaseEntity::GetWorldSpaceCenter(Vector &vWorldSpaceCenter)
+	{
+    	Vector vMin, vMax;
+    	this->GetRenderBounds(vMin, vMax);
+    	vWorldSpaceCenter = this->GetAbsOrigin();
+    	vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
+	}
+	bool CBaseEntity::SetupBones(matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
+	{
+		void* pRenderable = (void*)(this + 0x4);
+		typedef bool(*OriginalFn)(void *, matrix3x4*, int, int, float);
+		return getvfunc<OriginalFn>(pRenderable, 16)(pRenderable, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
+	}
+	ClientClass *CBaseEntity::GetClientClass()
+	{
+    	typedef ClientClass *(*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 17)(this);
+	}
+	bool CBaseEntity::IsAlive() /*From 8dcc/tf2-cheat*/
+	{
+    	typedef bool (*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 183)(this);
+	}
+	int CBaseEntity::GetIndex()
+	{
+    	typedef int (*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 79)(this);
+	}
+	int CBaseEntity::GetHealth() /* From 8dcc/tf2-cheat */ /* there's a netvar for it but im too lazy.*/
+	{
+    	typedef int (*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 152)(this);
+	}
+	void CBaseEntity::GetRenderBounds(Vector &mins, Vector &maxs)
+	{
+    	typedef void (*OriginalFn)(void *, Vector &, Vector &);
+    	getvfunc<OriginalFn>(this, 60)(this, mins, maxs);
+	}
+	int CBaseEntity::GetCond()
+	{
+		DYNVAR_RETURN(int, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCond");
+	}
+	Vector CBaseEntity::GetEyePosition()
+	{
+		DYNVAR_RETURN(Vector, this, "DT_BasePlayer", "localdata", "m_vecViewOffset[0]") + this->GetAbsOrigin();
+	}
+	int CBaseEntity::GetTeamNum()
+	{
+		DYNVAR_RETURN(int, this, "DT_BaseEntity", "m_iTeamNum");
+	}
 };
 
 class EngineClient
@@ -346,6 +355,18 @@ public:
 	}
 };
 
+class CBaseCombatWeapon : public CBaseEntity
+{
+public:
+	int GetMaxClip1();
+	int GetMaxClip2();
+	int GetSlot();
+	char *GetName();
+	char *GetPrintName();
+	int GetItemDefinitionIndex();
+};
+
+
 enum playercontrols
 {
 	IN_ATTACK	= (1 << 0),
@@ -497,6 +518,234 @@ public:
 	}
 };
 
+class alignas(16)VectorAligned : public Vector
+{
+public:
+	inline VectorAligned(void) {};
+
+	inline VectorAligned(float X, float Y, float Z)
+	{
+		Init(X, Y, Z);
+	}
+
+	explicit VectorAligned(const Vector& vOther)
+	{
+		Init(vOther.x, vOther.y, vOther.z);
+	}
+
+	VectorAligned& operator=(const Vector& vOther)
+	{
+		Init(vOther.x, vOther.y, vOther.z);
+		return *this;
+	}
+
+	float w;
+};
+
+struct Ray_t
+{
+	VectorAligned   m_Start;
+	VectorAligned   m_Delta;
+	VectorAligned   m_StartOffset;
+	VectorAligned   m_Extents;
+
+	bool    m_IsRay;
+	bool    m_IsSwept;
+
+	void Init(Vector& start, Vector& end)
+	{
+		m_Delta = end - start;
+
+		m_IsSwept = (m_Delta.Length2DSqr() != 0);
+
+		m_Extents.Init();
+		m_IsRay = true;
+
+		m_StartOffset.Init();
+		m_Start = start;
+	}
+
+	void Init(Vector& start, Vector& end, Vector& mins, Vector& maxs)
+	{
+		m_Delta = end - start;
+
+		m_IsSwept = (m_Delta.Length2DSqr() != 0);
+
+		m_Extents = maxs - mins;
+		m_Extents *= 0.5f;
+		m_IsRay = (m_Extents.Length2DSqr() < 1e-6);
+
+		m_StartOffset = mins + maxs;
+		m_StartOffset *= 0.5f;
+		m_Start = start - m_StartOffset;
+		m_StartOffset *= -1.0f;
+	}
+};
+
+struct cplane_t // windows : byte linux: unsigned char
+{
+	Vector normal;
+	float	dist;
+	unsigned char	type;
+	unsigned char	signbits;
+	unsigned char	pad[2];
+};
+
+struct csurface_t
+{
+	const char		*name;
+	short			surfaceProps;
+	unsigned short	flags;
+};
+
+enum SurfaceFlags_t
+{
+	DISPSURF_FLAG_SURFACE = (1 << 0),
+	DISPSURF_FLAG_WALKABLE = (1 << 1),
+	DISPSURF_FLAG_BUILDABLE = (1 << 2),
+	DISPSURF_FLAG_SURFPROP1 = (1 << 3),
+	DISPSURF_FLAG_SURFPROP2 = (1 << 4),
+};
+
+enum TraceType_t
+{
+	TRACE_EVERYTHING = 0,
+	TRACE_WORLD_ONLY,				// NOTE: This does *not* test static props!!!
+	TRACE_ENTITIES_ONLY,			// NOTE: This version will *not* test static props
+	TRACE_EVERYTHING_FILTER_PROPS,	// NOTE: This version will pass the IHandleEntity for props through the filter, unlike all other filters
+};
+
+class ITraceFilter
+{
+public:
+	virtual bool ShouldHitEntity(void *pEntity, int contentsMask) = 0;
+	virtual TraceType_t	GetTraceType() const = 0;
+};
+
+class CTraceFilter : public ITraceFilter
+{
+public:
+	virtual bool ShouldHitEntity(void* pEntityHandle, int contentsMask)
+	{
+		CBaseEntity *pEntity = (CBaseEntity *)pEntityHandle;
+
+		switch (pEntity->GetClientClass()->iClassID)
+		{
+		case 55: // Portal Window
+		case 64: // Spawn Door visualizers
+		case 117: // Sniper Dots
+		case 225: // Medigun Shield
+			return false;
+			break;
+		}
+
+		return !(pEntityHandle == pSkip);
+	}
+
+	virtual TraceType_t	GetTraceType() const
+	{
+		return TRACE_EVERYTHING;
+	}
+
+	void* pSkip;
+};
+
+class CBaseTrace
+{
+public:
+	bool IsDispSurface(void) { return ((dispFlags & DISPSURF_FLAG_SURFACE) != 0); }
+	bool IsDispSurfaceWalkable(void) { return ((dispFlags & DISPSURF_FLAG_WALKABLE) != 0); }
+	bool IsDispSurfaceBuildable(void) { return ((dispFlags & DISPSURF_FLAG_BUILDABLE) != 0); }
+	bool IsDispSurfaceProp1(void) { return ((dispFlags & DISPSURF_FLAG_SURFPROP1) != 0); }
+	bool IsDispSurfaceProp2(void) { return ((dispFlags & DISPSURF_FLAG_SURFPROP2) != 0); }
+
+public:
+	Vector			startpos;
+	Vector			endpos;
+	cplane_t		plane;
+
+	float			fraction;
+
+	int				contents;
+	unsigned short	dispFlags;
+
+	bool			allsolid;
+	bool			startsolid;
+
+	CBaseTrace() {}
+
+private:
+	CBaseTrace(const CBaseTrace& vOther);
+};
+
+class CGameTrace : public CBaseTrace
+{
+public:
+	bool DidHitWorld() const;
+
+	bool DidHitNonWorldEntity() const;
+
+	int GetEntityIndex() const;
+
+	bool DidHit() const
+	{
+		return fraction < 1 || allsolid || startsolid;
+	}
+
+public:
+	float			fractionleftsolid;
+	csurface_t		surface;
+
+	int				hitgroup;
+
+	short			physicsbone;
+
+	CBaseEntity*	m_pEnt;
+	int				hitbox;
+
+	CGameTrace() {}
+	CGameTrace(const CGameTrace& vOther);
+};
+
+
+class IEngineTrace
+{
+public:	  //We really only need this I guess...
+	void TraceRay(const Ray_t& ray, unsigned int fMask, ITraceFilter* pTraceFilter, trace_t* pTrace)//5
+	{
+		typedef void(*TraceRayFn)(void*, const Ray_t&, unsigned int, ITraceFilter*, trace_t*);
+		return getvfunc<TraceRayFn>(this, 4)(this, ray, fMask, pTraceFilter, pTrace);
+	}
+};
+
+class IVModelInfo
+{
+public:
+	uintptr_t *GetModel(int index)
+	{
+		typedef uintptr_t*(*GetModelFn)(void*, int);
+		return getvfunc<GetModelFn>(this, 1)(this, index);
+	}
+
+	int	GetModelIndex(const char* name)
+	{
+		typedef int( * GetModelIndexFn)(void*, const char*);
+		return getvfunc< GetModelIndexFn >(this, 2)(this, name);
+	}
+
+	const char* GetModelName(const uintptr_t* model)
+	{
+		typedef const char* ( * GetModelNameFn)(void*, const uintptr_t*);
+		return getvfunc< GetModelNameFn >(this, 3)(this, model);
+	}
+
+	studiohdr_t* GetStudiomodel(const uintptr_t *mod)
+	{
+		typedef studiohdr_t* ( * GetStudiomodelFn)(void*, const uintptr_t*);
+		return getvfunc< GetStudiomodelFn >(this, 28)(this, mod);
+	}
+};
+
 class CInterfaces
 {
 public:
@@ -506,6 +755,8 @@ public:
 	ISurface *Surface;
 	ClientModeShared *ClientMode;
 	CHLClient *Client;
+	IEngineTrace* EngineTrace;
+	IVModelInfo* ModelInfo;
 };
 //#include "CConfig.h"
 //#include "Colors.h"

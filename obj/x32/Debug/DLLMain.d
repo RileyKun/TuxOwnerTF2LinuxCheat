@@ -1,17 +1,19 @@
-obj/x32/Debug/DLLMain.o: DLLMain.cpp SDK.h windowsTypes.h CGlobalVars.h \
- CSignature.h Log.h VMTHooks.h Vector.h WeaponList.h dt_recv2.h \
- dt_common2.h getvfunc.h CNetVars.h Client.h Panels.h
-SDK.h:
-windowsTypes.h:
-CGlobalVars.h:
-CSignature.h:
-Log.h:
-VMTHooks.h:
-Vector.h:
-WeaponList.h:
-dt_recv2.h:
-dt_common2.h:
-getvfunc.h:
-CNetVars.h:
-Client.h:
-Panels.h:
+obj/x32/Debug/DLLMain.o: src/DLLMain.cpp src/SDK.h src/windowsTypes.h \
+ src/CGlobalVars.h src/CSignature.h src/Log.h src/VMTHooks.h src/Vector.h \
+ src/WeaponList.h src/dt_recv2.h src/dt_common2.h src/getvfunc.h \
+ src/CNetVars.h src/SDK/studiohd.h src/Client.h src/Panels.h
+src/SDK.h:
+src/windowsTypes.h:
+src/CGlobalVars.h:
+src/CSignature.h:
+src/Log.h:
+src/VMTHooks.h:
+src/Vector.h:
+src/WeaponList.h:
+src/dt_recv2.h:
+src/dt_common2.h:
+src/getvfunc.h:
+src/CNetVars.h:
+src/SDK/studiohd.h:
+src/Client.h:
+src/Panels.h:

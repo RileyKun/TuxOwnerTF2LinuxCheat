@@ -25,19 +25,22 @@ void mainThread()
 		//Grab the factorys from their resptive module's EAT.
 
 		//system("ls -l . > /home/josh/log.txt");
-		
-		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
-		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
-		XASSERT(gInts.Client);
-		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
-		XASSERT(gInts.EntList);
-		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
-		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
-		XASSERT(gInts.Engine);
 		VGUIFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/vguimatsurface.so" ), "CreateInterface" );
+		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
+		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
+		
+		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
+		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
+		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
+		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
+		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		XASSERT(gInts.Surface);
-
+		XASSERT(gInts.Client);
+		XASSERT(gInts.Engine);
+		XASSERT(gInts.EntList);
+		XASSERT(gInts.EngineTrace);
+		XASSERT(gInts.ModelInfo);
 		//Setup the Panel hook so we can draw.
 		if( !gInts.Panels )
 		{

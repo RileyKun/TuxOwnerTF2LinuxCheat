@@ -1,21 +1,23 @@
-obj/x32/Debug/CMenu.o: CMenu.cpp CMenu.h SDK.h windowsTypes.h \
- CGlobalVars.h CSignature.h Log.h VMTHooks.h Vector.h WeaponList.h \
- dt_recv2.h dt_common2.h getvfunc.h CNetVars.h CDrawManager.h Panels.h \
- Colors.h CConfig.h
-CMenu.h:
-SDK.h:
-windowsTypes.h:
-CGlobalVars.h:
-CSignature.h:
-Log.h:
-VMTHooks.h:
-Vector.h:
-WeaponList.h:
-dt_recv2.h:
-dt_common2.h:
-getvfunc.h:
-CNetVars.h:
-CDrawManager.h:
-Panels.h:
-Colors.h:
-CConfig.h:
+obj/x32/Debug/CMenu.o: src/CMenu.cpp src/CMenu.h src/SDK.h \
+ src/windowsTypes.h src/CGlobalVars.h src/CSignature.h src/Log.h \
+ src/VMTHooks.h src/Vector.h src/WeaponList.h src/dt_recv2.h \
+ src/dt_common2.h src/getvfunc.h src/CNetVars.h src/SDK/studiohd.h \
+ src/CDrawManager.h src/Panels.h src/Colors.h src/CConfig.h
+src/CMenu.h:
+src/SDK.h:
+src/windowsTypes.h:
+src/CGlobalVars.h:
+src/CSignature.h:
+src/Log.h:
+src/VMTHooks.h:
+src/Vector.h:
+src/WeaponList.h:
+src/dt_recv2.h:
+src/dt_common2.h:
+src/getvfunc.h:
+src/CNetVars.h:
+src/SDK/studiohd.h:
+src/CDrawManager.h:
+src/Panels.h:
+src/Colors.h:
+src/CConfig.h:

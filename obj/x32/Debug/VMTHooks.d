@@ -1,2 +1,2 @@
-obj/x32/Debug/VMTHooks.o: VMTHooks.cpp VMTHooks.h
-VMTHooks.h:
+obj/x32/Debug/VMTHooks.o: src/VMTHooks.cpp src/VMTHooks.h
+src/VMTHooks.h:

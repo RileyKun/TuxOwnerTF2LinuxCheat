@@ -1,5 +1,5 @@
-#include "SDK.h"
-#include "CDrawManager.h"
+#include "../../SDK.h"
+#include "../../CDrawManager.h"
 class ESP
 {
 public:
