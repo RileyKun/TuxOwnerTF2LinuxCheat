@@ -118,11 +118,24 @@ public:
 	bool hasbeenpredicted; //3C;
 };
 
+enum tf_classes
+{
+	TF2_Scout	= 1,
+	TF2_Soldier  = 3,
+	TF2_Pyro	 = 7,
+	TF2_Demoman  = 4,
+	TF2_Heavy	= 6,
+	TF2_Engineer = 9,
+	TF2_Medic	= 5,
+	TF2_Sniper   = 2,
+	TF2_Spy		 = 8,
+};
+
 class CBaseEntity
 {
 public: 
 
-	Vector &CBaseEntity::GetAbsOrigin()
+	Vector &GetAbsOrigin()
 	{
     	typedef Vector &(*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 11)(this);
@@ -133,67 +146,67 @@ public:
 		typedef bool(*OriginalFn)(void*);
 		return getvfunc<OriginalFn>(pNetworkable, 8)(pNetworkable);
 	}
-	Vector &CBaseEntity::GetAbsAngles()
+	Vector &GetAbsAngles()
 	{
     	typedef Vector &(*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 12)(this);
 	}
-	Vector &CBaseEntity::GetShootPos() // DONT ASK, I DONT KNOW IF THIS WILL WORK! (Pasted from 8dcc's tf2 cheat)
+	Vector &GetShootPos() // DONT ASK, I DONT KNOW IF THIS WILL WORK! (Pasted from 8dcc's tf2 cheat)
 	{
     	typedef Vector &(*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 302)(this);
 	}
-	void CBaseEntity::GetWorldSpaceCenter(Vector &vWorldSpaceCenter)
+	void GetWorldSpaceCenter(Vector &vWorldSpaceCenter)
 	{
     	Vector vMin, vMax;
     	this->GetRenderBounds(vMin, vMax);
     	vWorldSpaceCenter = this->GetAbsOrigin();
     	vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
 	}
-	bool CBaseEntity::SetupBones(matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
+	bool SetupBones(matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
 	{
 		void* pRenderable = (void*)(this + 0x4);
 		typedef bool(*OriginalFn)(void *, matrix3x4*, int, int, float);
 		return getvfunc<OriginalFn>(pRenderable, 16)(pRenderable, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
 	}
-	ClientClass *CBaseEntity::GetClientClass()
+	ClientClass *GetClientClass()
 	{
     	typedef ClientClass *(*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 17)(this);
 	}
-	bool CBaseEntity::IsAlive() /*From 8dcc/tf2-cheat*/
+	bool IsAlive() /*From 8dcc/tf2-cheat*/
 	{
     	typedef bool (*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 183)(this);
 	}
-	int CBaseEntity::GetIndex()
+	int GetIndex()
 	{
     	typedef int (*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 79)(this);
 	}
-	int CBaseEntity::GetHealth() /* From 8dcc/tf2-cheat */ /* there's a netvar for it but im too lazy.*/
+	int GetHealth() /* From 8dcc/tf2-cheat */ /* there's a netvar for it but im too lazy.*/
 	{
     	typedef int (*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 152)(this);
 	}
-	void CBaseEntity::GetRenderBounds(Vector &mins, Vector &maxs)
+	void GetRenderBounds(Vector &mins, Vector &maxs)
 	{
     	typedef void (*OriginalFn)(void *, Vector &, Vector &);
     	getvfunc<OriginalFn>(this, 60)(this, mins, maxs);
 	}
-	int CBaseEntity::GetCond()
+	int GetCond()
 	{
 		DYNVAR_RETURN(int, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCond");
 	}
-	Vector CBaseEntity::GetEyePosition()
+	Vector GetEyePosition()
 	{
 		DYNVAR_RETURN(Vector, this, "DT_BasePlayer", "localdata", "m_vecViewOffset[0]") + this->GetAbsOrigin();
 	}
-	int CBaseEntity::GetTeamNum()
+	int GetTeamNum()
 	{
 		DYNVAR_RETURN(int, this, "DT_BaseEntity", "m_iTeamNum");
 	}
-	int CBaseEntity::GetClassNum()
+	int GetClassNum()
 	{
 		DYNVAR_RETURN(int, this, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
 	}
@@ -215,6 +228,27 @@ public:
 		void* pRenderable = (void*)(this + 0x4);
 		return pRenderable;
 	}
+	matrix3x4& GetRgflCoordinateFrame()
+	{
+		void* pRenderable = static_cast<void*>(this + 0x4);
+		typedef matrix3x4 &(*OriginalFn)(void *);
+		return getvfunc<OriginalFn>(pRenderable, 34)(pRenderable);
+	}
+
+	int GetMaxHealth()
+	{
+		typedef int(*OriginalFn)(void*);	
+		return getvfunc<OriginalFn>(this, 107)(this);
+	}
+	Vector CBaseEntity::GetCollideableMins()
+	{
+		DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "m_Collision", "m_vecMins");
+	}
+
+	Vector CBaseEntity::GetCollideableMaxs()
+	{
+		DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "m_Collision", "m_vecMaxs");
+	}
 	//m_vecOrigin          = gNetvars.get_offset("DT_BaseEntity", "m_vecOrigin");
 	//Vector GetHitboxPosition(CBaseEntity* pEntity, int iHitbox);
 	uintptr_t* GetModel()
@@ -231,6 +265,38 @@ public:
 		return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
 	}
 	*/
+	char* szGetClass()
+	{
+		DYNVAR(iClass, int, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
+
+		switch (iClass.GetValue(this))
+		{
+			case TF2_Scout:
+				return "Scout";
+			case TF2_Soldier:
+				return "Soldier";
+			case TF2_Pyro:
+				return "Pyro";
+			case TF2_Demoman:
+				return "Demoman";
+			case TF2_Heavy:
+				return "Heavy";
+			case TF2_Engineer:
+				return "Engineer";
+			case TF2_Medic:
+				return "Medic";
+			case TF2_Sniper:
+				return "Sniper";
+			case TF2_Spy:
+				return "Spy";
+			default:
+				return "Unknown class";
+		}
+
+		return "Unknown class"; //Just in case
+	}
+	CBaseCombatWeapon* GetActiveWeapon();
+
 };
 /*
 enum hitboxes
@@ -552,18 +618,7 @@ enum tf_cond
 	TFCondEx_IgnoreStates = (TFCondEx_PyroHeal)
 };
 
-enum tf_classes
-{
-	TF2_Scout	= 1,
-	TF2_Soldier  = 3,
-	TF2_Pyro	 = 7,
-	TF2_Demoman  = 4,
-	TF2_Heavy	= 6,
-	TF2_Engineer = 9,
-	TF2_Medic	= 5,
-	TF2_Sniper   = 2,
-	TF2_Spy		 = 8,
-};
+
 
 enum source_lifestates
 {

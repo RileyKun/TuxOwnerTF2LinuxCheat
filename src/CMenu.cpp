@@ -29,8 +29,12 @@ enum ESettingsHitboxes {
 */
 char* szHitboxes[] =
 {
-	"Head", "Pelvis", "Arms", "Legs"
+	"Auto", "Head", "Pelvis", "Lower Torse", "Lower Mid. Torse", "Upper Mid. Torse", "Upper Torse",
+	"Left Upper Arm", "Left Lower Arm", "Left Hand", "Right Upper Arm",
+	"Right Lower Arm", "Right Hand", "Left Hip", "Left Knee", "Left Foot",
+	"Right Hip", "Right Knee", "Right Foot",
 };
+
 
 int CCheatMenu::AddItem(int nIndex, char szTitle[30], float* value, float flMin, float flMax, float flStep, bool isClassSwitch)
 {
@@ -95,6 +99,21 @@ void CCheatMenu::Render(void)
 	if (gCheatMenu.esp_switch)
 	{
 		i = AddItem(i, " - Enabled", &gCheatMenu.esp_active, 0, 1, 1, false);
+		i = AddItem(i, " - Enemies Only", &gCheatMenu.esp_enemyonly, 0, 1, 1, false);
+		i = AddItem(i, " - Box", &gCheatMenu.esp_box, 0, 1, 1, false);
+		i = AddItem(i, " - Name", &gCheatMenu.esp_name, 0, 1, 1, false);
+		i = AddItem(i, " - Class", &gCheatMenu.esp_class, 0, 1, 1, false);
+		i = AddItem(i, " - Health", &gCheatMenu.esp_health, 0, 3, 1, false);
+		i = AddItem(i, " - Health", &gCheatMenu.esp_cond, 0, 3, 1, false);
+		//i = AddItem(i, " - Bones", &gCvars.esp_bones, 0, 3, 1, false);
+	}
+	i = AddItem(i , "Priorites", &gCheatMenu.priorties_switch, 0,1,1, true);
+
+	if (gCheatMenu.priorties_switch)
+	{
+		i = AddItem(i, "- Ignore Cloaked", &gCheatMenu.priorties_ignorecloaked, 0,1,1, false);
+		i = AddItem(i, "- Ignore Taunting", &gCheatMenu.priorties_ignoretaunting, 0,1,1, false);
+		i = AddItem(i, "- Ignore Disguised", &gCheatMenu.priorties_ignoretaunting, 0,1,1, false);
 	}
 
 	i = AddItem(i, "Settings", &gCheatMenu.settings_switch, 0, 1, 1, true);
@@ -109,12 +128,6 @@ void CCheatMenu::Render(void)
 	{
 		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
 		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
-		//i = AddItem(i, " - Noisemaker Spam", &gCheatMenu.misc_noisemaker_spam, 0, 1, 1, false);
-		//i = AddItem(i, " - Anti Anti Aim", &gCheatMenu.misc_anti_anti_aim, 0, 1, 1, false);
-
-		//if (gCheatMenu.misc_anti_anti_aim) {
-		//	i = AddItem(i, " - Allow Unsafe Pitch Correction", &gCheatMenu.misc_anti_anti_aim_unsafe_x, 0, 1, 1, false);
-		//}
 	}
 
 	iMenuItems = i;
@@ -126,12 +139,13 @@ void CCheatMenu::HandleControls(void)
     // added sleep due to the key pressing being "too fast" 
 	float flCurTime = gInts.Engine->Time();
 	static float flNextSend = 0.0f;
+	static float thesleeptime = 0.1f;
     //if (eventcode == 1)
 	//{
 		
 	if (keystate[SDL_SCANCODE_INSERT] && flCurTime > flNextSend) //insert
 	{
-		flNextSend = (flCurTime + 0.5f);
+		flNextSend = (flCurTime + thesleeptime);
 		gCheatMenu.bMenuActive = !gCheatMenu.bMenuActive;
     }
 
@@ -139,14 +153,14 @@ void CCheatMenu::HandleControls(void)
 	{
 		if (keystate[SDL_SCANCODE_UP] && flCurTime > flNextSend) // Up
 		{
-			flNextSend = (flCurTime + 0.5f);
+			flNextSend = (flCurTime + thesleeptime);
 			if (gCheatMenu.iMenuIndex > 0) gCheatMenu.iMenuIndex--;
 			else gCheatMenu.iMenuIndex = gCheatMenu.iMenuItems - 1;
 			//return 0;
 		}
 		if (keystate[SDL_SCANCODE_DOWN] && flCurTime > flNextSend) // Down
 		{
-			flNextSend = (flCurTime + 0.5f);
+			flNextSend = (flCurTime + thesleeptime);
 			if (gCheatMenu.iMenuIndex < gCheatMenu.iMenuItems - 1) gCheatMenu.iMenuIndex++;
 			else gCheatMenu.iMenuIndex = 0;
 			//return 0;
@@ -155,7 +169,7 @@ void CCheatMenu::HandleControls(void)
 		{
 			if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value && flCurTime > flNextSend)
 			{
-				flNextSend = (flCurTime + 0.5f);
+				flNextSend = (flCurTime + thesleeptime);
 				gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] -= gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flStep;
 				if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] < gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMin)
 					gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] = gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMax;
@@ -165,7 +179,7 @@ void CCheatMenu::HandleControls(void)
 		{
 			if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value && flCurTime > flNextSend)
 			{
-				flNextSend = (flCurTime + 0.5f);
+				flNextSend = (flCurTime + thesleeptime);
 				gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] += gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flStep;
 				if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] > gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMax)
 					gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] = gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMin;

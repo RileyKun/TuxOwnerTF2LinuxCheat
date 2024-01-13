@@ -189,6 +189,18 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			pEntity->GetCond() & TFCond_UberchargeFading ||
 			pEntity->GetCond() & TFCond_Bonked)
 			continue;
+        if (pEntity->GetCond() & TFCond_Cloaked && gCheatMenu.priorties_ignorecloaked)
+        {
+            continue;
+        }
+        if (pEntity->GetCond() & TFCond_Taunting && gCheatMenu.priorties_ignoretaunting)
+        {
+            continue;
+        }
+        if (pEntity->GetCond() & TFCond_Disguised && gCheatMenu.priorties_ignoredisguised)
+        {
+            continue;
+        }
 
 		float flDistToTarget = (vLocal - vEntity).Length();
         double minimalDistance = 99999.0;
@@ -213,8 +225,6 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 				iBestTarget = i;
 			}
 		}
-		if (gCheatMenu.PlayerMode[i] == 2) //always aim at rage targets first
-			return i;
 	}
 
 	return iBestTarget;
@@ -348,4 +358,5 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (gCheatMenu.aimbot_autoshoot)
 		pCommand->buttons |= IN_ATTACK;
+    
 }

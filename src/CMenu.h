@@ -50,6 +50,7 @@ public:
 	float esp_enemyonly;
 	float esp_box;
 	float esp_name;
+	float esp_cond;
 	float esp_class;
 	float esp_health;
 	float esp_bones;
@@ -68,6 +69,11 @@ public:
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
+
+	float priorties_switch;
+	float priorties_ignorecloaked;
+	float priorties_ignoretaunting;
+	float priorties_ignoredisguised;
 };
 
 extern CCheatMenu gCheatMenu;
