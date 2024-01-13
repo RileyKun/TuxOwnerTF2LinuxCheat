@@ -5,6 +5,7 @@ class ESP
 public:
     void StartThisshit(CBaseEntity* pLocal);
     void ActualfreakinESP(CBaseEntity* pEntity);
+    int  GetPlayerColor(CBaseEntity* pPlayer);
 };
 
 extern ESP gESP;

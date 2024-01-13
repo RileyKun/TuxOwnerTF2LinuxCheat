@@ -274,7 +274,11 @@ inline float Vector::NormalizeInPlace()
 	v.x *= iradius;
 	v.y *= iradius;
 	v.z *= iradius;
+
+	return iradius;
 }
+
+
 //===============================================
 inline Vector Vector::operator+(const Vector& v) const	
 { 

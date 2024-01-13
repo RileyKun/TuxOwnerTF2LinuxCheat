@@ -16,7 +16,7 @@
 #include <thread>
 #include <wchar.h>
 #include "CNetVars.h"
-#include "SDK/studiohd.h"
+#include "SDK/studiohdr.h"
 using namespace std;
 
 typedef void *(*CreateInterface_t)(const char *, int *);
@@ -44,7 +44,11 @@ class CBaseCombatWeapon;
 #define SQUARE(a) a *a
 #define BLU_TEAM 3
 #define RED_TEAM 2
-
+struct old_movement_t {
+	Vector angle;
+	float fwd;
+	float sdm;
+};
 typedef struct player_info_s
 {
 	char name[32];
@@ -116,7 +120,8 @@ public:
 
 class CBaseEntity
 {
-public: // everything is defined on CBaseEntity.cpp
+public: 
+
 	Vector &CBaseEntity::GetAbsOrigin()
 	{
     	typedef Vector &(*OriginalFn)(void *);
@@ -132,6 +137,11 @@ public: // everything is defined on CBaseEntity.cpp
 	{
     	typedef Vector &(*OriginalFn)(void *);
     	return getvfunc<OriginalFn>(this, 12)(this);
+	}
+	Vector &CBaseEntity::GetShootPos() // DONT ASK, I DONT KNOW IF THIS WILL WORK! (Pasted from 8dcc's tf2 cheat)
+	{
+    	typedef Vector &(*OriginalFn)(void *);
+    	return getvfunc<OriginalFn>(this, 302)(this);
 	}
 	void CBaseEntity::GetWorldSpaceCenter(Vector &vWorldSpaceCenter)
 	{
@@ -183,7 +193,68 @@ public: // everything is defined on CBaseEntity.cpp
 	{
 		DYNVAR_RETURN(int, this, "DT_BaseEntity", "m_iTeamNum");
 	}
+	int CBaseEntity::GetClassNum()
+	{
+		DYNVAR_RETURN(int, this, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
+	}
+	Vector GetVecOrigin()
+	{
+		DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "m_vecOrigin");
+	}
+	int GetHitboxSet()
+	{
+		DYNVAR_RETURN(int, this, "DT_BaseAnimating", "m_nHitboxSet");
+	}
+	int GetFlags()
+	{
+		DYNVAR_RETURN(int, this, "DT_BasePlayer", "m_fFlags");
+	}
+	void GetRenderable() 
+	{
+    	//return (Renderable*)((uint32_t)ent + 0x4);
+		void* pRenderable = (void*)(this + 0x4);
+		return pRenderable;
+	}
+	//m_vecOrigin          = gNetvars.get_offset("DT_BaseEntity", "m_vecOrigin");
+	//Vector GetHitboxPosition(CBaseEntity* pEntity, int iHitbox);
+	uintptr_t* GetModel()
+	{
+		void* pRenderable = (void*)(this + 0x4);
+		typedef uintptr_t* (*OriginalFn)(void*);
+		return getvfunc<OriginalFn>(pRenderable, 9)(pRenderable);
+	}
+	Vector GetHitboxPosition(int Hitbox);
+	/*
+	CBaseCombatWeapon* CBaseEntity::GetActiveWeapon()
+	{
+		DYNVAR(pHandle, DWORD, "DT_BaseCombatCharacter", "m_hActiveWeapon");
+		return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
+	}
+	*/
 };
+/*
+enum hitboxes
+{
+    HITBOX_HEAD = 0,
+    HITBOX_PELVIS = 1,
+    HITBOX_spine_0 = 2,
+    HITBOX_spine_1 = 3,
+    HITBOX_spine_2 = 4,
+    HITBOX_spine_3 = 5,
+    HITBOX_upperArm_L = 6,
+    lowerArm_L = 7,
+    hand_L = 8,
+    upperArm_R = 9,
+    lowerArm_R = 10,
+    hand_R = 11,
+    hip_L = 12,
+    knee_L = 13,
+    foot_L = 14,
+    hip_R = 15,
+    knee_R = 16,
+    foot_R = 17,	
+};
+*/
 
 class EngineClient
 {
@@ -730,7 +801,7 @@ public:
 	int	GetModelIndex(const char* name)
 	{
 		typedef int( * GetModelIndexFn)(void*, const char*);
-		return getvfunc< GetModelIndexFn >(this, 2)(this, name);
+		return getvfunc< GetModelIndexFn >(this, 3)(this, name); // 3
 	}
 
 	const char* GetModelName(const uintptr_t* model)
@@ -742,7 +813,7 @@ public:
 	studiohdr_t* GetStudiomodel(const uintptr_t *mod)
 	{
 		typedef studiohdr_t* ( * GetStudiomodelFn)(void*, const uintptr_t*);
-		return getvfunc< GetStudiomodelFn >(this, 28)(this, mod);
+		return getvfunc< GetStudiomodelFn >(this, 29)(this, mod); // 29 apparently old 28
 	}
 };
 

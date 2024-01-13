@@ -284,7 +284,7 @@ enum medicweapons
 };
 enum sniperweapons
 {
-	//Primary
+		//Primary
 	WPN_SniperRifle = 14,
 	WPN_NewSniperRifle = 201,
 	WPN_Huntsman = 56,
@@ -303,20 +303,23 @@ enum sniperweapons
 	WPN_BotSniperRifleES = 957,
 	WPN_BotSniperRifleEG = 966,
 	WPN_FestiveHuntsman = 1005,
+	WPN_CompoundBow = 1092,
+	WPN_ClassicSniperRifle = 1098,
+	WPN_ShootingStar = 30665,
 	//Secondary
 	WPN_SMG = 16,
 	WPN_NewSMG = 203,
 	WPN_Jarate = 58,
 	WPN_DarwinDangerShield = 231,
 	WPN_CleanersCarbine = 751,
+	WPN_FestiveJarate = 1083,
+	WPN_SelfAwareBeautyMark = 1105,
 	//Melee
 	WPN_Kukri = 3,
 	WPN_NewKukri = 193,
 	WPN_TribalmansShiv = 171,
 	WPN_Bushwacka = 232,
 	WPN_Shahanshah = 401,
-	//Hats
-	HAT_Snaggletooth = 229,
 };
 enum spyweapons
 {

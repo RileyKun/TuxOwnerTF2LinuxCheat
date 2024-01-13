@@ -49,6 +49,7 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 			if (pBaseLocalEnt == NULL) //Always check for null pointers.
 				return;
 			gESP.StartThisshit(pBaseLocalEnt);
+			
 
 		}
 	}

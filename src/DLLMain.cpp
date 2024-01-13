@@ -41,6 +41,7 @@ void mainThread()
 		XASSERT(gInts.EntList);
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
+		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");
 		//Setup the Panel hook so we can draw.
 		if( !gInts.Panels )
 		{
