@@ -34,10 +34,11 @@ public:
 	float aimbot_switch;
 	float aimbot_silent;
 	float aimbot_active;
-	float aimbot_key;
+	//float aimbot_key;
 	float aimbot_hitscan;
 	float aimbot_hitbox;
 	float aimbot_autoshoot;
+	float aimbot_fov;
 
 	float triggerbot_switch;
 	float triggerbot_active;
@@ -59,7 +60,7 @@ public:
 	float misc_noisemaker_spam;
 	float misc_anti_anti_aim;
 	float misc_anti_anti_aim_unsafe_x;
-
+	
 	float playerlist_switch;
 	float PlayerMode[64] = {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,

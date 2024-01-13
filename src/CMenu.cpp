@@ -54,9 +54,10 @@ void CCheatMenu::Render(void)
 	{
 		i = AddItem(i, " - Enabled", &gCheatMenu.aimbot_active, 0, 1, 1, false);
 		i = AddItem(i, " - Silent", &gCheatMenu.aimbot_silent, 0, 1, 1, false);
-		i = AddItem(i, " - Key", &gCheatMenu.aimbot_key, 0, 8, 1, false);
+		i = AddItem(i, " - FOV", &gCheatMenu.aimbot_fov, 0, 180, 1, false);
+		//i = AddItem(i, " - Key", &gCheatMenu.aimbot_key, 0, 8, 1, false);
 		i = AddItem(i, " - Hitscan", &gCheatMenu.aimbot_hitscan, 0, 1, 1, false);
-		i = AddItem(i, " - Hitbox", &gCheatMenu.aimbot_hitbox, 0, 4, 1, false);
+		i = AddItem(i, " - Hitbox", &gCheatMenu.aimbot_hitbox, 0, 18, 1, false);
 		i = AddItem(i, " - Autoshoot", &gCheatMenu.aimbot_autoshoot, 0, 1, 1, false);
 	}
 
@@ -230,7 +231,7 @@ void CCheatMenu::DrawMenu(void)
 					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szBoneModes[(int)pMenu[i].value[0]]);
 				}
 
-				else if (pMenu[i].flMax == 4)
+				else if (pMenu[i].flMax == 18)
 				{
 					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, "%s", szHitboxes[(int)pMenu[i].value[0]]);
 				}

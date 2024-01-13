@@ -98,7 +98,60 @@ static Vector CAim::get_hitbox_pos(CBaseEntity* pEntity, int hitbox_idx)
     return center_of_hitbox(hdr, bones, HITBOX_SET, hitbox_idx);
 }
 
-int CAim::GetBestTarget(CBaseEntity* pLocal)
+float CAim::GetFOV(Vector angle, Vector src, Vector dst)
+{
+	Vector ang, aim;
+	float mag, u_dot_v;
+	ang = calc_angle(src, dst);
+
+
+	MakeVector(angle, aim);
+	MakeVector(ang, ang);
+
+	mag = sqrtf(pow(aim.x, 2) + pow(aim.y, 2) + pow(aim.z, 2));
+	u_dot_v = aim.Dot(ang);
+
+	return RAD2DEG(acos(u_dot_v / (pow(mag, 2))));
+}
+
+Vector CAim::calc_angle(Vector src, Vector dst)
+{
+	Vector AimAngles, delta;
+	float hyp;
+	delta = src - dst;
+	hyp = sqrtf((delta.x * delta.x) + (delta.y * delta.y)); //SUPER SECRET IMPROVEMENT CODE NAME DONUT STEEL
+	AimAngles.x = atanf(delta.z / hyp) * RADPI;
+	AimAngles.y = atanf(delta.y / delta.x) * RADPI;
+	AimAngles.z = 0.0f;
+	if (delta.x >= 0.0)
+		AimAngles.y += 180.0f;
+	return AimAngles;
+}
+void CAim::MakeVector(Vector angle, Vector& vector)
+{
+	float pitch, yaw, tmp;
+	pitch = float(angle[0] * PI / 180);
+	yaw = float(angle[1] * PI / 180);
+	tmp = float(cos(pitch));
+	vector[0] = float(-tmp * -cos(yaw));
+	vector[1] = float(sin(yaw)*tmp);
+	vector[2] = float(-sin(pitch));
+}
+
+float CAim::flGetDistance(Vector vOrigin, Vector vLocalOrigin)
+{
+	Vector vDelta = vOrigin - vLocalOrigin;
+
+	float m_fDistance = sqrt(vDelta.Length());
+
+	if (m_fDistance < 1.0f)
+		return 1.0f;
+
+	return m_fDistance;
+}
+
+
+int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	int iBestTarget = -1;
 						 //this num could be smaller 
@@ -138,19 +191,61 @@ int CAim::GetBestTarget(CBaseEntity* pLocal)
 			continue;
 
 		float flDistToTarget = (vLocal - vEntity).Length();
-
+        double minimalDistance = 99999.0;
+        float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);
+		float distance = flGetDistance(vEntity, pLocal->GetEyePosition());
+        /*
 		if (flDistToTarget < flDistToBest)
 		{
 			flDistToBest = flDistToTarget;
 			iBestTarget = i;
 		}
-
+        */
+        if (distance < minimalDistance)//gCvars.aimbot.fov)
+		{
+			if (flFOV < flDistToBest && flFOV < gCheatMenu.aimbot_fov)
+			{
+				if (gCheatMenu.PlayerMode[i] == 2)
+					return i;
+				//flDistToBest = flDistToTarget;
+				flDistToBest = flFOV;
+				gCheatMenu.iAimbotIndex = i;
+				iBestTarget = i;
+			}
+		}
 		if (gCheatMenu.PlayerMode[i] == 2) //always aim at rage targets first
 			return i;
 	}
 
 	return iBestTarget;
 }
+
+
+void FixMovementForUserCmd(CUserCmd* cmd, old_movement_t mov) {
+	float deltaView = cmd->viewangles.x - mov.angle.y;
+	float f1;
+	float f2;
+
+	if (mov.angle.y < 0.f)
+		f1 = 360.0f + mov.angle.y;
+	else
+		f1 = mov.angle.y;
+
+	if (cmd->viewangles.y < 0.0f)
+		f2 = 360.0f + cmd->viewangles.y;
+	else
+		f2 = cmd->viewangles.y;
+
+	if (f2 < f1)
+		deltaView = abs(f2 - f1);
+	else
+		deltaView = 360.0f - abs(f1 - f2);
+	deltaView = 360.0f - deltaView;
+
+	cmd->forwardmove = cos(DEG2RAD(deltaView)) * mov.fwd + cos(DEG2RAD(deltaView + 90.f)) * mov.sdm;
+	cmd->sidemove = sin(DEG2RAD(deltaView)) * mov.fwd + sin(DEG2RAD(deltaView + 90.f)) * mov.sdm;
+}
+
 
 bool IsVisible(void* pLocal, void* pEntity, Vector vStart, Vector vEnd)
 {
@@ -219,7 +314,7 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	//if (!pLocal->GetActiveWeapon())
 	//	return;
 
-	CBaseEntity* pEntity = GetBaseEntity(GetBestTarget(pLocal));
+	CBaseEntity* pEntity = GetBaseEntity(GetBestTarget(pLocal, pCommand));
 
 	if (!pEntity)
 		return;
@@ -246,8 +341,9 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		gInts.Engine->SetViewAngles(pCommand->viewangles);
 	}
 
-	if (gCheatMenu.aimbot_silent) { // apply our movement fix if silent aim is enabled.
-		//Util->FixMovementForUserCmd(pCommand, old_mov);
+	if (gCheatMenu.aimbot_silent) 
+    { // apply our movement fix if silent aim is enabled.
+		FixMovementForUserCmd(pCommand, old_mov);
 	}
 
 	if (gCheatMenu.aimbot_autoshoot)
