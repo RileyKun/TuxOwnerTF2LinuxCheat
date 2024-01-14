@@ -2,8 +2,8 @@
 #include <time.h>
 #include <cstring>
 
-char g_logFile[255] = "/home/josh/log.txt";
-char g_debugLogFile[255] = "/home/josh/debugLog.txt";
+char g_logFile[255] = "/home/vannie/log.txt";
+char g_debugLogFile[255] = "/home/vannie/debugLog.txt";
 
 void Log::Debug(const char* fmt, ...) 
 {

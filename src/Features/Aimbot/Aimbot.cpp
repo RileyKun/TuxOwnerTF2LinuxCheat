@@ -58,46 +58,6 @@ void CAim::setting_to_hitboxes(int setting, int* min, int* max)
 #define HITBOX_SET 0
 #define MAXSTUDIOBONES 128
 
-void VectorTransform(const Vector& vSome, const matrix3x4& vMatrix, Vector& vOut)
-{
-	for (auto i = 0; i < 3; i++)
-		vOut[i] = vSome.Dot((Vector&)vMatrix[i]) + vMatrix[i][3];
-}
-
-Vector center_of_hitbox(studiohdr_t* studio, matrix3x4* bonemat, int set, int idx) 
-{
-    studiobbox_t* bbox = studiohdr_pHitbox(studio, set, idx);
-    if (!bbox)
-        return VEC_ZERO;
-
-    Vector min, max;
-    VectorTransform(bbox->bbmin, bonemat[bbox->bone], min);
-    VectorTransform(bbox->bbmax, bonemat[bbox->bone], max);
-
-    return (Vector){
-        (min.x + max.x) * 0.5f,
-        (min.y + max.y) * 0.5f,
-        (min.z + max.z) * 0.5f,
-    };
-}
-#define BONE_USED_BY_HITBOX 0x00000100
-static Vector CAim::get_hitbox_pos(CBaseEntity* pEntity, int hitbox_idx) 
-{
-    static matrix3x4 bones[MAXSTUDIOBONES];
-    if (!pEntity->SetupBones(bones, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0))
-        return VEC_ZERO;
-
-    const auto model = pEntity->GetModel();
-    if (!model)
-        return VEC_ZERO;
-
-    studiohdr_t* hdr = gInts.ModelInfo->GetStudiomodel(model);
-    if (!hdr)
-        return VEC_ZERO;
-
-    return center_of_hitbox(hdr, bones, HITBOX_SET, hitbox_idx);
-}
-
 float CAim::GetFOV(Vector angle, Vector src, Vector dst)
 {
 	Vector ang, aim;
@@ -180,7 +140,7 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 		if (iBestHitbox == -1)
 			continue;
 
-		Vector vEntity = get_hitbox_pos(pEntity, iBestHitbox); //pEntity->GetWorldSpaceCenter(vEntity);
+		Vector vEntity = pEntity->get_hitbox_pos(iBestHitbox); //pEntity->GetWorldSpaceCenter(vEntity);
 
 		if (!gCheatMenu.PlayerMode[i])
 			continue;
@@ -213,18 +173,19 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			iBestTarget = i;
 		}
         */
-        if (distance < minimalDistance)//gCvars.aimbot.fov)
-		{
-			if (flFOV < flDistToBest && flFOV < gCheatMenu.aimbot_fov)
-			{
-				if (gCheatMenu.PlayerMode[i] == 2)
-					return i;
-				//flDistToBest = flDistToTarget;
-				flDistToBest = flFOV;
-				gCheatMenu.iAimbotIndex = i;
-				iBestTarget = i;
-			}
-		}
+        //if (distance < minimalDistance)//gCvars.aimbot.fov)
+	//	{
+	
+	if (flFOV < gCheatMenu.aimbot_fov)
+	{
+		if (gCheatMenu.PlayerMode[i] == 2)
+			return i;
+		//flDistToBest = flDistToTarget;
+		//flDistToBest = flFOV;
+		gCheatMenu.iAimbotIndex = i;
+		iBestTarget = i;
+	}
+		//}
 	}
 
 	return iBestTarget;
@@ -292,15 +253,15 @@ int CAim::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 	{
 		for (int i = 0; i < 17; i++)
 		{
-			if (IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), get_hitbox_pos(pEntity, i)))
+			if (IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->get_hitbox_pos(i)))
 				return i;
 		}
 	}
 
-	if (get_hitbox_pos(pEntity, iBestHitbox) == VEC_ZERO)
+	if (pEntity->get_hitbox_pos(iBestHitbox) == VEC_ZERO)
 		return -1;
 
-	if (!IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), get_hitbox_pos(pEntity, iBestHitbox)))
+	if (!IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->get_hitbox_pos(iBestHitbox)))
 		return -1;
 	
 	return iBestHitbox;
@@ -309,6 +270,13 @@ int CAim::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {    
 	old_movement_t old_mov = old_movement_t();
+    	/* "GetActiveWeapon" does not work.  */
+    	//auto pWep = pLocal->GetActiveWeapon();
+
+    	//if(pWep->GetSlot() == WPN_SLOT_MELEE) // dont try to melee, it wont work lol
+    	//{
+        //	return;
+    	//}
 
 	if (gCheatMenu.aimbot_silent) { // only backup the c_usercmd data when it's needed.
 		old_mov.angle = pCommand->viewangles;
@@ -334,7 +302,7 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (iBestHitbox == -1)
 		return;
 
-	Vector vEntity = get_hitbox_pos(pEntity,iBestHitbox);
+	Vector vEntity = pEntity->get_hitbox_pos(iBestHitbox);
 
 	Vector vLocal = pLocal->GetEyePosition();
 

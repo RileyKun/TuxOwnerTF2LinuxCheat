@@ -9,6 +9,7 @@ public:
 	void  *GetModuleHandleSafe( const char* pszModuleName );
  	uintptr_t GetClientSignature ( char* chPattern );
 	uintptr_t GetEngineSignature ( char* chPattern );
+	void** CSignature::FindPattern(const char* fileName, const char* pattern, const char* mask);
 };
 
 extern CSignature gSignatures;

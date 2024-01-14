@@ -104,7 +104,8 @@ void CCheatMenu::Render(void)
 		i = AddItem(i, " - Name", &gCheatMenu.esp_name, 0, 1, 1, false);
 		i = AddItem(i, " - Class", &gCheatMenu.esp_class, 0, 1, 1, false);
 		i = AddItem(i, " - Health", &gCheatMenu.esp_health, 0, 3, 1, false);
-		i = AddItem(i, " - Health", &gCheatMenu.esp_cond, 0, 3, 1, false);
+		i = AddItem(i, " - Conditions", &gCheatMenu.esp_cond, 0, 1, 1, false);
+		i = AddItem(i, " - Building ESP", &gCheatMenu.building_esp, 0,1,1, false);
 		//i = AddItem(i, " - Bones", &gCvars.esp_bones, 0, 3, 1, false);
 	}
 	i = AddItem(i , "Priorites", &gCheatMenu.priorties_switch, 0,1,1, true);
@@ -126,6 +127,8 @@ void CCheatMenu::Render(void)
 	i = AddItem(i, "Misc", &gCheatMenu.misc_switch, 0, 1, 1, true);
 	if (gCheatMenu.misc_switch)
 	{
+		i = AddItem(i, " - SpeedCrouch", &gCheatMenu.misc_speedcrouch, 0, 1, 1, false);
+		i = AddItem(i, " - ThirdPerson", &gCheatMenu.misc_thirdperson, 0, 1, 1, false);
 		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
 		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
 	}

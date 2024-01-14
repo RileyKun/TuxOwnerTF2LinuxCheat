@@ -10,12 +10,6 @@ int CBaseCombatWeapon::GetMaxClip2()
 	return getvfunc<OriginalFn>(this, 319)(this);
 }
 
-int CBaseCombatWeapon::GetSlot()
-{
-	typedef int(*OriginalFn)(void*);
-	return getvfunc<OriginalFn>(this, 327)(this);
-}
-
 char *CBaseCombatWeapon::GetName()
 {
 	typedef char *(*OriginalFn)(void*);

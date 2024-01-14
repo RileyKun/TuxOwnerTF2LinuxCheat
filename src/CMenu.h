@@ -54,14 +54,20 @@ public:
 	float esp_class;
 	float esp_health;
 	float esp_bones;
+	float building_esp;
+	
 
+	float misc_speedcrouch;
+	float misc_thirdperson;
 	float misc_switch;
 	float misc_bunnyhop;
 	float misc_autostrafe;
-	float misc_noisemaker_spam;
-	float misc_anti_anti_aim;
-	float misc_anti_anti_aim_unsafe_x;
+
+	float autobackstab;
+	float autobackstab_silent;
+
 	
+
 	float playerlist_switch;
 	float PlayerMode[64] = {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,

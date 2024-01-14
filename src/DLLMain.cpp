@@ -7,10 +7,12 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <thread>
-
+#include "Math/CMath.h"
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
 CInterfaces gInts;
+CMath gMath;
+
 
 CreateInterface_t EngineFactory = NULL;
 CreateInterface_t ClientFactory = NULL;
@@ -28,13 +30,14 @@ void mainThread()
 		VGUIFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/vguimatsurface.so" ), "CreateInterface" );
 		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
 		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
-		
+		//		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./bin/libvstdlib.so"), "CreateInterface");
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
 		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
+		//gInts.cvar = ( ICVar* )CvarFactory("VEngineCvar004", NULL);
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
 		XASSERT(gInts.Engine);
@@ -58,7 +61,8 @@ void mainThread()
 				panelHook->Rehook();
 			}
 		}
-		
+	
+
 		// This sig here wont work on linux (a replacement one is further down)
 		//DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");
 		//XASSERT(dwClientModeAddress);

@@ -121,6 +121,27 @@ void ESP::ActualfreakinESP(CBaseEntity* pEntity)
 	int iHp = pEntity->GetHealth(), iMaxHp = pEntity->GetMaxHealth();
 	if (iHp > iMaxHp)
 		iHp = iMaxHp;
+	
+
+	if (gCheatMenu.building_esp)
+	{
+		if (pEntity->GetClientClass()->iClassID == 86) // dispenser
+		{
+			gDrawManager.OutlineRect(x - 1, y - 1, w + 2, h + 2, COLORCODE(0,0,0,255));
+			gDrawManager.OutlineRect(x, y, w, h, clrPlayerCol);
+			gDrawManager.OutlineRect(x + 1, y + 1, w - 2, h - 2, COLORCODE(0,0,0,255));
+			gDrawManager.DrawString(x + w + 2, y + iY, clrPlayerCol, "DISPENSER");
+			iY += gDrawManager.GetESPHeight();
+		}
+		if (pEntity->GetClientClass()->iClassID == 88)
+		{
+			gDrawManager.OutlineRect(x - 1, y - 1, w + 2, h + 2, COLORCODE(0,0,0,255));
+			gDrawManager.OutlineRect(x, y, w, h, clrPlayerCol);
+			gDrawManager.OutlineRect(x + 1, y + 1, w - 2, h - 2, COLORCODE(0,0,0,255));
+			gDrawManager.DrawString(x + w + 2, y + iY, clrPlayerCol, "SENTRY");
+			iY += gDrawManager.GetESPHeight();
+		}
+	}
 
 	if (gCheatMenu.esp_box)
 	{

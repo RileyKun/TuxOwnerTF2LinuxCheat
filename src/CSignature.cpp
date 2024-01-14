@@ -5,6 +5,10 @@
 #include <link.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstring>
 
 #include <cstring>
 
@@ -129,5 +133,46 @@ uintptr_t CSignature::GetEngineSignature(char* chPattern)
 	// we do this by rebasing the address (subbing the mmapped one and adding the dlopened one.
 	return dwFindPattern(((uintptr_t)module) + textOffset, ((uintptr_t)module) + textOffset + textSize, chPattern) - (uintptr_t)(module) + moduleMap->l_addr;
 }
+
+void** CSignature::FindPattern(const char* fileName, const char* pattern, const char* mask) {
+    std::ifstream file(fileName, std::ios::binary | std::ios::ate);
+    if (!file.is_open()) {
+        Log::Fatal("error openning file");
+        return nullptr;
+    }
+
+    std::streamsize fileSize = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    std::vector<char> buffer(fileSize);
+    if (!file.read(buffer.data(), fileSize)) {
+        //std::cerr << "Error reading file: " << fileName << std::endl;
+        Log::Fatal("error reading file");
+		return nullptr;
+    }
+
+    for (std::size_t i = 0; i < fileSize; ++i) {
+        if (memcmp(&buffer[i], pattern, strlen(pattern)) == 0) {
+            bool found = true;
+            for (std::size_t j = 0; j < strlen(mask); ++j) {
+                if (mask[j] == 'x') {
+                    continue;
+                }
+                if (mask[j] != '?' && mask[j] != buffer[i + j]) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found) {
+                return reinterpret_cast<void**>(&buffer[i]);
+            }
+        }
+    }
+
+    //std::cerr << "Pattern not found in file: " << fileName << std::endl;
+    Log::Fatal("pattern not found.");
+	return nullptr;
+}
+
 
 CSignature gSignatures;
