@@ -13,6 +13,7 @@ public:
     float flGetDistance(Vector vOrigin, Vector vLocalOrigin);
     void Run(CBaseEntity* pLocal, CUserCmd* pCommand);
     float GetFOV(Vector angle, Vector src, Vector dst);
+    bool CanAmbassadorHeadshot(CBaseEntity* pLocal);
 };
 
 extern CAim gAim;

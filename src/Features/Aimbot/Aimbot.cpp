@@ -267,10 +267,16 @@ int CAim::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 	return iBestHitbox;
 }
 
+bool CAim::CanAmbassadorHeadshot(CBaseEntity* pLocal)
+{
+	//return gInts.Engine->Time() - pLocal->GetActiveWeapon()->m_flLastFireTime() >= 0.930;//1.0;
+}
+
+
 void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {    
 	old_movement_t old_mov = old_movement_t();
-    	/* "GetActiveWeapon" does not work.  */
+    	/* "GetActiveWeapon" does not work. i think. */
     	//auto pWep = pLocal->GetActiveWeapon();
 
     	//if(pWep->GetSlot() == WPN_SLOT_MELEE) // dont try to melee, it wont work lol
@@ -312,7 +318,11 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	ClampAngle(vAngs);
 	gCheatMenu.iAimbotIndex = pEntity->GetIndex();
+	//auto pWep = pLocal->GetActiveWeapon();
 
+
+	//if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
+	//		if (!CanAmbassadorHeadshot(pLocal)) return;	
 	pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
 
 	if (!gCheatMenu.aimbot_silent) {
@@ -324,7 +334,41 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		FixMovementForUserCmd(pCommand, old_mov);
 	}
 
+	if (gCheatMenu.aimbot_autoscope && !pLocal->IsScoped() && pLocal->szGetClass() == "Sniper")
+	{
+		pCommand->buttons |= IN_ATTACK2;
+	}
+
 	if (gCheatMenu.aimbot_autoshoot)
-		pCommand->buttons |= IN_ATTACK;
+	{
+		float flCurTime = gInts.Engine->Time();
+		static float flNextSend = 0.0f;
+		if (pLocal->szGetClass() == "Sniper")
+		{
+			if (!gCheatMenu.aimbot_zoomedonly)
+			{
+				if (flCurTime > flNextSend)
+				{
+					pCommand->buttons |= IN_ATTACK;
+					flNextSend = (flCurTime + 0.2f); // this is retarded but fuck it 
+				}
+			}
+			else if (gCheatMenu.aimbot_zoomedonly)
+			{
+				if (pLocal->IsScoped())
+				{
+					if (flCurTime > flNextSend)
+					{
+						pCommand->buttons |= IN_ATTACK;
+						flNextSend = (flCurTime + 0.2f);
+					}
+				}
+			}
+		}
+		if (pLocal->szGetClass() != "Sniper") // yey
+		{
+			pCommand->buttons |= IN_ATTACK;
+		}
+	}
     
 }

@@ -14,6 +14,8 @@ obj/x32/Debug/Features/Triggerbot/Triggerbotterino.o: \
  src/Features/Triggerbot/../../getvfunc.h \
  src/Features/Triggerbot/../../CNetVars.h \
  src/Features/Triggerbot/../../SDK/studiohdr.h \
+ src/Features/Triggerbot/../../SDK/Enums.h \
+ src/Features/Triggerbot/../../SDK/ConVar.h \
  src/Features/Triggerbot/../../CMenu.h
 src/Features/Triggerbot/Triggerbotterino.h:
 src/Features/Triggerbot/../../SDK.h:
@@ -29,4 +31,6 @@ src/Features/Triggerbot/../../dt_common2.h:
 src/Features/Triggerbot/../../getvfunc.h:
 src/Features/Triggerbot/../../CNetVars.h:
 src/Features/Triggerbot/../../SDK/studiohdr.h:
+src/Features/Triggerbot/../../SDK/Enums.h:
+src/Features/Triggerbot/../../SDK/ConVar.h:
 src/Features/Triggerbot/../../CMenu.h:

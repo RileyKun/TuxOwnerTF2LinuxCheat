@@ -45,6 +45,11 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     {
         pLocal->setfov(100); // reset fov i guess sdfshdjdfhj
     }
+    if (gCheatMenu.misc_svcheats)
+    {
+        static ConVar* cheats = gInts.cvar->FindVar("sv_cheats");
+        cheats->SetValue(1);
+    }
 }
 
 void CMisc::BHOP(CUserCmd* pCmd) // yes i know i shouldnt make a another function just for one line of code but fuck you i can do whatever i want lol this is my cheeto.

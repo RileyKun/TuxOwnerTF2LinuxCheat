@@ -10,6 +10,8 @@ obj/x32/Debug/Features/Aimbot/Aimbot.o: src/Features/Aimbot/Aimbot.cpp \
  src/Features/Aimbot/../../getvfunc.h \
  src/Features/Aimbot/../../CNetVars.h \
  src/Features/Aimbot/../../SDK/studiohdr.h \
+ src/Features/Aimbot/../../SDK/Enums.h \
+ src/Features/Aimbot/../../SDK/ConVar.h \
  src/Features/Aimbot/../../SDK/studiohdrfrom8dcc.h \
  src/Features/Aimbot/../../CMenu.h \
  src/Features/Aimbot/../../SDK/bspflags.h
@@ -27,6 +29,8 @@ src/Features/Aimbot/../../dt_common2.h:
 src/Features/Aimbot/../../getvfunc.h:
 src/Features/Aimbot/../../CNetVars.h:
 src/Features/Aimbot/../../SDK/studiohdr.h:
+src/Features/Aimbot/../../SDK/Enums.h:
+src/Features/Aimbot/../../SDK/ConVar.h:
 src/Features/Aimbot/../../SDK/studiohdrfrom8dcc.h:
 src/Features/Aimbot/../../CMenu.h:
 src/Features/Aimbot/../../SDK/bspflags.h:

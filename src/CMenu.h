@@ -38,6 +38,8 @@ public:
 	float aimbot_hitscan;
 	float aimbot_hitbox;
 	float aimbot_autoshoot;
+	float aimbot_zoomedonly;
+	float aimbot_autoscope;
 	float aimbot_fov;
 
 	float triggerbot_switch;
@@ -64,6 +66,9 @@ public:
 	float misc_switch;
 	float misc_bunnyhop;
 	float misc_autostrafe;
+	float misc_autokilltaunt;
+	float misc_svcheats;
+	// i'll do kill say later
 
 	float autobackstab;
 	float autobackstab_silent;

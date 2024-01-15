@@ -1,11 +1,13 @@
 #include "SDK.h"
-/*
+
 CBaseCombatWeapon* CBaseEntity::GetActiveWeapon()
 {
-	DYNVAR(pHandle, uintptr_t, "DT_BaseCombatCharacter", "m_hActiveWeapon");
-	return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
+		//DYNVAR(pHandle, uintptr_t, "DT_BaseCombatCharacter", "m_hActiveWeapon");
+	    //return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
+    typedef CBaseCombatWeapon *(*OriginalFn)(void *); // from 8dcc
+    return getvfunc<OriginalFn>(this, 291)(this);
 }
-*/
+
 #include "Math/CMath.h"
 
 class CMath;

@@ -230,6 +230,11 @@ void ESP::ActualfreakinESP(CBaseEntity* pEntity)
 			gDrawManager.DrawString(x + w + 2, y + iY, CONDCOLOR, "*TAUNTING*");
 			iY += gDrawManager.GetESPHeight();
 		}
+		if (pEntity->GetCond() & TFCond_Zoomed)
+		{
+			gDrawManager.DrawString(x + w + 2, y + iY, CONDCOLOR, "*SCOPED*");
+			iY += gDrawManager.GetESPHeight();
+		}
 	}
 
 }

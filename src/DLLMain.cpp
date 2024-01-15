@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <thread>
 #include "Math/CMath.h"
+#include "argh.h" // killsay and soon to be annoncer
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
 CInterfaces gInts;
@@ -18,6 +19,7 @@ CreateInterface_t EngineFactory = NULL;
 CreateInterface_t ClientFactory = NULL;
 CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
+CreateInterface_t CvarFactory = NULL;
 
 void mainThread()
 {	
@@ -30,22 +32,27 @@ void mainThread()
 		VGUIFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/vguimatsurface.so" ), "CreateInterface" );
 		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
 		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
-		//		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./bin/libvstdlib.so"), "CreateInterface");
+		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./bin/libvstdlib.so"), "CreateInterface");
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
 		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
-		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
-		//gInts.cvar = ( ICVar* )CvarFactory("VEngineCvar004", NULL);
+		//gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
+		gInts.cvar = ( ICvar* )CvarFactory("VEngineCvar004", NULL);
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
 		XASSERT(gInts.Engine);
 		XASSERT(gInts.EntList);
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
+		XASSERT(gInts.cvar);
+		//XASSERT(gInts.EventManager);
 		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");
+		
+		//gKillSay.InitKillSay(); // yes, we run it in dllmain. Don't ask, i dont know. 
+		// todo later ^
 		//Setup the Panel hook so we can draw.
 		if( !gInts.Panels )
 		{
@@ -131,7 +138,6 @@ void mainThread()
 			// it was mainly to test that my signature scanning was working.
 			//uintptr_t dwAddr = gSignatures.GetClientSignature("A1 ? ? ? ? 55 89 E5 0F B6 4D 0C 8B 10 89 45 08 89 4D 0C 5D 8B 42 2C FF E0");		
 		};
-
 		std::thread findCM(findCreateMove);
 		findCM.detach();
 		

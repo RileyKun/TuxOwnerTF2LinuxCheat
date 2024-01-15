@@ -63,13 +63,15 @@ void CCheatMenu::Render(void)
 		i = AddItem(i, " - Hitscan", &gCheatMenu.aimbot_hitscan, 0, 1, 1, false);
 		i = AddItem(i, " - Hitbox", &gCheatMenu.aimbot_hitbox, 0, 18, 1, false);
 		i = AddItem(i, " - Autoshoot", &gCheatMenu.aimbot_autoshoot, 0, 1, 1, false);
+		i = AddItem(i, " - AutoScope", &gCheatMenu.aimbot_autoscope, 0, 1, 1, false);
+		i = AddItem(i, " - Zoomed Only", &gCheatMenu.aimbot_zoomedonly, 0, 1, 1, false);
 	}
 
 	i = AddItem(i, "Triggerbot", &gCheatMenu.triggerbot_switch, 0, 1, 1, true);
 	if (gCheatMenu.triggerbot_switch)
 	{
 		i = AddItem(i, " - Enabled", &gCheatMenu.triggerbot_active, 0, 1, 1, false);
-		i = AddItem(i, " - Key", &gCheatMenu.triggerbot_key, 0, 8, 1, false);
+		//i = AddItem(i, " - Key", &gCheatMenu.triggerbot_key, 0, 8, 1, false);
 		i = AddItem(i, " - Head Only", &gCheatMenu.triggerbot_headonly, 0, 1, 1, false);
 	}
 
@@ -136,6 +138,7 @@ void CCheatMenu::Render(void)
 		}
 		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
 		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
+		i = AddItem(i, " - SV_CHEATS bypass", &gCheatMenu.misc_svcheats, 0, 1, 1, false);
 	}
 
 	iMenuItems = i;

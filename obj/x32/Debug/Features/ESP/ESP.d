@@ -7,6 +7,7 @@ obj/x32/Debug/Features/ESP/ESP.o: src/Features/ESP/ESP.cpp \
  src/Features/ESP/../../dt_recv2.h src/Features/ESP/../../dt_common2.h \
  src/Features/ESP/../../getvfunc.h src/Features/ESP/../../CNetVars.h \
  src/Features/ESP/../../SDK/studiohdr.h \
+ src/Features/ESP/../../SDK/Enums.h src/Features/ESP/../../SDK/ConVar.h \
  src/Features/ESP/../../CDrawManager.h src/Features/ESP/../../Panels.h \
  src/Features/ESP/../../CMenu.h
 src/Features/ESP/ESP.h:
@@ -23,6 +24,8 @@ src/Features/ESP/../../dt_common2.h:
 src/Features/ESP/../../getvfunc.h:
 src/Features/ESP/../../CNetVars.h:
 src/Features/ESP/../../SDK/studiohdr.h:
+src/Features/ESP/../../SDK/Enums.h:
+src/Features/ESP/../../SDK/ConVar.h:
 src/Features/ESP/../../CDrawManager.h:
 src/Features/ESP/../../Panels.h:
 src/Features/ESP/../../CMenu.h:
