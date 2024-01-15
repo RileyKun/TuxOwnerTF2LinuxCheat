@@ -37,6 +37,7 @@ void mainThread()
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
+		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		//gInts.cvar = ( ICVar* )CvarFactory("VEngineCvar004", NULL);
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);

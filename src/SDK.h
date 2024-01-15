@@ -260,15 +260,6 @@ public:
 		typedef uintptr_t* (*OriginalFn)(void*);
 		return getvfunc<OriginalFn>(pRenderable, 9)(pRenderable);
 	}
-	int ForceTauntCam()
-	{
-		return *reinterpret_cast<int*>(uintptr_t(this) + 0x1E04);
-		/*
-		    PAD(0x18);
-    int nForceTauntCam; 0x1E04  <- from 8dcc's tf2 cheat, again.
-		*/
-	}
-
 	/*
 	CBaseCombatWeapon* CBaseEntity::GetActiveWeapon()
 	{
@@ -305,6 +296,18 @@ public:
 		}
 
 		return "Unknown class"; //Just in case
+	}
+	void setfov(int fov) // From Dumpster fire
+	{
+		DYNVAR(n, int, "DT_BasePlayer", "m_iFOV");
+		DYNVAR(n2, int, "DT_BasePlayer", "m_iDefaultFOV");
+		n.SetValue(this, fov);
+		n2.SetValue(this, fov);
+	}
+	void ForceTauntCam(bool t) // From Dumpster fire
+	{
+		DYNVAR(n, bool, "DT_TFPlayer", "m_nForceTauntCam");
+		return n.SetValue(this, t);
 	}
 	Vector get_hitbox_pos(int hitbox_idx);
 	//CBaseCombatWeapon* GetActiveWeapon();
@@ -865,7 +868,73 @@ public:
 		typedef void (*OriginalFn)(void *, unsigned long, const wchar_t *, int &, int &);
 		getvfunc<OriginalFn>(this, 75)(this, font, text, wide, tall);
 	}
+	void DrawSetTextureRGBA(int textureID, unsigned char  const* colors, int w, int h)
+	{
+		typedef void*(*oDrawSetTextColor)(void*, int, unsigned char  const*, int, int);
+		return getvfunc<oDrawSetTextColor>(this, 37)(this, textureID, colors, w, h);
+	}
+	int CreateNewTextureID(bool procedural)
+	{
+		typedef int(*oDrawSetTextColor)(void*, bool);
+		return getvfunc<oDrawSetTextColor>(this, 43)(this, procedural);
+	}
+
+	void IPlaySound(const char* fileName)
+	{
+		typedef void*(*OriginalFn)(void*, const char*);
+		return getvfunc<OriginalFn>(this, 82)(this, fileName);
+	}
+
+
 };
+
+class IGameEvent
+{
+public:
+	virtual ~IGameEvent()
+	{
+	};
+	virtual const char *GetName() const = 0; // get event name
+
+	virtual bool IsReliable() const = 0;				  // if event handled reliable
+	virtual bool IsLocal() const = 0;					  // if event is never networked
+	virtual bool IsEmpty(const char *keyName = NULL) = 0; // check if data field exists
+
+														  // Data access
+	virtual bool GetBool(const char *keyName = NULL, bool defaultValue = false) = 0;
+	virtual int GetInt(const char *keyName = NULL, int defaultValue = 0) = 0;
+	virtual float GetFloat(const char *keyName = NULL, float defaultValue = 0.0f) = 0;
+	virtual const char *GetString(const char *keyName = NULL, const char *defaultValue = "") = 0;
+
+	virtual void SetBool(const char *keyName, bool value) = 0;
+	virtual void SetInt(const char *keyName, int value) = 0;
+	virtual void SetFloat(const char *keyName, float value) = 0;
+	virtual void SetString(const char *keyName, const char *value) = 0;
+};
+
+class IGameEventListener2
+{
+public:
+	virtual ~IGameEventListener2(void)
+	{
+	};
+
+	// FireEvent is called by EventManager if event just occured
+	// KeyValue memory will be freed by manager if not needed anymore
+	virtual void FireGameEvent(IGameEvent *event) = 0;
+};
+
+
+class IGameEventManager2
+{
+public:
+	bool AddListener(IGameEventListener2 *listener, const char *name, bool bServerSide)
+	{
+		typedef bool(*OriginalFn)(void*, IGameEventListener2 *, const char *, bool);
+		return getvfunc<OriginalFn>(this, 3)(this, listener, name, bServerSide);
+	}
+};
+
 
 class CEntList
 {
@@ -890,18 +959,50 @@ public:
 class CBaseCombatWeapon : public CBaseEntity
 {
 public:
-	int GetMaxClip1();
-	int GetMaxClip2();
-	
-	int CBaseCombatWeapon::GetSlot()
+	int GetMaxClip1()
+	{
+		typedef int(*OriginalFn)(void*);
+		return getvfunc<OriginalFn>(this, 318)(this);
+	}
+
+	int GetMaxClip2()
+	{
+		typedef int(*OriginalFn)(void*);
+		return getvfunc<OriginalFn>(this, 319)(this);
+	}
+
+	int GetSlot()
 	{
 		typedef int(*OriginalFn)(void*);
 		return getvfunc<OriginalFn>(this, 327)(this);
 	}
 
-	char *GetName();
-	char *GetPrintName();
-	int GetItemDefinitionIndex();
+	char *GetName()
+	{
+		typedef char *(*OriginalFn)(void*);
+		return getvfunc<OriginalFn>(this, 329)(this);
+	}
+
+	char *GetPrintName()
+	{
+		typedef char *(*OriginalFn)(void*);
+		return getvfunc<OriginalFn>(this, 330)(this);
+	}
+
+	int GetItemDefinitionIndex()
+	{
+		DYNVAR_RETURN(int, this, "DT_EconEntity", "m_AttributeManager", "m_Item", "m_iItemDefinitionIndex");
+	}
+
+	float ChargedDamage()
+	{
+		DYNVAR_RETURN(float, this, "DT_TFSniperRifle", "SniperRifleLocalData", "m_flChargedDamage");
+	}
+
+	bool ReadyToBackstab()
+	{
+		DYNVAR_RETURN(bool, this, "DT_TFWeaponKnife", "m_bReadyToBackstab");
+	}
 };
 
 
@@ -1284,6 +1385,7 @@ public:
 	CHLClient *Client;
 	IEngineTrace* EngineTrace;
 	IVModelInfo* ModelInfo;
+	IGameEventManager2* EventManager;
 	//ICvar* cvar;
 };
 //#include "CConfig.h"

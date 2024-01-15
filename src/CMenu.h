@@ -59,6 +59,8 @@ public:
 
 	float misc_speedcrouch;
 	float misc_thirdperson;
+	float misc_enablevmfov;
+	float misc_vmfov;
 	float misc_switch;
 	float misc_bunnyhop;
 	float misc_autostrafe;

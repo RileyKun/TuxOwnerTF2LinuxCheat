@@ -1,7 +1,8 @@
 #include "Misc.h"
 #include "../../CMenu.h"
 CMisc gMisc;
-
+#include <SDL2/SDL.h>
+const Uint8 *penisstate = SDL_GetKeyboardState(NULL);
 void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
 {
     if (!(pLocal->GetFlags() & FL_ONGROUND) && pCmd->buttons & IN_JUMP)
@@ -22,8 +23,27 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     }
     if (gCheatMenu.misc_thirdperson)
     {
-        pLocal->ForceTauntCam();
-        //pLocal->ForceTauntCam() == true;
+        float flCurTime = gInts.Engine->Time();
+	    static float flNextSend = 0.0f;
+	    static float thesleeptime = 0.1f;
+        static bool isThirdPersonEnabled = false;  
+
+        if (penisstate[SDL_SCANCODE_B] && flCurTime > flNextSend)
+        {
+            flNextSend = (flCurTime + thesleeptime);
+            isThirdPersonEnabled = !isThirdPersonEnabled;
+
+        
+            pLocal->ForceTauntCam(isThirdPersonEnabled);
+        }
+    }
+    if (gCheatMenu.misc_enablevmfov)
+    {
+        pLocal->setfov(gCheatMenu.misc_vmfov);
+    }
+    if (!gCheatMenu.misc_enablevmfov)
+    {
+        pLocal->setfov(100); // reset fov i guess sdfshdjdfhj
     }
 }
 

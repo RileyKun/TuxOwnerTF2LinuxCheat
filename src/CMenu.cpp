@@ -129,6 +129,11 @@ void CCheatMenu::Render(void)
 	{
 		i = AddItem(i, " - SpeedCrouch", &gCheatMenu.misc_speedcrouch, 0, 1, 1, false);
 		i = AddItem(i, " - ThirdPerson", &gCheatMenu.misc_thirdperson, 0, 1, 1, false);
+		i = AddItem(i, " - VMFoV", &gCheatMenu.misc_enablevmfov, 0, 1, 1, false);
+		if (gCheatMenu.misc_enablevmfov)
+		{
+			i = AddItem(i, " - VMFoV Val", &gCheatMenu.misc_vmfov, 0, 180, 1, false);
+		}
 		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
 		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
 	}
