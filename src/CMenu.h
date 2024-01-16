@@ -56,6 +56,7 @@ public:
 	float esp_class;
 	float esp_health;
 	float esp_bones;
+	float esp_local;
 	float building_esp;
 	
 
@@ -69,6 +70,9 @@ public:
 	float misc_autokilltaunt;
 	float misc_svcheats;
 	// i'll do kill say later
+
+	float misc_saveconfig;
+	float misc_loadconfig;
 
 	float autobackstab;
 	float autobackstab_silent;

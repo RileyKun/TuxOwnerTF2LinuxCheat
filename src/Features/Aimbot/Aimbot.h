@@ -14,6 +14,7 @@ public:
     void Run(CBaseEntity* pLocal, CUserCmd* pCommand);
     float GetFOV(Vector angle, Vector src, Vector dst);
     bool CanAmbassadorHeadshot(CBaseEntity* pLocal);
+    void w(bool silent, Vector vAngs, CUserCmd* pCommand);
 };
 
 extern CAim gAim;

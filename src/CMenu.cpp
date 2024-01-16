@@ -2,7 +2,7 @@
 #include "SDK.h"
 #include "CDrawManager.h"
 #include "Colors.h"
-#include "CConfig.h"
+#include "ConfigManager.h"
 #include <cstring>
 CCheatMenu gCheatMenu;
 int ScreenH;
@@ -107,7 +107,9 @@ void CCheatMenu::Render(void)
 		i = AddItem(i, " - Class", &gCheatMenu.esp_class, 0, 1, 1, false);
 		i = AddItem(i, " - Health", &gCheatMenu.esp_health, 0, 3, 1, false);
 		i = AddItem(i, " - Conditions", &gCheatMenu.esp_cond, 0, 1, 1, false);
-		i = AddItem(i, " - Building ESP", &gCheatMenu.building_esp, 0,1,1, false);
+		i = AddItem(i, " - pLocal ESP", &gCheatMenu.esp_local, 0, 1, 1, false);
+		//i = AddItem(i, " - Building ESP", &gCheatMenu.building_esp, 0,1,1, false);,
+		i = AddItem(i, " - Bones", &gCheatMenu.esp_bones, 0, 3, 1, false);
 		//i = AddItem(i, " - Bones", &gCvars.esp_bones, 0, 3, 1, false);
 	}
 	i = AddItem(i , "Priorites", &gCheatMenu.priorties_switch, 0,1,1, true);
@@ -119,11 +121,23 @@ void CCheatMenu::Render(void)
 		i = AddItem(i, "- Ignore Disguised", &gCheatMenu.priorties_ignoretaunting, 0,1,1, false);
 	}
 
-	i = AddItem(i, "Settings", &gCheatMenu.settings_switch, 0, 1, 1, true);
+	i = AddItem(i, "Settings & Configs", &gCheatMenu.settings_switch, 0, 1, 1, true);
 	if (gCheatMenu.settings_switch)
 	{
 		i = AddItem(i, " - Menu Postion X", &gCheatMenu.iMenu_Pos_X, 0, ScreenW, 25, false);
 		i = AddItem(i, " - Menu Postion Y", &gCheatMenu.iMenu_Pos_Y, 0, ScreenH, 25, false);
+		i = AddItem(i, " - Save Config", &gCheatMenu.misc_saveconfig, 0,1,1, false);
+		i = AddItem(i, " - Load Config", &gCheatMenu.misc_loadconfig, 0,1,1, false);
+		if (gCheatMenu.misc_saveconfig)
+		{
+			gConfig.SaveConfig();
+			gCheatMenu.misc_saveconfig = 0.0f; 
+		}
+		if (gCheatMenu.misc_loadconfig)
+		{
+			gConfig.LoadConfig();
+			gCheatMenu.misc_loadconfig = 0.0f; 
+		}
 	}
 
 	i = AddItem(i, "Misc", &gCheatMenu.misc_switch, 0, 1, 1, true);
@@ -211,7 +225,7 @@ void CCheatMenu::DrawMenu(void)
 
 	CBaseEntity *pLocal = GetBaseEntity(me);
 
-	int clrColor = COLORBLUTM;
+	int clrColor = COLORNULLCORE;
 
 	gDrawManager.DrawRect(x, y - (h + 4), w, iMenuItems * h + 21, COLORCODE(20, 20, 20, 128));
 	gDrawManager.OutlineRect(x, y - (h + 4), w, (h + 4), clrColor);

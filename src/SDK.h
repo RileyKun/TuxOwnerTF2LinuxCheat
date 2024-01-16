@@ -309,6 +309,107 @@ public:
 	}
 	Vector get_hitbox_pos(int hitbox_idx);
 	CBaseCombatWeapon* GetActiveWeapon();
+	/*
+	CObject *ToBaseObject(CBaseEntity *pBaseEntity)
+	{
+		return reinterpret_cast<CObject *>(pBaseEntity);
+	}
+	*/
+	/* building stuff idk dkfjdshkpofhs*/
+	CBaseEntity* GetOwner()
+	{
+		DYNVAR_RETURN(CBaseEntity*, this, "DT_BaseObject", "m_hBuilder");
+	}
+
+	inline int GetLevel()
+	{
+		DYNVAR_RETURN(int, this, "DT_BaseObject", "m_iUpgradeLevel");
+	}
+
+	inline bool IsSapped()
+	{
+		DYNVAR_RETURN(bool, this, "DT_BaseObject", "m_bHasSapper");
+	}
+
+	inline bool IsBuilding()
+	{
+		DYNVAR_RETURN(bool, this, "DT_BaseObject", "m_bBuilding");
+	}
+
+	inline float GetPercentageConstructed()
+	{
+		if (IsBuilding())
+		{
+			DYNVAR_RETURN(float, this, "DT_BaseObject", "m_flPercentageConstructed");
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	inline int GetHealthBaseObject()
+	{
+		DYNVAR_RETURN(int, this, "DT_BaseObject", "m_iHealth");
+	}
+
+	inline int GetState()
+	{
+		DYNVAR_RETURN(int, this, "DT_ObjectSentrygun", "m_iState");
+	}
+
+	inline int GetUpgradedMetal()
+	{
+		DYNVAR_RETURN(int, this, "DT_BaseObject", "m_iUpgradeMetal");
+	}
+
+	inline int GetTeamNumBuilding()
+	{
+		DYNVAR_RETURN(int, this, "DT_BaseEntity", "m_iTeamNum");
+	}
+	inline int GetMetalReserve()
+	{
+		DYNVAR_RETURN(int, this, "DT_ObjectDispenser", "m_iAmmoMetal");
+	}
+	inline int GetRocket()
+	{
+		if (GetLevel() == 3)
+		{
+			DYNVAR_RETURN(int, this, "DT_ObjectSentrygun", "m_iAmmoRockets");
+		}
+		return NULL;
+	}
+
+	inline int GetAmmo()
+	{
+		DYNVAR_RETURN(int, this, "DT_ObjectSentrygun", "m_iAmmoShells");
+	}
+
+	inline int IsControlled()
+	{
+		DYNVAR_RETURN(bool, this, "DT_ObjectSentrygun", "m_bPlayerControlled");
+	}
+
+
+	inline char* GetStateString()
+	{
+		switch (GetState())
+		{
+		case 1:
+		{
+			return "Idle";
+		}
+		case 2:
+		{
+			return "Attacking";
+		}
+		case 3:
+		{
+			return "Upgrading";
+		}
+		}
+		return "Unknown";
+	}
 
 };
 /*
@@ -437,6 +538,11 @@ public:
 		typedef void (*OriginalFn)(void *, int, int, int, int);
 		getvfunc<OriginalFn>(this, 10)(this, r, g, b, a);
 	}
+	void DrawLine(int x0, int y0, int x1, int y1)
+	{
+		typedef void (*DrawLineFn)(void*, int, int, int, int);
+		getvfunc<DrawLineFn>(this, 15)(this, x0, y0, x1, y1);
+	}
 	void DrawFilledRect(int x0, int y0, int x1, int y1)
 	{
 		typedef void (*OriginalFn)(void *, int, int, int, int);
@@ -505,6 +611,26 @@ public:
 	}
 
 
+};
+
+
+
+class CObject : public CBaseEntity
+{
+public:
+	
+};
+
+class CObjectDispenser : public CObject
+{
+public:
+	
+};
+//===================================================================================
+class CObjectSentryGun : public CObject
+{
+public:
+	
 };
 
 class IGameEvent

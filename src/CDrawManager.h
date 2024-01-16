@@ -22,6 +22,7 @@ public:
 	void DrawRect(int x, int y, int w, int h, uint32_t dwColor);
 	void OutlineRect(int x, int y, int w, int h, uint32_t dwColor);
 	bool WorldToScreen(Vector &vOrigin, Vector &vScreen);
+	void DrawLine(int x, int y, int x1, int y1, uint32_t Color);
 	uint32_t dwGetTeamColor(int iIndex)
 	{
 		static uint32_t dwColors[] = {

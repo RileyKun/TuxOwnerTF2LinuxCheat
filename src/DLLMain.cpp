@@ -1,7 +1,7 @@
 #include "SDK.h"
 #include "Client.h"
 #include "Panels.h"
-
+//#include "ConfigManager.h"
 #include "Log.h"
 
 #include <unistd.h>
@@ -39,7 +39,7 @@ void mainThread()
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
-		//gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
+		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		gInts.cvar = ( ICvar* )CvarFactory("VEngineCvar004", NULL);
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
@@ -47,7 +47,7 @@ void mainThread()
 		XASSERT(gInts.EntList);
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
-		XASSERT(gInts.cvar);
+		//XASSERT(gInts.cvar);
 		//XASSERT(gInts.EventManager);
 		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");
 		
@@ -69,7 +69,7 @@ void mainThread()
 				panelHook->Rehook();
 			}
 		}
-	
+		//gConfig.LoadConfig(); // load config on inject.
 
 		// This sig here wont work on linux (a replacement one is further down)
 		//DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");

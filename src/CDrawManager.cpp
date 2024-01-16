@@ -64,6 +64,11 @@ void CDrawManager::DrawRect(int x, int y, int w, int h, uint32_t Color)
 	gInts.Surface->DrawSetColor(RED(Color), GREEN(Color), BLUE(Color), ALPHA(Color));
 	gInts.Surface->DrawFilledRect(x, y, x + w, y + h);
 }
+void CDrawManager::DrawLine(int x, int y, int x1, int y1, uint32_t Color)
+{
+	gInts.Surface->DrawSetColor(RED(Color), GREEN(Color), BLUE(Color), ALPHA(Color));
+	gInts.Surface->DrawLine(x, y, x1, y1);
+}
 //===================================================================================
 void CDrawManager::OutlineRect(int x, int y, int w, int h, uint32_t Color)
 {

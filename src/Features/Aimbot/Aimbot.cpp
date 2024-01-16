@@ -192,7 +192,7 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 }
 
 
-void FixMovementForUserCmd(CUserCmd* cmd, old_movement_t mov) {
+void FixMovementForUserCmd(CUserCmd* cmd, old_movement_t mov) { // old, from potassium.
 	float deltaView = cmd->viewangles.x - mov.angle.y;
 	float f1;
 	float f2;
@@ -215,6 +215,16 @@ void FixMovementForUserCmd(CUserCmd* cmd, old_movement_t mov) {
 
 	cmd->forwardmove = cos(DEG2RAD(deltaView)) * mov.fwd + cos(DEG2RAD(deltaView + 90.f)) * mov.sdm;
 	cmd->sidemove = sin(DEG2RAD(deltaView)) * mov.fwd + sin(DEG2RAD(deltaView + 90.f)) * mov.sdm;
+}
+void silentMovementFix(CUserCmd *pUserCmd, Vector angles) //Fix for silent movement    creds gir + f1ssi0n
+{
+	Vector vecSilent(pUserCmd->forwardmove, pUserCmd->sidemove, pUserCmd->upmove);
+	float flSpeed = sqrt(vecSilent.x * vecSilent.x + vecSilent.y * vecSilent.y);
+	Vector angMove;
+	VectorAngles(vecSilent, angMove);
+	float flYaw = DEG2RAD(angles.y - pUserCmd->viewangles.y + angMove.y);
+	pUserCmd->forwardmove = cos(flYaw) * flSpeed;
+	pUserCmd->sidemove = sin(flYaw) * flSpeed;
 }
 
 
@@ -323,7 +333,7 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	//if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
 	//		if (!CanAmbassadorHeadshot(pLocal)) return;	
-	pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
+	//pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
 
 	if (!gCheatMenu.aimbot_silent) {
 		gInts.Engine->SetViewAngles(pCommand->viewangles);
@@ -331,14 +341,29 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (gCheatMenu.aimbot_silent) 
     { // apply our movement fix if silent aim is enabled.
-		FixMovementForUserCmd(pCommand, old_mov);
+		//FixMovementForUserCmd(pCommand, old_mov);
+		if (pCommand->buttons & IN_ATTACK)
+		{
+			w(true, vAngs, pCommand);
+		}
+		else if (gCheatMenu.aimbot_autoshoot)
+		{
+			w(true, vAngs, pCommand);
+			pCommand->buttons |= IN_ATTACK;
+		}
+		else
+		{
+			if (pCommand->buttons & IN_ATTACK)
+				w(true, vAngs, pCommand);
+		}
 	}
-
-	if (gCheatMenu.aimbot_autoscope && !pLocal->IsScoped() && pLocal->szGetClass() == "Sniper")
+	else
 	{
-		pCommand->buttons |= IN_ATTACK2;
+		w(gCheatMenu.aimbot_silent, vAngs, pCommand);
+		if (gCheatMenu.aimbot_autoshoot)
+			pCommand->buttons |= IN_ATTACK;
 	}
-
+	/*
 	if (gCheatMenu.aimbot_autoshoot)
 	{
 		float flCurTime = gInts.Engine->Time();
@@ -370,5 +395,28 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			pCommand->buttons |= IN_ATTACK;
 		}
 	}
+	*/ // i dont play sniper.
+
+	if (gCheatMenu.aimbot_autoscope && !pLocal->IsScoped() && pLocal->szGetClass() == "Sniper")
+	{
+		pCommand->buttons |= IN_ATTACK2;
+	}
     
+}
+
+
+void CAim::w(bool silent, Vector vAngs, CUserCmd* pCommand)
+{
+	if (silent)
+	{
+		ClampAngle(vAngs);
+		silentMovementFix(pCommand, vAngs);
+		pCommand->viewangles = vAngs;
+
+	}
+	else
+	{
+		pCommand->viewangles = vAngs;
+		gInts.Engine->SetViewAngles(pCommand->viewangles);
+	}
 }
