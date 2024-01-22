@@ -9,6 +9,9 @@
 #include <thread>
 #include "Math/CMath.h"
 #include "argh.h" // killsay and soon to be annoncer
+#include <SDL2/SDL.h>
+
+
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
 CInterfaces gInts;
@@ -132,7 +135,6 @@ void mainThread()
 			clientModeHook->Init(gInts.ClientMode);
 			clientModeHook->HookMethod(&Hooked_CreateMove, gOffsets.iCreateMoveOffset); //ClientMode create move is called inside of CHLClient::CreateMove, and thus no need for hooking WriteUserCmdDelta.
 			clientModeHook->Rehook();
-
 			// if you really want to use a sig, here is one.
 			// its far to long (the whole function, but go ahead if you really feel like it.
 			// it was mainly to test that my signature scanning was working.
@@ -142,6 +144,8 @@ void mainThread()
 		findCM.detach();
 		
 	}
+	//XCloseDisplay(display);
+	
 	return; //The thread has been completed, and we do not need to call anything once we're done. The call to Hooked_PaintTraverse is now our main
 }
 

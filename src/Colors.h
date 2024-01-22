@@ -10,6 +10,9 @@
 //class Colors
 //{
 //public:
+//
+namespace Color
+{
     int COLORWHITE = COLORCODE(255,255,255,255);
     int COLORBLACK = COLORCODE(0,0,0,255);
     int COLORNULLCORE = COLORCODE(15,150,150,255);
@@ -19,4 +22,4 @@
     int COLORGRAY  = COLORCODE(90, 90, 90, 255);
 //};
 
-
+};

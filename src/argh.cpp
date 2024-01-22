@@ -59,7 +59,7 @@ void CKillSay::FireGameEvent(IGameEvent *event)
 		player_info_t pInfo;
 		if (!gInts.Engine->GetPlayerInfo(kid, &pInfo))
 			return;
-		gInts.ClientMode->m_pChat->ChatPrintf(0, "\x6[\x3Tux\x6] \x4%s died! RIP LOL! ", pInfo.name);	
+		gInts.ClientMode->m_pChat->ChatPrintf(0, "\x6[\x3Tux\x6] \x4%d died! RIP LOL! ", pInfo.name);	
 	}
 	/*
 	if (strcmp(event->GetName(), "player_death"))

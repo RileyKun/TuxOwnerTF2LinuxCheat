@@ -19,6 +19,7 @@ public:
 	void DrawMenu(void);
 	int	 AddItem(int nIndex, char szTitle[30], float* value, float flMin, float flMax, float flStep, bool isClassHead);
     void HandleControls();
+	void DrawInfo(int speedValue);
 	//private:
 	bool bMenuActive;
 	int iMenuIndex;
@@ -29,6 +30,8 @@ public:
 	float settings_switch;
 	float iMenu_Pos_X = 300;
 	float iMenu_Pos_Y = 75;
+	float iInfo_Pos_X = 1150;
+	float iInfo_Pos_Y = 600;
 	float szsubstest;
 
 	float aimbot_switch;
@@ -67,16 +70,18 @@ public:
 	float misc_switch;
 	float misc_bunnyhop;
 	float misc_autostrafe;
-	float misc_autokilltaunt;
 	float misc_svcheats;
+	float misc_tauntspin;
+	float misc_spinspeed;
+	float misc_autobackstab;
 	// i'll do kill say later
 
 	float misc_saveconfig;
 	float misc_loadconfig;
 
-	float autobackstab;
-	float autobackstab_silent;
-
+	//float autobackstab;
+	//float autobackstab_silent;
+	bool isThirdPersonEnabled = false;
 	
 
 	float playerlist_switch;

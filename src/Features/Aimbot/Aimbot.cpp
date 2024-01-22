@@ -286,14 +286,15 @@ bool CAim::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {    
 	old_movement_t old_mov = old_movement_t();
-    	/* "GetActiveWeapon" does not work. i think. */
-    	//auto pWep = pLocal->GetActiveWeapon();
+    // i genuinely think get slot is fucked lmao
+	//if (!pLocal->GetActiveWeapon())
+	//	return;
+	
+	//if (pLocal->GetActiveWeapon()->GetSlot() == WPN_SLOT_MELEE)
+	//	return; // dont melee
 
-    	//if(pWep->GetSlot() == WPN_SLOT_MELEE) // dont try to melee, it wont work lol
-    	//{
-        //	return;
-    	//}
-
+	//if (pLocal->GetActiveWeapon()->GetSlot() == WPN_SLOT_PRIMARY && pLocal->szGetClass() == "Spy")
+	//	return; // you are retarded if you think you can backstab by using the aimbot. We have a fucking autobackstab feature for a reason lmao
 	if (gCheatMenu.aimbot_silent) { // only backup the c_usercmd data when it's needed.
 		old_mov.angle = pCommand->viewangles;
 		old_mov.fwd = pCommand->forwardmove;

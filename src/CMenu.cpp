@@ -3,6 +3,7 @@
 #include "CDrawManager.h"
 #include "Colors.h"
 #include "ConfigManager.h"
+#include "Input.h"
 #include <cstring>
 CCheatMenu gCheatMenu;
 int ScreenH;
@@ -126,6 +127,8 @@ void CCheatMenu::Render(void)
 	{
 		i = AddItem(i, " - Menu Postion X", &gCheatMenu.iMenu_Pos_X, 0, ScreenW, 25, false);
 		i = AddItem(i, " - Menu Postion Y", &gCheatMenu.iMenu_Pos_Y, 0, ScreenH, 25, false);
+		i = AddItem(i, " - InfoBox Position X", &gCheatMenu.iInfo_Pos_X, 0, ScreenW, 25, false);
+		i = AddItem(i, " - InfoBox Position Y", &gCheatMenu.iInfo_Pos_Y, 0, ScreenH, 25, false);
 		i = AddItem(i, " - Save Config", &gCheatMenu.misc_saveconfig, 0,1,1, false);
 		i = AddItem(i, " - Load Config", &gCheatMenu.misc_loadconfig, 0,1,1, false);
 		if (gCheatMenu.misc_saveconfig)
@@ -144,6 +147,10 @@ void CCheatMenu::Render(void)
 	if (gCheatMenu.misc_switch)
 	{
 		i = AddItem(i, " - SpeedCrouch", &gCheatMenu.misc_speedcrouch, 0, 1, 1, false);
+		i = AddItem(i, " - AutoBackStab", &gCheatMenu.misc_autobackstab, 0, 1, 1, false);
+		i = AddItem(i, " - TauntSpin", &gCheatMenu.misc_tauntspin, 0, 1, 1, false);
+		if (gCheatMenu.misc_tauntspin)
+			i = AddItem(i, " - Spin Speed", &gCheatMenu.misc_spinspeed, 0, 180, 1, false);
 		i = AddItem(i, " - ThirdPerson", &gCheatMenu.misc_thirdperson, 0, 1, 1, false);
 		i = AddItem(i, " - VMFoV", &gCheatMenu.misc_enablevmfov, 0, 1, 1, false);
 		if (gCheatMenu.misc_enablevmfov)
@@ -152,15 +159,20 @@ void CCheatMenu::Render(void)
 		}
 		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
 		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
-		i = AddItem(i, " - SV_CHEATS bypass", &gCheatMenu.misc_svcheats, 0, 1, 1, false);
+		//i = AddItem(i, " - SV_CHEATS bypass", &gCheatMenu.misc_svcheats, 0, 1, 1, false);
 	}
 
 	iMenuItems = i;
 }
-#include <SDL2/SDL.h>
 const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+int cur_x, cur_y;
+//const Uint8 *mouseState = SDL_GetMouseState(cur_x, cur_y);
 void CCheatMenu::HandleControls(void)
 {	
+	
+	//
+
+	
     // added sleep due to the key pressing being "too fast" 
 	float flCurTime = gInts.Engine->Time();
 	static float flNextSend = 0.0f;
@@ -176,6 +188,7 @@ void CCheatMenu::HandleControls(void)
 
 	if (gCheatMenu.bMenuActive)
 	{
+		
 		if (keystate[SDL_SCANCODE_UP] && flCurTime > flNextSend) // Up
 		{
 			flNextSend = (flCurTime + thesleeptime);
@@ -214,6 +227,40 @@ void CCheatMenu::HandleControls(void)
 	}
 	//}
 }
+/*
+* Inspration From Old Nullcore (Circa 2018)
+*/
+void CCheatMenu::DrawInfo(int speedValue)
+{
+	int x = iInfo_Pos_X,
+    xx = x + 150,
+    y = iInfo_Pos_Y,
+    w = 200,
+    h = 14;
+
+	int clrColor = Color::COLORNULLCORE;
+
+	gDrawManager.DrawRect(x, y - (h + 4), w, 2 * h + 21, COLORCODE(20, 20, 20, 128));
+	gDrawManager.OutlineRect(x, y - (h + 4), w, (h + 4), clrColor);
+
+	// Draw the first text inside the box
+	gDrawManager.DrawString(x + 4, y - (h + 4) + 30, clrColor, "Speed: %d", speedValue);
+
+	// Draw the second text inside the box
+	const char* thirdPersonStatus = gCheatMenu.isThirdPersonEnabled ? "Enabled" : "Disabled";
+	gDrawManager.DrawString(x + 4, y - (h + 4) + 20, clrColor, "Thirdperson: %s", thirdPersonStatus);
+
+	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
+	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
+
+	gDrawManager.OutlineRect(x, y - (h + 4), w, 2 * h + 21, clrColor);
+
+	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (2 * h + 21) + 2, COLORCODE(0, 0, 0, 255));
+	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (2 * h + 21) - 2, COLORCODE(0, 0, 0, 255));
+
+	// Draw the final text outside the box
+	gDrawManager.DrawString(x + 4, y - 16, clrColor, "Information box");
+}
 
 void CCheatMenu::DrawMenu(void)
 {
@@ -222,15 +269,42 @@ void CCheatMenu::DrawMenu(void)
 		y = iMenu_Pos_Y,
 		w = 200,
 		h = 14;
+	
+	gInts.Surface->GetCursorPosition(cur_x, cur_y);
 
 	CBaseEntity *pLocal = GetBaseEntity(me);
+//	Display *d = XOpenDisplay(NULL);
+	//if (!d) 
+	//{
+//		printf("xopen display not working yo");
+//		return;
+//	}
 
-	int clrColor = COLORNULLCORE;
+	/*
+	if (gInput.InArea(x, y, w, h, cur_x, cur_y))
+	{
+		if (keystate[SDL_SCANCODE_END]) // retarded but whatever. I cannot get mouse state, i tried x11, SDL, even raw input. Doesnt Work.
+		{
+			cur_x = iMenu_Pos_X;
+    		cur_y = iMenu_Pos_Y;
+		}
+	}
+	*/ // shit doesnt work 
+	//XCloseDisplay(d);
+	
+	//if (mouseState[SDL_BUTTON_LEFT])
+	//{
+    //	cur_x = iMenu_Pos_X;
+    //	cur_y = iMenu_Pos_Y;
+	//}
+
+
+	int clrColor = Color::COLORNULLCORE;
 
 	gDrawManager.DrawRect(x, y - (h + 4), w, iMenuItems * h + 21, COLORCODE(20, 20, 20, 128));
 	gDrawManager.OutlineRect(x, y - (h + 4), w, (h + 4), clrColor);
 
-	gDrawManager.DrawRect(x + 2, y - (h + 4), w - 4, (h + 4), clrColor);
+	//gDrawManager.DrawRect(x + 2, y - (h + 4), w - 4, (h + 4), clrColor);
 	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 
@@ -239,7 +313,7 @@ void CCheatMenu::DrawMenu(void)
 	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (iMenuItems * h + 21) + 2, COLORCODE(0, 0, 0, 255));
 	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (iMenuItems * h + 21) - 2, COLORCODE(0, 0, 0, 255));
 
-	gDrawManager.DrawString(x + 4, y - 16, clrColor, "Polly.xyz");
+	gDrawManager.DrawString(x + 4, y - 16, clrColor, "TuxOwner");
 
 	for (int i = 0; i < iMenuItems; i++)
 	{
@@ -258,41 +332,41 @@ void CCheatMenu::DrawMenu(void)
 			}
 			else
 			{
-				gDrawManager.DrawString(x + 4, y + (h * i), COLORWHITE, pMenu[i].szTitle);
+				gDrawManager.DrawString(x + 4, y + (h * i), Color::COLORWHITE, pMenu[i].szTitle);
 
 				if (!strcmp(pMenu[i].szTitle, " - Health"))
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szHealthModes[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szHealthModes[(int)pMenu[i].value[0]]);
 				}
 
 				else if (!strcmp(pMenu[i].szTitle, " - Bones"))
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szBoneModes[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szBoneModes[(int)pMenu[i].value[0]]);
 				}
 
 				else if (pMenu[i].flMax == 18)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, "%s", szHitboxes[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), Color::COLORWHITE, "%s", szHitboxes[(int)pMenu[i].value[0]]);
 				}
 
 				else if (pMenu[i].flMax == 8)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, "%s", szKeyNames[(int)pMenu[i].value[0]]);
+					gDrawManager.DrawString(xx, y + (h * i), Color::COLORWHITE, "%s", szKeyNames[(int)pMenu[i].value[0]]);
 				}
 
 				else if (pMenu[i].flMax == 2)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), COLORWHITE, !pMenu[i].value[0] ? "Ignore" : pMenu[i].value[0] == 1 ? "Normal" : "Rage");
+					gDrawManager.DrawString(xx, y + (h * i), Color::COLORWHITE, !pMenu[i].value[0] ? "Ignore" : pMenu[i].value[0] == 1 ? "Normal" : "Rage");
 				}
 
 				else if (pMenu[i].flMax == 1)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? COLORWHITE : COLORCODE(105, 105, 105, 255), pMenu[i].value[0] ? "ON" : "OFF");
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), pMenu[i].value[0] ? "ON" : "OFF");
 				}
 
 				else if (pMenu[i].value[0] >= 1 && pMenu[i].flMax > 1)
 				{
-					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] >= 1 ? COLORWHITE : COLORCODE(105, 105, 105, 255), "%0.0f", pMenu[i].value[0]);
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] >= 1 ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%0.0f", pMenu[i].value[0]);
 				}
 			}
 		}

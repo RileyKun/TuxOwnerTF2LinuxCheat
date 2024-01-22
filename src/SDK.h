@@ -303,138 +303,38 @@ public:
 	{
 		return (GetCond() & TFCond_Zoomed) != 0;
 	}
-	bool ReadyToBackstab()
+	bool ReadyToBackstabEnt()
 	{
-		DYNVAR_RETURN(bool, this, "DT_TFWeaponKnife", "m_bReadyToBackstab");
+		//DYNVAR_RETURN(bool, CBaseCombatWeapon*, "DT_TFWeaponKnife", "m_bReadyToBackstab");
+		int offset = gNetVars.get_offset("DT_TFWeaponKnife", "m_bReadyToBackstab");
+		return *(bool*)(this + offset);
 	}
+	//CBaseCombatWeapon* ReadyToBackstabWpn()
+	//{
+		//DYNVAR_RETURN(bool, CBaseCombatWeapon*, "DT_TFWeaponKnife", "m_bReadyToBackstab");
+	//	int offset = gNetVars.get_offset("DT_TFWeaponKnife", "m_bReadyToBackstab");
+	//	return *(bool*)(this + offset);
+	//}
 	Vector get_hitbox_pos(int hitbox_idx);
 	CBaseCombatWeapon* GetActiveWeapon();
+	Vector GetAngles()
+	{
+		static int offset = gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]");
+		return *(Vector*)(this + offset);
+	}
+	Vector GetAnglesHTC()
+	{
+		static int offset = gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]");
+		return *(Vector*)(this + offset);
+	}
 	/*
-	CObject *ToBaseObject(CBaseEntity *pBaseEntity)
-	{
-		return reinterpret_cast<CObject *>(pBaseEntity);
-	}
+	* m_vecVelocity = g_pNetVars->GetOffset(XorStr("DT_BasePlayer"), XorStr("m_vecVelocity[0]"));
 	*/
-	/* building stuff idk dkfjdshkpofhs*/
-	CBaseEntity* GetOwner()
+	Vector GetVelocityLocal()
 	{
-		DYNVAR_RETURN(CBaseEntity*, this, "DT_BaseObject", "m_hBuilder");
+		DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "localdata", "m_vecVelocity[0]");
 	}
-
-	inline int GetLevel()
-	{
-		DYNVAR_RETURN(int, this, "DT_BaseObject", "m_iUpgradeLevel");
-	}
-
-	inline bool IsSapped()
-	{
-		DYNVAR_RETURN(bool, this, "DT_BaseObject", "m_bHasSapper");
-	}
-
-	inline bool IsBuilding()
-	{
-		DYNVAR_RETURN(bool, this, "DT_BaseObject", "m_bBuilding");
-	}
-
-	inline float GetPercentageConstructed()
-	{
-		if (IsBuilding())
-		{
-			DYNVAR_RETURN(float, this, "DT_BaseObject", "m_flPercentageConstructed");
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	inline int GetHealthBaseObject()
-	{
-		DYNVAR_RETURN(int, this, "DT_BaseObject", "m_iHealth");
-	}
-
-	inline int GetState()
-	{
-		DYNVAR_RETURN(int, this, "DT_ObjectSentrygun", "m_iState");
-	}
-
-	inline int GetUpgradedMetal()
-	{
-		DYNVAR_RETURN(int, this, "DT_BaseObject", "m_iUpgradeMetal");
-	}
-
-	inline int GetTeamNumBuilding()
-	{
-		DYNVAR_RETURN(int, this, "DT_BaseEntity", "m_iTeamNum");
-	}
-	inline int GetMetalReserve()
-	{
-		DYNVAR_RETURN(int, this, "DT_ObjectDispenser", "m_iAmmoMetal");
-	}
-	inline int GetRocket()
-	{
-		if (GetLevel() == 3)
-		{
-			DYNVAR_RETURN(int, this, "DT_ObjectSentrygun", "m_iAmmoRockets");
-		}
-		return NULL;
-	}
-
-	inline int GetAmmo()
-	{
-		DYNVAR_RETURN(int, this, "DT_ObjectSentrygun", "m_iAmmoShells");
-	}
-
-	inline int IsControlled()
-	{
-		DYNVAR_RETURN(bool, this, "DT_ObjectSentrygun", "m_bPlayerControlled");
-	}
-
-
-	inline char* GetStateString()
-	{
-		switch (GetState())
-		{
-		case 1:
-		{
-			return "Idle";
-		}
-		case 2:
-		{
-			return "Attacking";
-		}
-		case 3:
-		{
-			return "Upgrading";
-		}
-		}
-		return "Unknown";
-	}
-
 };
-/*
-enum hitboxes
-{
-    HITBOX_HEAD = 0,
-    HITBOX_PELVIS = 1,
-    HITBOX_spine_0 = 2,
-    HITBOX_spine_1 = 3,
-    HITBOX_spine_2 = 4,
-    HITBOX_spine_3 = 5,
-    HITBOX_upperArm_L = 6,
-    lowerArm_L = 7,
-    hand_L = 8,
-    upperArm_R = 9,
-    lowerArm_R = 10,
-    hand_R = 11,
-    hip_L = 12,
-    knee_L = 13,
-    foot_L = 14,
-    hip_R = 15,
-    knee_R = 16,
-    foot_R = 17,	
-};
-*/
 class EngineClient
 {
 public:
@@ -609,7 +509,12 @@ public:
 		typedef void*(*OriginalFn)(void*, const char*);
 		return getvfunc<OriginalFn>(this, 82)(this, fileName);
 	}
-
+	void GetCursorPosition(int &x, int &y)
+	{
+		typedef void*(*OriginalFn)(void*, int, int);
+		return getvfunc<OriginalFn>(this, 96)(this, x, y);
+		//return getvfunc<void(*)(void*, int &, int &)>(this, 96)(this, x, y);
+	}
 
 };
 
@@ -740,55 +645,23 @@ public:
 		return getvfunc<OriginalFn>(this, 6)(this);
 	}
 };
-/*
+
 class CBaseCombatWeapon : public CBaseEntity
 {
 public:
-	int GetMaxClip1()
+	int GetWeaponID()
 	{
 		typedef int(*OriginalFn)(void*);
-		return getvfunc<OriginalFn>(this, 318)(this);
+		return getvfunc<OriginalFn>(this, 449)(this);
 	}
-
-	int GetMaxClip2()
+	bool IsBackstabable()
 	{
-		typedef int(*OriginalFn)(void*);
-		return getvfunc<OriginalFn>(this, 319)(this);
-	}
-
-	int GetSlot()
-	{
-		typedef int(*OriginalFn)(void*);
-		return getvfunc<OriginalFn>(this, 398)(this); // was 327, according to cathook, its 398
-	}
-
-	char *GetName()
-	{
-		typedef char *(*OriginalFn)(void*);
-		return getvfunc<OriginalFn>(this, 329)(this);
-	}
-
-	char *GetPrintName()
-	{
-		typedef char *(*OriginalFn)(void*);
-		return getvfunc<OriginalFn>(this, 401)(this); // was 330, according to cathook its 401
-	}
-
-	int GetItemDefinitionIndex()
-	{
-		DYNVAR_RETURN(int, this, "DT_EconEntity", "m_AttributeManager", "m_Item", "m_iItemDefinitionIndex");
-	}
-
-
-
-	float ChargedDamage()
-	{
-		DYNVAR_RETURN(float, this, "DT_TFSniperRifle", "SniperRifleLocalData", "m_flChargedDamage");
+		DYNVAR_RETURN(bool, this, "DT_TFWeaponKnife", "m_bReadyToBackstab");
 	}
 
 	
 };
-*/
+
 class CHudChat
 {
 public:

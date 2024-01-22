@@ -13,14 +13,14 @@ ifeq ($(config),debug_x32)
   TARGET = $(TARGETDIR)/libDarkstorm.so
   OBJDIR = obj/x32/Debug
   DEFINES += -DDEBUG
-  INCLUDES += -lSDL2
-  FORCE_INCLUDE += -lSDL2
+  INCLUDES += -lSDL2 -lX11
+  FORCE_INCLUDE += -lSDL2 -lX11
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -fPIC -fpermissive -fPIC -std=c++11 -lSDL2
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -fPIC -fpermissive -fPIC -std=c++11 -lSDL2 -lX11
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lSDL2
-  LDDEPS += -lSDL2
+  LIBS += -lSDL2 -lX11
+  LDDEPS += -lSDL2 -lX11
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS

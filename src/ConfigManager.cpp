@@ -53,7 +53,7 @@ void CConfigManager::SaveConfig()
         Save["gMisc"]["vmfov"] = gCheatMenu.misc_vmfov;
         Save["gMisc"]["bhop"] = gCheatMenu.misc_bunnyhop;
         Save["gMisc"]["autostrafe"] = gCheatMenu.misc_autostrafe;
-        Save["gMisc"]["autokilltaunt"] = gCheatMenu.misc_autokilltaunt; // not used yet. (again)
+        //Save["gMisc"]["autokilltaunt"] = gCheatMenu.misc_autokilltaunt; // not used yet. (again)
         Save["gMisc"]["svcheats"] = gCheatMenu.misc_svcheats; // not used yet when i accomplish to fix ConVars. 
 		/*
         *           DONE! Lets output it to the file!
@@ -109,7 +109,7 @@ void CConfigManager::LoadConfig()
         gCheatMenu.misc_bunnyhop = Load["gMisc"]["bhop"].asFloat();
         gCheatMenu.misc_autostrafe = Load["gMisc"]["autostrafe"].asFloat();
         gCheatMenu.misc_speedcrouch = Load["gMisc"]["speedcrouch"].asFloat();
-        gCheatMenu.misc_autokilltaunt = Load["gMisc"]["autokilltaunt"].asFloat();
+        //gCheatMenu.misc_autokilltaunt = Load["gMisc"]["autokilltaunt"].asFloat();
 
         load.close(); // done reading the file. Close it.
     }

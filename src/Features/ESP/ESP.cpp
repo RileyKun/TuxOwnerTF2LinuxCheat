@@ -35,6 +35,10 @@ void ESP::StartThisshit(CBaseEntity* pLocal)
 
 int ESP::GetPlayerColor(CBaseEntity* pPlayer)
 {
+	if (gCheatMenu.PlayerMode[pPlayer->GetIndex()] == 2)
+	{
+		return COLORCODE(75,0,130,255);
+	}
 	if (pPlayer->GetIndex() == gCheatMenu.iAimbotIndex)
 		return COLORCODE(0, 255, 0, 255); // green
 	switch (pPlayer->GetTeamNum())
@@ -58,7 +62,7 @@ Rewrite the esp to look more NullCore's ESP.
 Yes. Nullcore's.
 
 */
-
+/*
 void ESPBuildings(CBaseEntity* pEntity)
 {
 	auto entityhandle = pEntity->GetOwner(); // it should be named GetBuilder but whatever. Waxxy named it this way for no reason, probably cuz he's some tranny lol
@@ -85,6 +89,7 @@ void ESPBuildings(CBaseEntity* pEntity)
     	}
 	}
 }
+*/
 
 void ESP::ESPLOCAL(CBaseEntity* pEntity)
 {
@@ -354,7 +359,8 @@ void ESP::ActualfreakinESP(CBaseEntity* pEntity)
 
 	if (gCheatMenu.building_esp)
 	{
-		ESPBuildings(pEntity);
+		//ESPBuildings(pEntity);
+		// doesnt work
 	}
 
 	if (gCheatMenu.esp_box)

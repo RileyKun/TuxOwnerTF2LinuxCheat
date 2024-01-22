@@ -15,8 +15,29 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
         {
             AutoStrafe(pCmd);
         }
-        
     }
+
+	//Vector vX = entity->GetAngles();
+	//Vector vY = entity->GetAnglesHTC();
+	//auto *WritePitch = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]"));
+	//auto *WriteYaw = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]"));
+	/*
+    if (gCvars.aimbot_resolver && resolver)
+	{
+		if (vX.x == -89.0f)
+		{
+			*WritePitch = 90.0f;
+		}
+		if (vX.x == 89.0f)
+		{
+			*WritePitch = -90.0f;
+		}
+	}
+    */ // todo later
+	if (gCheatMenu.misc_tauntspin)
+	{
+		TauntSpin(pCmd, pLocal);
+	}
     if (gCheatMenu.misc_speedcrouch)
     {
         SpeedCrouch(pCmd);
@@ -26,15 +47,15 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
         float flCurTime = gInts.Engine->Time();
 	    static float flNextSend = 0.0f;
 	    static float thesleeptime = 0.1f;
-        static bool isThirdPersonEnabled = false;  
+         
 
         if (penisstate[SDL_SCANCODE_B] && flCurTime > flNextSend)
         {
             flNextSend = (flCurTime + thesleeptime);
-            isThirdPersonEnabled = !isThirdPersonEnabled;
+            gCheatMenu.isThirdPersonEnabled = !gCheatMenu.isThirdPersonEnabled;
 
         
-            pLocal->ForceTauntCam(isThirdPersonEnabled);
+            pLocal->ForceTauntCam(gCheatMenu.isThirdPersonEnabled);
         }
     }
     if (gCheatMenu.misc_enablevmfov)
@@ -66,7 +87,7 @@ void CMisc::AutoStrafe(CUserCmd* pCmd)
 
 void CMisc::SpeedCrouch(CUserCmd* pCmd)
 {
-    if (!(pCmd->buttons & IN_ATTACK) && (pCmd->buttons & IN_DUCK))
+    if ((pCmd->buttons & IN_DUCK)) // !(pCmd->buttons & IN_ATTACK)
     {
         Vector vLocalAngles = pCmd->viewangles;
 	    float speed = pCmd->forwardmove;
@@ -81,3 +102,18 @@ void CMisc::SpeedCrouch(CUserCmd* pCmd)
 	    }
     }
 }
+
+void CMisc::TauntSpin(CUserCmd* pCmd, CBaseEntity* pLocal)
+{
+	Vector/*&*/ angles = pCmd->viewangles;
+	if (pLocal->GetCond() & TFCond_Taunting)
+	{
+		static float spinAngle = 0.0f; 
+
+		spinAngle += gCheatMenu.misc_spinspeed; 
+
+		angles.y = spinAngle;
+		
+	}
+}
+
