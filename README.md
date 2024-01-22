@@ -2,4 +2,8 @@
 
 This shit aint gonna be public since i dont want to help the community. Fuck em.
 
-# not gonna add todo list here either fuck that
+# not gonna add todo list.. jk.
+Annoncer, SetupVelocity, getting SDL to work, Anti-Aim, Pure Bypass, DT, Warp.
+
+# done list
+Menu, Aimbot, ESP, autobackstab, triggerbot, Info Box, Config Manager, BHop, Strafe, FoV changer, Taunt Spin, Crouch Speed, and more. (i think i dont remember)
