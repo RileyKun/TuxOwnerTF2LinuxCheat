@@ -253,6 +253,7 @@ public:
 		return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
 	}
 	*/
+	
 	char* szGetClass()
 	{
 		DYNVAR(iClass, int, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
@@ -332,7 +333,7 @@ public:
 	*/
 	Vector GetVelocityLocal()
 	{
-		DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "localdata", "m_vecVelocity[0]");
+		DYNVAR_RETURN(Vector, this, "DT_BasePlayer", "localdata", "m_vecVelocity[0]");
 	}
 };
 class EngineClient
@@ -1010,7 +1011,12 @@ protected:
 	virtual ICVarIteratorInternal	*FactoryInternalIterator(void) = 0;
 	friend class Iterator;
 };
-
+//#include "steam\ISteamClient017.h"
+//#include "steam\ISteamFriends002.h"
+//#include "steam\ISteamUser017.h"
+#include "SDK/Steam/ISteamClient017.h"
+#include "SDK/Steam/ISteamFriends002.h"
+#include "SDK/Steam/ISteamUser017.h"
 class CInterfaces
 {
 public:
@@ -1024,6 +1030,9 @@ public:
 	IVModelInfo* ModelInfo;
 	IGameEventManager2* EventManager;
 	ICvar* cvar;
+	ISteamClient017* steamclient;
+	ISteamFriends002* steamfriends;
+	ISteamUser017* steamuser;
 };
 extern CInterfaces gInts;
 extern CPlayerVariables gPlayerVars;

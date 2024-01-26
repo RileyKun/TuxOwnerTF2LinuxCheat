@@ -20,6 +20,12 @@ char* szHealthModes[] = {
 char* szBoneModes[] = {
 	"OFF", "White", "Health", "Team",
 };
+char* hvhpitchchar[] = {
+	"Fake UP", "UP", "Fake Down", "Down",
+};
+char* hvhyawchar[] = {
+	"Right", "Left", "Back", "Emotion", "Random",
+};
 /*
 enum ESettingsHitboxes {
     SETT_HITBOX_HEAD  = 0,
@@ -142,15 +148,28 @@ void CCheatMenu::Render(void)
 			gCheatMenu.misc_loadconfig = 0.0f; 
 		}
 	}
-
+	i = AddItem(i, "HvH", &gCheatMenu.hvh_switch, 0, 1, 1, true);
+	if (gCheatMenu.hvh_switch)
+	{
+		i = AddItem(i, " - Enable AA", &gCheatMenu.hvh_enable, 0, 1, 1, false);
+		i = AddItem(i, " - Pitch", &gCheatMenu.hvh_pitch, 0, 4, 1, false);
+		i = AddItem(i, " - Yaw", &gCheatMenu.hvh_yaw, 0, 5, 1, false);
+	}
 	i = AddItem(i, "Misc", &gCheatMenu.misc_switch, 0, 1, 1, true);
 	if (gCheatMenu.misc_switch)
 	{
 		i = AddItem(i, " - SpeedCrouch", &gCheatMenu.misc_speedcrouch, 0, 1, 1, false);
 		i = AddItem(i, " - AutoBackStab", &gCheatMenu.misc_autobackstab, 0, 1, 1, false);
 		i = AddItem(i, " - TauntSpin", &gCheatMenu.misc_tauntspin, 0, 1, 1, false);
+		i = AddItem(i, " - Dump Players", &gCheatMenu.misc_dumpplayers, 0, 1, 1, false);
 		if (gCheatMenu.misc_tauntspin)
 			i = AddItem(i, " - Spin Speed", &gCheatMenu.misc_spinspeed, 0, 180, 1, false);
+
+		if (gCheatMenu.misc_dumpplayers)
+		{
+			gConfig.DumpPlayers();
+			gCheatMenu.misc_dumpplayers = 0.0f; 
+		}
 		i = AddItem(i, " - ThirdPerson", &gCheatMenu.misc_thirdperson, 0, 1, 1, false);
 		i = AddItem(i, " - VMFoV", &gCheatMenu.misc_enablevmfov, 0, 1, 1, false);
 		if (gCheatMenu.misc_enablevmfov)
@@ -159,6 +178,7 @@ void CCheatMenu::Render(void)
 		}
 		i = AddItem(i, " - Bunnyhop", &gCheatMenu.misc_bunnyhop, 0, 1, 1, false);
 		i = AddItem(i, " - Autostrafe", &gCheatMenu.misc_autostrafe, 0, 1, 1, false);
+		i = AddItem(i, " - Followbot", &gCheatMenu.followbot_enabled, 0, 1, 1, false);
 		//i = AddItem(i, " - SV_CHEATS bypass", &gCheatMenu.misc_svcheats, 0, 1, 1, false);
 	}
 
@@ -238,9 +258,12 @@ void CCheatMenu::DrawInfo(int speedValue)
     w = 200,
     h = 14;
 
+	//int iMenuIndexNCC = 4;
+
 	int clrColor = Color::COLORNULLCORE;
 
-	gDrawManager.DrawRect(x, y - (h + 4), w, 2 * h + 21, COLORCODE(20, 20, 20, 128));
+	//gDrawManager.DrawRect(x, y - (h + 4), w, 2 * h + 21, COLORCODE(20, 20, 20, 128));
+	gDrawManager.DrawRect(x, y - (h + 4), w, 4 * h + 21, COLORCODE(20, 20, 20, 128));
 	gDrawManager.OutlineRect(x, y - (h + 4), w, (h + 4), clrColor);
 
 	// Draw the first text inside the box
@@ -248,15 +271,22 @@ void CCheatMenu::DrawInfo(int speedValue)
 
 	// Draw the second text inside the box
 	const char* thirdPersonStatus = gCheatMenu.isThirdPersonEnabled ? "Enabled" : "Disabled";
+	const char* AntiAimStatus = gCheatMenu.hvh_enable ? "Enabled" : "Disabled";
 	gDrawManager.DrawString(x + 4, y - (h + 4) + 20, clrColor, "Thirdperson: %s", thirdPersonStatus);
+
+	gDrawManager.DrawString(x + 4, y - (h + 4) + 40, clrColor, "Anti-Aim: %s", AntiAimStatus);
 
 	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 
-	gDrawManager.OutlineRect(x, y - (h + 4), w, 2 * h + 21, clrColor);
+	//gDrawManager.OutlineRect(x, y - (h + 4), w, 2 * h + 21, clrColor);
+	gDrawManager.OutlineRect(x, y - (h + 4), w, 4 * h + 21, clrColor);
+	//gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (2 * h + 21) + 2, COLORCODE(0, 0, 0, 255));
+	//gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (2 * h + 21) - 2, COLORCODE(0, 0, 0, 255));
 
-	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (2 * h + 21) + 2, COLORCODE(0, 0, 0, 255));
-	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (2 * h + 21) - 2, COLORCODE(0, 0, 0, 255));
+	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (4 * h + 21) + 2, COLORCODE(0, 0, 0, 255));
+	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (4 * h + 21) - 2, COLORCODE(0, 0, 0, 255));
+
 
 	// Draw the final text outside the box
 	gDrawManager.DrawString(x + 4, y - 16, clrColor, "Information box");
@@ -339,6 +369,16 @@ void CCheatMenu::DrawMenu(void)
 					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szHealthModes[(int)pMenu[i].value[0]]);
 				}
 
+				if (!strcmp(pMenu[i].szTitle, " - Pitch"))
+				{
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", hvhpitchchar[(int)pMenu[i].value[0]]);
+				}
+
+				if (!strcmp(pMenu[i].szTitle, " - Yaw"))
+				{
+					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", hvhyawchar[(int)pMenu[i].value[0]]);
+				}
+
 				else if (!strcmp(pMenu[i].szTitle, " - Bones"))
 				{
 					gDrawManager.DrawString(xx, y + (h * i), pMenu[i].value[0] ? Color::COLORWHITE : COLORCODE(105, 105, 105, 255), "%s", szBoneModes[(int)pMenu[i].value[0]]);
@@ -392,6 +432,16 @@ void CCheatMenu::DrawMenu(void)
 				if (!strcmp(pMenu[i].szTitle, " - Health"))
 				{
 					gDrawManager.DrawString(xx, y + (h * i), clrColor, "%s", szHealthModes[(int)pMenu[i].value[0]]);
+				}
+
+				if (!strcmp(pMenu[i].szTitle, " - Pitch"))
+				{
+					gDrawManager.DrawString(xx, y + (h * i), clrColor, "%s", hvhpitchchar[(int)pMenu[i].value[0]]);
+				}
+				
+				if (!strcmp(pMenu[i].szTitle, " - Yaw"))
+				{
+					gDrawManager.DrawString(xx, y + (h * i), clrColor, "%s", hvhyawchar[(int)pMenu[i].value[0]]);
 				}
 
 				else if (!strcmp(pMenu[i].szTitle, " - Bones"))

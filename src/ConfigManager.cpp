@@ -115,3 +115,26 @@ void CConfigManager::LoadConfig()
     }
     
 }
+/*
+*   Not really supposed to be here but who cares?
+*/
+void CConfigManager::DumpPlayers()
+{
+    std::ofstream output("players.txt", std::ios_base::app); // app allows to push to file
+    for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
+	{
+		if (i == me)
+			continue;
+		CBaseEntity* pEntity = GetBaseEntity(i);
+
+		if (!pEntity)
+			continue;
+		
+        player_info_t pInfo;
+        if (!gInts.Engine->GetPlayerInfo(pEntity->GetIndex(), &pInfo))
+            continue;
+        
+        output << std::to_string(pInfo.friendsID).c_str() << " : " << pInfo.name << std::endl;
+	}
+    output.close();
+}

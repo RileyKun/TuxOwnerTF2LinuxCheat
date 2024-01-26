@@ -23,6 +23,8 @@ CreateInterface_t ClientFactory = NULL;
 CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
 CreateInterface_t CvarFactory = NULL;
+CreateInterface_t SteamFactory = NULL;
+
 
 void mainThread()
 {	
@@ -31,11 +33,17 @@ void mainThread()
 		//Gottammove those factorys up.
 		//Grab the factorys from their resptive module's EAT.
 
-		//system("ls -l . > /home/josh/log.txt");
+		system("ls -l . > /home/vannie/log.txt");
+		/*
+		* .SO stuff
+		*/
 		VGUIFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/vguimatsurface.so" ), "CreateInterface" );
 		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
 		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
 		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./bin/libvstdlib.so"), "CreateInterface");
+		//SteamFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./.steam/bin/steamclient.so"), "CreateInterface");
+		
+		
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
 		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
@@ -44,6 +52,13 @@ void mainThread()
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		gInts.cvar = ( ICvar* )CvarFactory("VEngineCvar004", NULL);
+		//gInts.steamclient = (ISteamClient017*)SteamFactory("SteamClient017", NULL);
+		//HSteamPipe hNewPipe = gInts.steamclient->CreateSteamPipe();
+		//HSteamUser hNewUser = gInts.steamclient->ConnectToGlobalUser(hNewPipe);
+		//gInts.steamfriends = reinterpret_cast<ISteamFriends002 *>(gInts.steamclient->GetISteamFriends(hNewUser, hNewPipe, STEAMFRIENDS_INTERFACE_VERSION_002));
+		//gInts.steamuser = reinterpret_cast<ISteamUser017 *>(gInts.steamclient->GetISteamUser(hNewUser, hNewPipe, STEAMUSER_INTERFACE_VERSION_017));
+
+
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
 		XASSERT(gInts.Engine);
@@ -51,7 +66,7 @@ void mainThread()
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
 		//XASSERT(gInts.cvar);
-		//XASSERT(gInts.EventManager);
+		XASSERT(gInts.EventManager);
 		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");
 		
 		//gKillSay.InitKillSay(); // yes, we run it in dllmain. Don't ask, i dont know. 
@@ -135,6 +150,7 @@ void mainThread()
 			clientModeHook->Init(gInts.ClientMode);
 			clientModeHook->HookMethod(&Hooked_CreateMove, gOffsets.iCreateMoveOffset); //ClientMode create move is called inside of CHLClient::CreateMove, and thus no need for hooking WriteUserCmdDelta.
 			clientModeHook->Rehook();
+			//VMTBaseManager* clientHook = new VMTBaseManager();
 			// if you really want to use a sig, here is one.
 			// its far to long (the whole function, but go ahead if you really feel like it.
 			// it was mainly to test that my signature scanning was working.

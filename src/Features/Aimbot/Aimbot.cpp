@@ -146,7 +146,7 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			continue;
 
 		if (pEntity->GetCond() & TFCond_Ubercharged ||
-			pEntity->GetCond() & TFCond_UberchargeFading ||
+			//pEntity->GetCond() & TFCond_UberchargeFading || <- ubercharge fading ignores forever for some reason. Get rid of it!
 			pEntity->GetCond() & TFCond_Bonked)
 			continue;
         if (pEntity->GetCond() & TFCond_Cloaked && gCheatMenu.priorties_ignorecloaked)
@@ -287,9 +287,13 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {    
 	old_movement_t old_mov = old_movement_t();
     // i genuinely think get slot is fucked lmao
-	//if (!pLocal->GetActiveWeapon())
-	//	return;
+	if (!pLocal->GetActiveWeapon())
+		return;
 	
+	
+	if (pLocal->GetActiveWeapon()->GetWeaponID() == TF_WEAPON_KNIFE)
+		return;  
+
 	//if (pLocal->GetActiveWeapon()->GetSlot() == WPN_SLOT_MELEE)
 	//	return; // dont melee
 
@@ -334,7 +338,7 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	//if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
 	//		if (!CanAmbassadorHeadshot(pLocal)) return;	
-	//pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
+	pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
 
 	if (!gCheatMenu.aimbot_silent) {
 		gInts.Engine->SetViewAngles(pCommand->viewangles);
@@ -342,29 +346,9 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (gCheatMenu.aimbot_silent) 
     { // apply our movement fix if silent aim is enabled.
-		//FixMovementForUserCmd(pCommand, old_mov);
-		if (pCommand->buttons & IN_ATTACK)
-		{
-			w(true, vAngs, pCommand);
-		}
-		else if (gCheatMenu.aimbot_autoshoot)
-		{
-			w(true, vAngs, pCommand);
-			pCommand->buttons |= IN_ATTACK;
-		}
-		else
-		{
-			if (pCommand->buttons & IN_ATTACK)
-				w(true, vAngs, pCommand);
-		}
+		FixMovementForUserCmd(pCommand, old_mov);
 	}
-	else
-	{
-		w(gCheatMenu.aimbot_silent, vAngs, pCommand);
-		if (gCheatMenu.aimbot_autoshoot)
-			pCommand->buttons |= IN_ATTACK;
-	}
-	/*
+	
 	if (gCheatMenu.aimbot_autoshoot)
 	{
 		float flCurTime = gInts.Engine->Time();
@@ -396,7 +380,6 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			pCommand->buttons |= IN_ATTACK;
 		}
 	}
-	*/ // i dont play sniper.
 
 	if (gCheatMenu.aimbot_autoscope && !pLocal->IsScoped() && pLocal->szGetClass() == "Sniper")
 	{

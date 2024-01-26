@@ -14,8 +14,8 @@ void CAutoBackStab::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     {
         return;
     }
-    if (pLocal->szGetClass() != "Spy")
-        return;
+   // if (pLocal->szGetClass() != "Spy")
+   ///     return;
     if (pLocal->GetActiveWeapon()->GetWeaponID() == TF_WEAPON_PDA_SPY_BUILD || pLocal->GetActiveWeapon()->GetWeaponID() == TF_WEAPON_REVOLVER)
         return;
     if (pLocal->GetActiveWeapon()->GetWeaponID() == TF_WEAPON_PDA_SPY)

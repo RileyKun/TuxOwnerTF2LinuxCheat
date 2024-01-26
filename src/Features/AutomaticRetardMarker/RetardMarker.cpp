@@ -42,19 +42,27 @@ void CRetard::FindNiggers(CBaseEntity* pEntity)
     /*
     * Todo: more strings to mark retards as
     */
+    /*
+    "\x6[\x3Tux\x6] \x4%s is possibly a tranny"
+    */
+    std::string chatprintftranny = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + "is possibly a tranny";
+    std::string chatprintffurry  = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + "is possibly a furfag";
+    std::string chatprintfpedo  = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + "is possibly a pedophile";
+
+
     if(isWordInList(pInfo.name, tranny) && flCurTime > flNextSend) 
     {
-        gInts.ClientMode->m_pChat->ChatPrintf(gInts.Engine->GetLocalPlayer(), "\x6[\x3Tux\x6] \x4%d is possibly a tranny", pInfo.name);	   
+        gInts.ClientMode->m_pChat->ChatPrintf(0, chatprintftranny.c_str());	   
         flNextSend = (flCurTime + thesleeptime);
     }
     if(isWordInList(pInfo.name, pedo) && flCurTime > flNextSend) 
     {
-        gInts.ClientMode->m_pChat->ChatPrintf(gInts.Engine->GetLocalPlayer(), "\x6[\x3Tux\x6] \x4%d is possibly a pedophile", pInfo.name);	   
+        gInts.ClientMode->m_pChat->ChatPrintf(0, chatprintfpedo.c_str());	   
         flNextSend = (flCurTime + thesleeptime);
     }
     if(isWordInList(pInfo.name, furry) && flCurTime > flNextSend) 
     {
-        gInts.ClientMode->m_pChat->ChatPrintf(gInts.Engine->GetLocalPlayer(), "\x6[\x3Tux\x6] \x4%d is possibly a furfag", pInfo.name);	   
+        gInts.ClientMode->m_pChat->ChatPrintf(0, chatprintffurry.c_str());	   
         flNextSend = (flCurTime + thesleeptime);
     }
 }

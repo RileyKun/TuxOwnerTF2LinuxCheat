@@ -23,6 +23,7 @@ public:
 	//private:
 	bool bMenuActive;
 	int iMenuIndex;
+
 	int iMenuItems;
 	CMenuItems_t pMenu[120];
 	int iAimbotIndex = -1;
@@ -74,10 +75,18 @@ public:
 	float misc_tauntspin;
 	float misc_spinspeed;
 	float misc_autobackstab;
+	float misc_dumpplayers;
 	// i'll do kill say later
 
 	float misc_saveconfig;
 	float misc_loadconfig;
+
+	float hvh_switch;
+	float hvh_enable;
+	float hvh_yaw;
+	float hvh_pitch;
+
+	float followbot_enabled;
 
 	//float autobackstab;
 	//float autobackstab_silent;

@@ -13,7 +13,7 @@ void CDrawManager::Initialize()
 
 	gInts.Engine->GetScreenSize(gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
 	m_Font = gInts.Surface->CreateFont();
-	gInts.Surface->SetFontGlyphSet(m_Font, "Verdana", ESP_HEIGHT, 500, 0, 0, 0x200);
+	gInts.Surface->SetFontGlyphSet(m_Font, "Verdana", ESP_HEIGHT, 800, 0, 0, 0x200);
 }
 //===================================================================================
 void CDrawManager::DrawString(int x, int y, uint32_t Color, const wchar_t *pszText)

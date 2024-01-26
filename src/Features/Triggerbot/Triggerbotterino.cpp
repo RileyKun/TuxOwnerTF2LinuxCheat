@@ -42,7 +42,7 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	// return;
 
 	if (trace.m_pEnt->GetCond() & TFCond_Ubercharged ||
-		trace.m_pEnt->GetCond() & TFCond_UberchargeFading ||
+		//trace.m_pEnt->GetCond() & TFCond_UberchargeFading ||
 		trace.m_pEnt->GetCond() & TFCond_Bonked)
 		return;
 

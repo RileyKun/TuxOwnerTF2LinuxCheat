@@ -42,11 +42,6 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 		
 		if ( vguiFocusOverlayPanel == vguiPanel ) //If we're on MatSystemTopPanel, call our drawing code.
 		{
-			/*
-			Draw the menu Doesnt really matter where we draw it tho lol
-			*/
-			//if (gCheatMenu.misc_svpure)
-			//}
 			//This section will be called when the player is not at the menu game and can see the screen or not taking a screenshot.
 			//gDrawManager.DrawString( 200, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
 

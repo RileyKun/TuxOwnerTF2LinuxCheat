@@ -6,6 +6,7 @@ class CConfigManager
 public:
     void SaveConfig();
     void LoadConfig(); 
+    void DumpPlayers();
 };
 
 extern CConfigManager gConfig;

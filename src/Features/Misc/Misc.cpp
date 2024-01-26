@@ -16,24 +16,6 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
             AutoStrafe(pCmd);
         }
     }
-
-	//Vector vX = entity->GetAngles();
-	//Vector vY = entity->GetAnglesHTC();
-	//auto *WritePitch = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]"));
-	//auto *WriteYaw = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]"));
-	/*
-    if (gCvars.aimbot_resolver && resolver)
-	{
-		if (vX.x == -89.0f)
-		{
-			*WritePitch = 90.0f;
-		}
-		if (vX.x == 89.0f)
-		{
-			*WritePitch = -90.0f;
-		}
-	}
-    */ // todo later
 	if (gCheatMenu.misc_tauntspin)
 	{
 		TauntSpin(pCmd, pLocal);
@@ -61,16 +43,22 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     if (gCheatMenu.misc_enablevmfov)
     {
         pLocal->setfov(gCheatMenu.misc_vmfov);
+        if (pLocal->GetCond() & TFCond_Zoomed)
+        {
+            pLocal->setfov(70);
+        }
     }
     if (!gCheatMenu.misc_enablevmfov)
     {
-        pLocal->setfov(100); // reset fov i guess sdfshdjdfhj
+        pLocal->setfov(90); // reset fov i guess sdfshdjdfhj
     }
     if (gCheatMenu.misc_svcheats)
     {
         static ConVar* cheats = gInts.cvar->FindVar("sv_cheats");
         cheats->SetValue(1);
     }
+
+    //NameSteal();
 }
 
 void CMisc::BHOP(CUserCmd* pCmd) // yes i know i shouldnt make a another function just for one line of code but fuck you i can do whatever i want lol this is my cheeto.
@@ -117,3 +105,32 @@ void CMisc::TauntSpin(CUserCmd* pCmd, CBaseEntity* pLocal)
 	}
 }
 
+void CMisc::NameSteal()
+{
+    /*
+    for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
+	{
+		if (i == me)
+			continue;
+		//if (!gCheatMenu.esp_active)
+		//	continue;
+		CBaseEntity* pEntity = GetBaseEntity(i);
+
+		if (!pEntity)
+			continue;
+
+        player_info_t pInfo;
+        if (!gInts.Engine->GetPlayerInfo(pEntity->GetIndex(), &pInfo))
+            return;
+
+        float flCurTime = gInts.Engine->Time();
+	    static float flNextSend = 0.0f;
+
+        if (flCurTime > flNextSend)
+	    {      // todo : add a way change your name back to the original state after quiting the game / unloading
+		    gInts.steamfriends->SetPersonaName(pInfo.name);
+		    flNextSend = (flCurTime + 10.0f);
+	    }
+    }
+    */
+}
