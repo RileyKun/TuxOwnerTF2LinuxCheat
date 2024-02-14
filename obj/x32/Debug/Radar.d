@@ -1,11 +1,12 @@
-obj/x32/Debug/Panels.o: src/Panels.cpp src/SDK.h src/windowsTypes.h \
- src/CGlobalVars.h src/CSignature.h src/Log.h src/VMTHooks.h src/Vector.h \
- src/WeaponList.h src/dt_recv2.h src/dt_common2.h src/getvfunc.h \
- src/CNetVars.h src/SDK/studiohdr.h src/SDK/Enums.h src/SDK/ConVar.h \
- src/SDK/Steam/ISteamClient017.h src/SDK/Steam/SteamTypes.h \
- src/SDK/Steam/EResult.h src/SDK/Steam/ESteamError.h \
- src/SDK/Steam/ESteamNotify.h src/SDK/Steam/ESteamSeekMethod.h \
- src/SDK/Steam/ESteamBufferMethod.h src/SDK/Steam/ESteamFindFilter.h \
+obj/x32/Debug/Radar.o: src/Radar.cpp src/Radar.h src/SDK.h \
+ src/windowsTypes.h src/CGlobalVars.h src/CSignature.h src/Log.h \
+ src/VMTHooks.h src/Vector.h src/WeaponList.h src/dt_recv2.h \
+ src/dt_common2.h src/getvfunc.h src/CNetVars.h src/SDK/studiohdr.h \
+ src/SDK/Enums.h src/SDK/ConVar.h src/SDK/Steam/ISteamClient017.h \
+ src/SDK/Steam/SteamTypes.h src/SDK/Steam/EResult.h \
+ src/SDK/Steam/ESteamError.h src/SDK/Steam/ESteamNotify.h \
+ src/SDK/Steam/ESteamSeekMethod.h src/SDK/Steam/ESteamBufferMethod.h \
+ src/SDK/Steam/ESteamFindFilter.h \
  src/SDK/Steam/ESteamSubscriptionBillingInfoType.h \
  src/SDK/Steam/ESteamPaymentCardType.h \
  src/SDK/Steam/ESteamAppUpdateStatsQueryType.h \
@@ -35,9 +36,9 @@ obj/x32/Debug/Panels.o: src/Panels.cpp src/SDK.h src/windowsTypes.h \
  src/SDK/Steam/EVoiceResult.h src/SDK/Steam/ECurrencyCode.h \
  src/SDK/Steam/ClientCommon.h src/SDK/Steam/ISteamFriends002.h \
  src/SDK/Steam/FriendsCommon.h src/SDK/Steam/ISteamUser017.h \
- src/SDK/Steam/UserCommon.h src/Panels.h src/CDrawManager.h \
- src/Features/ESP/ESP.h src/CMenu.h src/Radar.h src/Vector2.h \
- src/QAngle.h src/Client.h
+ src/SDK/Steam/UserCommon.h src/CMenu.h src/Vector2.h src/CDrawManager.h \
+ src/Panels.h src/QAngle.h
+src/Radar.h:
 src/SDK.h:
 src/windowsTypes.h:
 src/CGlobalVars.h:
@@ -103,11 +104,8 @@ src/SDK/Steam/ISteamFriends002.h:
 src/SDK/Steam/FriendsCommon.h:
 src/SDK/Steam/ISteamUser017.h:
 src/SDK/Steam/UserCommon.h:
-src/Panels.h:
-src/CDrawManager.h:
-src/Features/ESP/ESP.h:
 src/CMenu.h:
-src/Radar.h:
 src/Vector2.h:
+src/CDrawManager.h:
+src/Panels.h:
 src/QAngle.h:
-src/Client.h:

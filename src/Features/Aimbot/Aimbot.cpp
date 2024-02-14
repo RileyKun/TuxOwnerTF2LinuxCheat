@@ -149,18 +149,19 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			//pEntity->GetCond() & TFCond_UberchargeFading || <- ubercharge fading ignores forever for some reason. Get rid of it!
 			pEntity->GetCond() & TFCond_Bonked)
 			continue;
-        if (pEntity->GetCond() & TFCond_Cloaked && gCheatMenu.priorties_ignorecloaked)
+        if (pEntity->GetCond() & TFCond_Cloaked && gCheatMenu.priorties_ignorecloaked && gCheatMenu.PlayerMode[i] != 2)
         {
             continue;
         }
-        if (pEntity->GetCond() & TFCond_Taunting && gCheatMenu.priorties_ignoretaunting)
+        if (pEntity->GetCond() & TFCond_Taunting && gCheatMenu.priorties_ignoretaunting && gCheatMenu.PlayerMode[i] != 2)
         {
             continue;
         }
-        if (pEntity->GetCond() & TFCond_Disguised && gCheatMenu.priorties_ignoredisguised)
+        if (pEntity->GetCond() & TFCond_Disguised && gCheatMenu.priorties_ignoredisguised && gCheatMenu.PlayerMode[i] != 2)
         {
             continue;
         }
+		
 
 		float flDistToTarget = (vLocal - vEntity).Length();
         double minimalDistance = 99999.0;
@@ -179,6 +180,12 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (flFOV < gCheatMenu.aimbot_fov)
 	{
 		if (gCheatMenu.PlayerMode[i] == 2)
+			return i;
+		if (pEntity->GetHealth() < 100)
+			return i;
+		if (pEntity->GetClassNum() == TF2_Heavy && gCheatMenu.priorties_preferheavy)
+			return i;
+		if (pEntity->GetClassNum() == TF2_Medic && gCheatMenu.priorties_prefermedic)
 			return i;
 		//flDistToBest = flDistToTarget;
 		//flDistToBest = flFOV;

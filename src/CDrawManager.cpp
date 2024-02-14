@@ -1,6 +1,7 @@
 #include "CDrawManager.h"
 #include "windowsTypes.h"
 #include <cstring>
+#define COLORCODE(r, g, b, a) ((uint32_t)((((r)&0xff) << 24) | (((g)&0xff) << 16) | (((b)&0xff) << 8) | ((a)&0xff)))
 //===================================================================================
 CDrawManager gDrawManager;
 
@@ -13,7 +14,18 @@ void CDrawManager::Initialize()
 
 	gInts.Engine->GetScreenSize(gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
 	m_Font = gInts.Surface->CreateFont();
-	gInts.Surface->SetFontGlyphSet(m_Font, "Verdana", ESP_HEIGHT, 800, 0, 0, 0x200);
+	gInts.Surface->SetFontGlyphSet(m_Font, "Tahoma", ESP_HEIGHT, 800, 0, 0, 0x200);
+}
+void CDrawManager::outline(int x, int y, int w, int h, int clrColor)
+{
+	gInts.Surface->DrawSetColor(RED(clrColor), GREEN(clrColor), BLUE(clrColor), ALPHA(clrColor));
+	gInts.Surface->DrawOutlinedRect(x, y, x + w, y + h);
+}
+void CDrawManager::DrawRectRadar(int x,int y,int w,int h, int clrColor)
+{
+	gDrawManager.outline(x, y, w, h, clrColor);
+	gDrawManager.outline(x, y , w, h , COLORCODE(21, 255, 21,255));
+	gDrawManager.outline(x , y , w , h , COLORCODE(21, 255, 21,255));
 }
 //===================================================================================
 void CDrawManager::DrawString(int x, int y, uint32_t Color, const wchar_t *pszText)

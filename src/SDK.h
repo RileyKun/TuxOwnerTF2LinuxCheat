@@ -119,6 +119,10 @@ public:
 	short mousedy;		   //3A
 	bool hasbeenpredicted; //3C;
 };
+
+/* CTargetID::GetTargetForSteamAvatar -> IsPlayerOnSteamFriendsList */
+
+
 class CBaseEntity
 {
 public: 

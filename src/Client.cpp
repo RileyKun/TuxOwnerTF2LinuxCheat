@@ -7,9 +7,11 @@
 #include "Features/AutoBackStab/AutoBack.h"
 #include "Features/autistvsautist/HvH.h"
 #include "Followbot.h"
+#include "CSignature.h"
 
 CGlobalzz g;
 Vector qLASTTICK;
+
 
 //============================================================================================
 bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd *pCommand)
@@ -29,6 +31,9 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 		CBaseEntity *oEntity = gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());
 
 
+		
+
+		
 		//Do your client hook stuff here. This function is called once per tick. For time-critical functions, run your code in PaintTraverse.
 		// For move specific functions, run them here.
 		//if (pCommand->buttons & IN_JUMP) //To prove we have control over the CUserCmd, write the IN_ATTACK bit every time we jump.

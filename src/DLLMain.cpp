@@ -10,6 +10,7 @@
 #include "Math/CMath.h"
 #include "argh.h" // killsay and soon to be annoncer
 #include <SDL2/SDL.h>
+#include "Client.h"
 
 
 COffsets gOffsets;
@@ -65,8 +66,11 @@ void mainThread()
 		XASSERT(gInts.EntList);
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
-		//XASSERT(gInts.cvar);
+		XASSERT(gInts.cvar);
 		XASSERT(gInts.EventManager);
+
+		g.sendpacket = gSignatures.GetEngineSignature("BE ? ? ? ? E9 ? ? ? ? 8D B6 00 00 00 00 A1 ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? 85 C0 0F 84 ? ? ? ? 8D 55 A8 C7 44 24 ? ? ? ? ?") + 1;
+
 		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");
 		
 		//gKillSay.InitKillSay(); // yes, we run it in dllmain. Don't ask, i dont know. 

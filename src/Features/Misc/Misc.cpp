@@ -1,5 +1,6 @@
 #include "Misc.h"
 #include "../../CMenu.h"
+#include "../../Client.h"
 CMisc gMisc;
 #include <SDL2/SDL.h>
 const Uint8 *penisstate = SDL_GetKeyboardState(NULL);
@@ -57,6 +58,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
         static ConVar* cheats = gInts.cvar->FindVar("sv_cheats");
         cheats->SetValue(1);
     }
+    //*g.sendpacket = penisstate[SDL_SCANCODE_R];
 
     //NameSteal();
 }

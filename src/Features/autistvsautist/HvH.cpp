@@ -99,7 +99,7 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 		if (gCheatMenu.hvh_yaw == 5)//Random
 			angles.y = RandFloatRange(-180.0f, 180.0f);
-        /*
+        
 		if (gCheatMenu.hvh_yaw == 6) //Fake Sideways Right
 		{
 			if (*g.sendpacket)
@@ -145,7 +145,6 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			else
 				angles.y += 0.0f;
 		}
-        */ // i dont have g.sendpacket working yet.
 	}
 
 	//	if (clamp) fClampAngle(angles);

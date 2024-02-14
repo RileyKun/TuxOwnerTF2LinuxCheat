@@ -5,6 +5,8 @@
 #include "CNetVars.h"
 #include "CMenu.h"
 #include "CSignature.h"
+#include "Radar.h"
+#include "Client.h"
 //#include "Colors.h"
 CScreenSize gScreenSize;
 //===================================================================================
@@ -58,8 +60,10 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 
 			if (pBaseLocalEnt == NULL) //Always check for null pointers.
 				return;
+
+			gRadar.DrawRadarBack();
 			gESP.StartThisshit(pBaseLocalEnt);
-			Vector velocity = pBaseLocalEnt->GetVelocityLocal();
+			Vector velocity = pBaseLocalEnt->GetVelocity();
 			float g_speed = 0.f;
 			g_speed = abs(sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]));
 
@@ -70,7 +74,7 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 			//int asswipe = static_cast<int>(velocity.x) * 1000000 + static_cast<int>(velocity.y) * 1000 + static_cast<int>(velocity.z);
 			//gDrawManager.DrawString(200,200, COLORCODE(255,255,255,255),  "Velocity: %d", pBaseLocalEnt->GetVelocityLocal());
 			//int asswipe = static_cast<int>(velocity.x * 1000); // Assuming x is a float or double
-			gCheatMenu.DrawInfo(speedDigits); // 10 for testing, i'll add velocity later mate.
+			gCheatMenu.DrawInfo(speedDigits, g.sendpacket); // 10 for testing, i'll add velocity later mate.
 		}
 	}
 	catch(...)

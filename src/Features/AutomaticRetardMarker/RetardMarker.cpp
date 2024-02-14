@@ -42,13 +42,9 @@ void CRetard::FindNiggers(CBaseEntity* pEntity)
     /*
     * Todo: more strings to mark retards as
     */
-    /*
-    "\x6[\x3Tux\x6] \x4%s is possibly a tranny"
-    */
     std::string chatprintftranny = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + "is possibly a tranny";
     std::string chatprintffurry  = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + "is possibly a furfag";
     std::string chatprintfpedo  = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + "is possibly a pedophile";
-
 
     if(isWordInList(pInfo.name, tranny) && flCurTime > flNextSend) 
     {

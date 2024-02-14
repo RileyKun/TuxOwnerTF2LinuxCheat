@@ -59,7 +59,8 @@ obj/x32/Debug/Features/ESP/ESP.o: src/Features/ESP/ESP.cpp \
  src/Features/ESP/../../SDK/Steam/ISteamUser017.h \
  src/Features/ESP/../../SDK/Steam/UserCommon.h \
  src/Features/ESP/../../CDrawManager.h src/Features/ESP/../../Panels.h \
- src/Features/ESP/../../CMenu.h
+ src/Features/ESP/../../CMenu.h src/Features/ESP/../../Radar.h \
+ src/Features/ESP/../../Vector2.h src/Features/ESP/../../QAngle.h
 src/Features/ESP/ESP.h:
 src/Features/ESP/../../SDK.h:
 src/Features/ESP/../../windowsTypes.h:
@@ -129,3 +130,6 @@ src/Features/ESP/../../SDK/Steam/UserCommon.h:
 src/Features/ESP/../../CDrawManager.h:
 src/Features/ESP/../../Panels.h:
 src/Features/ESP/../../CMenu.h:
+src/Features/ESP/../../Radar.h:
+src/Features/ESP/../../Vector2.h:
+src/Features/ESP/../../QAngle.h:

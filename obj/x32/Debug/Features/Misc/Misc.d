@@ -59,7 +59,7 @@ obj/x32/Debug/Features/Misc/Misc.o: src/Features/Misc/Misc.cpp \
  src/Features/Misc/../../SDK/Steam/FriendsCommon.h \
  src/Features/Misc/../../SDK/Steam/ISteamUser017.h \
  src/Features/Misc/../../SDK/Steam/UserCommon.h \
- src/Features/Misc/../../CMenu.h
+ src/Features/Misc/../../CMenu.h src/Features/Misc/../../Client.h
 src/Features/Misc/Misc.h:
 src/Features/Misc/../../SDK.h:
 src/Features/Misc/../../windowsTypes.h:
@@ -127,3 +127,4 @@ src/Features/Misc/../../SDK/Steam/FriendsCommon.h:
 src/Features/Misc/../../SDK/Steam/ISteamUser017.h:
 src/Features/Misc/../../SDK/Steam/UserCommon.h:
 src/Features/Misc/../../CMenu.h:
+src/Features/Misc/../../Client.h:

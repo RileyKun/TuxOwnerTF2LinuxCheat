@@ -24,7 +24,8 @@ char* hvhpitchchar[] = {
 	"Fake UP", "UP", "Fake Down", "Down",
 };
 char* hvhyawchar[] = {
-	"Right", "Left", "Back", "Emotion", "Random",
+	"Right", "Left", "Back", "Emotion", "Random", "Fake Sideways Right", "Fake Sideways Left", "Fake Right",
+	"Half Backwards Left", "Half Backwards Right", "Fake Left"
 };
 /*
 enum ESettingsHitboxes {
@@ -123,9 +124,21 @@ void CCheatMenu::Render(void)
 
 	if (gCheatMenu.priorties_switch)
 	{
-		i = AddItem(i, "- Ignore Cloaked", &gCheatMenu.priorties_ignorecloaked, 0,1,1, false);
-		i = AddItem(i, "- Ignore Taunting", &gCheatMenu.priorties_ignoretaunting, 0,1,1, false);
-		i = AddItem(i, "- Ignore Disguised", &gCheatMenu.priorties_ignoretaunting, 0,1,1, false);
+		i = AddItem(i, " - Ignore Cloaked", &gCheatMenu.priorties_ignorecloaked, 0,1,1, false);
+		i = AddItem(i, " - Ignore Taunting", &gCheatMenu.priorties_ignoretaunting, 0,1,1, false);
+		i = AddItem(i, " - Ignore Disguised", &gCheatMenu.priorties_ignoredisguised, 0,1,1, false);
+		i = AddItem(i, " - Prefer Low HP", &gCheatMenu.aimbot_preferlowhp, 0, 1, 1, false);
+		i = AddItem(i, " - Prefer Heavy", &gCheatMenu.priorties_preferheavy, 0, 1, 1, false);
+		i = AddItem(i, " - Prefer Medick", &gCheatMenu.priorties_prefermedic, 0, 1, 1, false);
+	}
+
+	i = AddItem(i, "Radar", &gCheatMenu.radar_switch, 0, 1, 1, true);
+	if (gCheatMenu.radar_switch)
+	{
+		i = AddItem(i, " - Enable Radar", &gCheatMenu.radarenable, 0,1,1, false);
+		i = AddItem(i, " - Radar Postion X", &gCheatMenu.radar_posx, 0, ScreenW, 25, false);
+		i = AddItem(i, " - Radar Postion Y", &gCheatMenu.radar_posy, 0, ScreenH, 25, false);
+		i = AddItem(i, " - Radar Width", &gCheatMenu.radar_width, 0, 300, 25, false);
 	}
 
 	i = AddItem(i, "Settings & Configs", &gCheatMenu.settings_switch, 0, 1, 1, true);
@@ -153,7 +166,7 @@ void CCheatMenu::Render(void)
 	{
 		i = AddItem(i, " - Enable AA", &gCheatMenu.hvh_enable, 0, 1, 1, false);
 		i = AddItem(i, " - Pitch", &gCheatMenu.hvh_pitch, 0, 4, 1, false);
-		i = AddItem(i, " - Yaw", &gCheatMenu.hvh_yaw, 0, 5, 1, false);
+		i = AddItem(i, " - Yaw", &gCheatMenu.hvh_yaw, 0, 11, 1, false);
 	}
 	i = AddItem(i, "Misc", &gCheatMenu.misc_switch, 0, 1, 1, true);
 	if (gCheatMenu.misc_switch)
@@ -250,7 +263,7 @@ void CCheatMenu::HandleControls(void)
 /*
 * Inspration From Old Nullcore (Circa 2018)
 */
-void CCheatMenu::DrawInfo(int speedValue)
+void CCheatMenu::DrawInfo(int speedValue, bool* bsendpack)
 {
 	int x = iInfo_Pos_X,
     xx = x + 150,
@@ -272,9 +285,14 @@ void CCheatMenu::DrawInfo(int speedValue)
 	// Draw the second text inside the box
 	const char* thirdPersonStatus = gCheatMenu.isThirdPersonEnabled ? "Enabled" : "Disabled";
 	const char* AntiAimStatus = gCheatMenu.hvh_enable ? "Enabled" : "Disabled";
+	const char* bSendPacketStatus = bsendpack ? "Enabled" : "Disabled";
 	gDrawManager.DrawString(x + 4, y - (h + 4) + 20, clrColor, "Thirdperson: %s", thirdPersonStatus);
 
 	gDrawManager.DrawString(x + 4, y - (h + 4) + 40, clrColor, "Anti-Aim: %s", AntiAimStatus);
+
+	//gDrawManager.DrawString(x + 4, y - (h + 4) + 50, clrColor, "Uhh: %d", pEntity->GetVelocity().x);
+
+	gDrawManager.DrawString(x + 4, y - (h + 4) + 60, clrColor, "bSendPacketl0l: %s", bSendPacketStatus);
 
 	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test

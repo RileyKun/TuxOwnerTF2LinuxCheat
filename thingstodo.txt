@@ -1,0 +1,5 @@
+=====Shit to do===========
+- Fake Angle Draw, I'm currently thinking of doing it with drawbone, i dont know if its possible.
+- Anti-Backstab
+- GetVelocity (for projectile Aim.)
+==========================

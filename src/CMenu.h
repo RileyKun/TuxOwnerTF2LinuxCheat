@@ -1,4 +1,5 @@
 #pragma once
+#include "SDK.h"
 // pasted from potassium tf2 
 // credits: gir and kalvin for this and source file
 
@@ -19,7 +20,7 @@ public:
 	void DrawMenu(void);
 	int	 AddItem(int nIndex, char szTitle[30], float* value, float flMin, float flMax, float flStep, bool isClassHead);
     void HandleControls();
-	void DrawInfo(int speedValue);
+	void DrawInfo(int speedValue, bool* bsendpack);
 	//private:
 	bool bMenuActive;
 	int iMenuIndex;
@@ -45,6 +46,7 @@ public:
 	float aimbot_zoomedonly;
 	float aimbot_autoscope;
 	float aimbot_fov;
+	float aimbot_preferlowhp;
 
 	float triggerbot_switch;
 	float triggerbot_active;
@@ -105,6 +107,17 @@ public:
 	float priorties_ignorecloaked;
 	float priorties_ignoretaunting;
 	float priorties_ignoredisguised;
+	float priorties_ignorefriends;
+	float priorties_preferheavy;
+	float priorties_prefermedic;
+
+	/* Radar */
+	float radar_switch;
+	float radartype;
+	float radar_width;
+	float radar_posx;
+	float radar_posy;
+	float radarenable;
 };
 
 extern CCheatMenu gCheatMenu;
