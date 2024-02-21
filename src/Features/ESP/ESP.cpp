@@ -5,7 +5,7 @@ ESP gESP;
 void ESP::StartThisshit(CBaseEntity* pLocal)
 {
 	//ESPLOCAL(pLocal); // run the local esp outside of pEnt loop
-    for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
+    for (int i = 1; i <= gInts.EntList->GetHighestEntityIndex(); i++)
 	{
 		if (i == me)
 			continue;
@@ -22,25 +22,71 @@ void ESP::StartThisshit(CBaseEntity* pLocal)
 		if (!pEntity->IsAlive())
 			continue;
 		if (gCheatMenu.esp_enemyonly && pEntity->GetTeamNum() == pLocal->GetTeamNum())
-			continue;
-		// finally added this lmao
-		//if (gCheatMenu.esp_local)
-		//	ActualfreakinESP(pLocal);
+			continue;		
 		if (gCheatMenu.esp_active)
+			Buildings(pEntity);	
 			ActualfreakinESP(pEntity);
-			
-			
+	}
+}
 
+void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
+{
+	switch (pEntity->GetClientClass()->iClassID)
+	{
+	case CObjectSentrygun:
+	{
+		CTFObjectSentryGun* pSentryGun = reinterpret_cast<CTFObjectSentryGun*>(pEntity);
+
+		if (!pSentryGun)
+			return;
+		int teamcolor = GetPlayerColor(pSentryGun);
+
+		Vector vecWorld, vecScreen; //Setup the Vectors.
+
+		pSentryGun->GetWorldSpaceCenter(vecWorld); //Get the center of the player.
+
+		if (gDrawManager.WorldToScreen(vecWorld, vecScreen) && pSentryGun && pSentryGun->IsAlive()) //If the player is visble.
+		{
+			gDrawManager.DrawString(vecScreen.x, vecScreen.y, teamcolor, "Sentry"); //Draw on the player.
+			if (!pSentryGun->IsBuilding())
+			{
+				gDrawManager.DrawString(vecScreen.x, vecScreen.y + 10, 0xFFFFFFFF, "Level: %i", pSentryGun->GetLevel()); //Draw on the player.
+			}
+		}
+	} 
+	case CObjectDispenser:
+	{
+		CTFObjectDispenser* pDispenser = reinterpret_cast<CTFObjectDispenser*>(pEntity);
+
+		if (!pDispenser)
+			return;
+
+		int teamcolor = GetPlayerColor(pDispenser);
+
+		Vector vecWorld, vecScreen;
+
+		pDispenser->GetWorldSpaceCenter(vecWorld);
+
+		if (gDrawManager.WorldToScreen(vecWorld, vecScreen) && pDispenser && pDispenser->IsAlive())
+		{
+			gDrawManager.DrawString(vecScreen.x, vecScreen.y, teamcolor, "Dispenser"); //Draw on the player.
+			if (!pDispenser->IsBuilding())
+			{
+				gDrawManager.DrawString(vecScreen.x, vecScreen.y + 10, 0xFFFFFFFF, "Level: %i", pDispenser->GetLevel()); //Draw on the player.
+			}
+		}
+	}
+	break;
 	}
 }
 
 int ESP::GetPlayerColor(CBaseEntity* pPlayer)
 {
-	if (gCheatMenu.PlayerMode[pPlayer->GetIndex()] == 2)
+	if (gCheatMenu.PlayerMode[pPlayer->GetIndex()] == 2 && pPlayer->GetClientClass()->iClassID != CObjectSentrygun)
 	{
 		return COLORCODE(75,0,130,255);
 	}
-	if (!gCheatMenu.PlayerMode[pPlayer->GetIndex()]) // ignored
+	if (!gCheatMenu.PlayerMode[pPlayer->GetIndex()] && pPlayer->GetClientClass()->iClassID != CObjectSentrygun) // ignored
 	{
 		return COLORCODE(15,150,150,255); // NCC colors
 	}

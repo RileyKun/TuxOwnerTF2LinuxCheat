@@ -524,23 +524,186 @@ public:
 };
 
 
-
 class CObject : public CBaseEntity
 {
 public:
-	
+	inline int GetLevel()
+	{
+		static int m_iUpgradeLevel = gNetVars.get_offset("DT_BaseObject", "m_iUpgradeLevel");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iUpgradeLevel);
+	}
+
+	inline bool IsSapped()
+	{
+		static int m_bHasSapper = gNetVars.get_offset("DT_BaseObject", "m_bHasSapper");
+		return *reinterpret_cast<bool*>(reinterpret_cast<std::uintptr_t>(this) + m_bHasSapper);
+	}
+
+	inline bool IsBuilding()
+	{
+		static int m_bBuilding = gNetVars.get_offset("DT_BaseObject", "m_bBuilding");
+		return *reinterpret_cast<bool*>(reinterpret_cast<std::uintptr_t>(this) + m_bBuilding);
+	}
+
+	//m_iObjectMode
+	inline int GetObjectMode()
+	{
+		static int m_iObjectMode = gNetVars.get_offset("DT_BaseObject", "m_iObjectMode");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iObjectMode);
+	}
+
+	inline bool IsBeingCarried()
+	{
+		static int m_bCarried = gNetVars.get_offset("DT_BaseObject", "m_bCarried");
+		static int m_bCarryDeploy = gNetVars.get_offset("DT_BaseObject", "m_bCarryDeploy");
+		static int m_bPlacing = gNetVars.get_offset("DT_BaseObject", "m_bPlacing");
+
+		if (*reinterpret_cast<bool*>(reinterpret_cast<std::uintptr_t>(this) + m_bCarried)
+			|| *reinterpret_cast<bool*>(reinterpret_cast<std::uintptr_t>(this) + m_bCarryDeploy)
+			|| *reinterpret_cast<bool*>(reinterpret_cast<std::uintptr_t>(this) + m_bPlacing))
+			return true;
+
+		return false;
+	}
+
+	inline float GetPercentageConstructed()
+	{
+		static int m_flPercentageConstructed = gNetVars.get_offset("DT_BaseObject", "m_flPercentageConstructed");
+
+		if (IsBuilding())
+			return *reinterpret_cast<float*>(reinterpret_cast<std::uintptr_t>(this) + m_flPercentageConstructed);
+		else
+			return NULL;
+	}
+
+	inline int GetHealth()
+	{
+		static int m_iHealth = gNetVars.get_offset("DT_BaseObject", "m_iHealth");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iHealth);
+	}
+
+	inline int GetMaxHealth()
+	{
+		static int m_iHealth = gNetVars.get_offset("DT_BaseObject", "m_iMaxHealth");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iHealth);
+	}
+
+
+	inline int GetUpgradedMetal()
+	{
+		static int m_iUpgradeMetal = gNetVars.get_offset("DT_BaseObject", "m_iUpgradeMetal");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iUpgradeMetal);
+	}
+
+	inline int GetState()
+	{
+		static int m_iState = gNetVars.get_offset("DT_BaseObject", "m_iState");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iState);
+	}
+
+	inline int GetTeamNum()
+	{
+		static int m_iTeamNum = gNetVars.get_offset("DT_BaseEntity", "m_iTeamNum");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iTeamNum);
+	}
 };
 
-class CObjectDispenser : public CObject
+class CTFObjectSentryGun : public CObject
 {
 public:
-	
+
+	inline int GetRocket()
+	{
+		static int m_iAmmoRockets = gNetVars.get_offset("DT_ObjectSentrygun", "m_iAmmoRockets");
+
+		if (GetLevel() == 3)
+			return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iAmmoRockets);
+
+		return NULL;
+	}
+
+	inline int GetAmmo()
+	{
+		static int m_iAmmoShells = gNetVars.get_offset("DT_ObjectSentrygun", "m_iAmmoShells");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iAmmoShells);
+	}
+
+	inline char* GetStateString()
+	{
+		switch (GetState())
+		{
+		case 1:
+		{
+			return "Idle";
+		}
+		case 2:
+		{
+			return "Attacking";
+		}
+		case 3:
+		{
+			return "Upgrading";
+		}
+		}
+		return "Unknown";
+	}
 };
-//===================================================================================
-class CObjectSentryGun : public CObject
+
+class CTFObjectTeleporter : public CObject
 {
 public:
-	
+
+	inline float GetRechargeTime()
+	{
+		static int m_flRechargeTime = gNetVars.get_offset("DT_ObjectTeleporter", "m_flRechargeTime");
+		return *reinterpret_cast<float*>(reinterpret_cast<std::uintptr_t>(this) + m_flRechargeTime);
+	}
+
+	inline float GetRechargeDuration()
+	{
+		static int m_flCurrentRechargeDuration = gNetVars.get_offset("DT_ObjectTeleporter", "m_flCurrentRechargeDuration");
+		return *reinterpret_cast<float*>(reinterpret_cast<std::uintptr_t>(this) + m_flCurrentRechargeDuration);
+	}
+
+	inline float YawToExit()
+	{
+		static int m_flYawToExit = gNetVars.get_offset("DT_ObjectTeleporter", "m_flYawToExit");
+		return *reinterpret_cast<float*>(reinterpret_cast<std::uintptr_t>(this) + m_flYawToExit);
+	}
+
+	inline char* GetStateString()
+	{
+		switch (GetState())
+		{
+		case 1:
+		{
+			return "Idle";
+		}
+		case 2:
+		{
+			return "Active";
+		}
+		case 4:
+		{
+			return "Teleporting";
+		}
+		case 6:
+		{
+			return "Charging";
+		}
+		}
+
+		return "Unknown";
+	}
+};
+class CTFObjectDispenser : public CObject
+{
+public:
+	inline int GetMetalReserve()
+	{
+		static int m_iAmmoMetal = gNetVars.get_offset("DT_ObjectDispenser", "m_iAmmoMetal");
+		return *reinterpret_cast<int*>(reinterpret_cast<std::uintptr_t>(this) + m_iAmmoMetal);
+	}
 };
 
 class IGameEvent

@@ -7,6 +7,7 @@ public:
     void ActualfreakinESP(CBaseEntity* pEntity);
     //void ESPLOCAL(CBaseEntity* pEntity);
     int  GetPlayerColor(CBaseEntity* pPlayer);
+    void Buildings(CBaseEntity* pEntity);
     void DrawBone(CBaseEntity* pEntity, int* iBones, int count, int clrCol);
 };
 

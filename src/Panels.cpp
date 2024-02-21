@@ -63,7 +63,7 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 
 			gRadar.DrawRadarBack();
 			gESP.StartThisshit(pBaseLocalEnt);
-			Vector velocity = pBaseLocalEnt->GetVelocity();
+			Vector velocity = pBaseLocalEnt->GetVelocityLocal();
 			float g_speed = 0.f;
 			g_speed = abs(sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]));
 
