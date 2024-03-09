@@ -53,7 +53,8 @@ void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
 				gDrawManager.DrawString(vecScreen.x, vecScreen.y + 10, 0xFFFFFFFF, "Level: %i", pSentryGun->GetLevel()); //Draw on the player.
 			}
 		}
-	} 
+	}
+	break;
 	case CObjectDispenser:
 	{
 		CTFObjectDispenser* pDispenser = reinterpret_cast<CTFObjectDispenser*>(pEntity);
