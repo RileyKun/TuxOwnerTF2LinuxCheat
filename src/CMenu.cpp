@@ -161,6 +161,12 @@ void CCheatMenu::Render(void)
 			gCheatMenu.misc_loadconfig = 0.0f; 
 		}
 	}
+	i = AddItem(i, "DT & Warp", &gCheatMenu.dt_n_warp_switch, 0, 1, 1, true);
+	if (gCheatMenu.dt_n_warp_switch)
+	{
+		i = AddItem(i, " - Enable DT/Warp", &gCheatMenu.warp_enable, 0, 1, 1, false);
+		i = AddItem(i, " - Ticks", &gCheatMenu.warp_value, 0, 35, 1, false);
+	}
 	i = AddItem(i, "HvH", &gCheatMenu.hvh_switch, 0, 1, 1, true);
 	if (gCheatMenu.hvh_switch)
 	{
@@ -263,7 +269,7 @@ void CCheatMenu::HandleControls(void)
 /*
 * Inspration From Old Nullcore (Circa 2018)
 */
-void CCheatMenu::DrawInfo(int speedValue, bool* bsendpack)
+void CCheatMenu::DrawInfo(int speedValue, float ticks)
 {
 	int x = iInfo_Pos_X,
     xx = x + 150,
@@ -285,14 +291,13 @@ void CCheatMenu::DrawInfo(int speedValue, bool* bsendpack)
 	// Draw the second text inside the box
 	const char* thirdPersonStatus = gCheatMenu.isThirdPersonEnabled ? "Enabled" : "Disabled";
 	const char* AntiAimStatus = gCheatMenu.hvh_enable ? "Enabled" : "Disabled";
-	const char* bSendPacketStatus = bsendpack ? "Enabled" : "Disabled";
 	gDrawManager.DrawString(x + 4, y - (h + 4) + 20, clrColor, "Thirdperson: %s", thirdPersonStatus);
 
 	gDrawManager.DrawString(x + 4, y - (h + 4) + 40, clrColor, "Anti-Aim: %s", AntiAimStatus);
 
 	//gDrawManager.DrawString(x + 4, y - (h + 4) + 50, clrColor, "Uhh: %d", pEntity->GetVelocity().x);
 
-	gDrawManager.DrawString(x + 4, y - (h + 4) + 60, clrColor, "bSendPacketl0l: %s", bSendPacketStatus);
+	gDrawManager.DrawString(x + 4, y - (h + 4) + 50, clrColor, "Charged Ticks: %f", ticks);
 
 	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test

@@ -3,7 +3,7 @@
 #include "Panels.h"
 //#include "ConfigManager.h"
 #include "Log.h"
-
+#include "CL_Move.h"
 #include <unistd.h>
 #include <pthread.h>
 #include <thread>
@@ -91,6 +91,9 @@ void mainThread()
 				panelHook->Rehook();
 			}
 		}
+		
+		static auto cl_move_addr = gSignatures.GetEngineSignature("55 89 E5 57 56 53 81 EC 9C 00 00 00 83 3D ? ? ? ? 01");
+        CL_Move_Detour.Init(cl_move_addr, (void *) Hooked_CL_Move);
 		//gConfig.LoadConfig(); // load config on inject.
 
 		// This sig here wont work on linux (a replacement one is further down)

@@ -74,7 +74,7 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 			//int asswipe = static_cast<int>(velocity.x) * 1000000 + static_cast<int>(velocity.y) * 1000 + static_cast<int>(velocity.z);
 			//gDrawManager.DrawString(200,200, COLORCODE(255,255,255,255),  "Velocity: %d", pBaseLocalEnt->GetVelocityLocal());
 			//int asswipe = static_cast<int>(velocity.x * 1000); // Assuming x is a float or double
-			gCheatMenu.DrawInfo(speedDigits, g.sendpacket); // 10 for testing, i'll add velocity later mate.
+			gCheatMenu.DrawInfo(speedDigits, gCheatMenu.WarpCharge); // 10 for testing, i'll add velocity later mate.
 		}
 	}
 	catch(...)

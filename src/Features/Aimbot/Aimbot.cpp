@@ -2,58 +2,16 @@
 #include "../../SDK/studiohdrfrom8dcc.h"
 #include "../../CMenu.h"
 #include "../../SDK/bspflags.h"
+#include <SDL2/SDL.h>
+
 /*
-*   Original Coder Of this aimbot: 8dcc.
+*   Original Coder of the studiohdr: 8dcc.
 *
 *   Ported to TuxOwner by Vannie
 *           13-01-2024
 */
 
 CAim gAim;
-
-void CAim::setting_to_hitboxes(int setting, int* min, int* max) 
-{
-    /*
-    switch (gCheatMenu.aimbot_hitbox) {
-        case 0: 
-            *min = HITBOX_HEAD;
-            *max = HITBOX_HEAD;
-            break;
-        case 1:
-            *min = HITBOX_PELVIS;
-            *max = HITBOX_SPINE3;
-            break;
-        case 2:
-            *min = HITBOX_LEFT_UPPER_ARM;
-            *max = HITBOX_RIGHT_HAND;
-            break;
-        case 3:
-            *min = HITBOX_LEFT_HIP;
-            *max = HITBOX_RIGHT_FOOT;
-            break;
-    }
-    */
-    if (gCheatMenu.aimbot_hitbox == 0)
-    {
-        *min = HITBOX_HEAD;
-        *max = HITBOX_HEAD;
-    }
-    if (gCheatMenu.aimbot_hitbox == 1)
-    {
-        *min = HITBOX_PELVIS;
-        *max = HITBOX_SPINE3;
-    }
-    if (gCheatMenu.aimbot_hitbox == 2)
-    {
-        *min = HITBOX_LEFT_UPPER_ARM;
-        *max = HITBOX_RIGHT_HAND;        
-    }
-    if (gCheatMenu.aimbot_hitbox == 3)
-    {
-        *min = HITBOX_LEFT_HIP;
-        *max = HITBOX_RIGHT_FOOT;        
-    }
-}
 #define VEC_ZERO ((Vector){ 0.f, 0.f, 0.f })
 #define HITBOX_SET 0
 #define MAXSTUDIOBONES 128
@@ -290,8 +248,13 @@ bool CAim::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 }
 
 
+
 void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {    
+
+	const Uint8 *epic = SDL_GetKeyboardState(NULL);
+
+
 	old_movement_t old_mov = old_movement_t();
     // i genuinely think get slot is fucked lmao
 	if (!pLocal->GetActiveWeapon())
@@ -303,6 +266,8 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	//if (pLocal->GetActiveWeapon()->GetSlot() == WPN_SLOT_MELEE)
 	//	return; // dont melee
+
+
 
 	//if (pLocal->GetActiveWeapon()->GetSlot() == WPN_SLOT_PRIMARY && pLocal->szGetClass() == "Spy")
 	//	return; // you are retarded if you think you can backstab by using the aimbot. We have a fucking autobackstab feature for a reason lmao
@@ -316,6 +281,11 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (!gCheatMenu.aimbot_active)
 		return;
+	
+	if (gCheatMenu.warp_enable && !epic[SDL_SCANCODE_R])
+	{
+		return;
+	}
 
 	//if (!pLocal->GetActiveWeapon())
 	//	return;
@@ -360,17 +330,9 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	{
 		float flCurTime = gInts.Engine->Time();
 		static float flNextSend = 0.0f;
-		if (pLocal->szGetClass() == "Sniper")
+		if (pLocal->GetClassNum() == TF2_Sniper)
 		{
-			if (!gCheatMenu.aimbot_zoomedonly)
-			{
-				if (flCurTime > flNextSend)
-				{
-					pCommand->buttons |= IN_ATTACK;
-					flNextSend = (flCurTime + 0.2f); // this is retarded but fuck it 
-				}
-			}
-			else if (gCheatMenu.aimbot_zoomedonly)
+			if (gCheatMenu.aimbot_zoomedonly)
 			{
 				if (pLocal->IsScoped())
 				{
@@ -382,13 +344,13 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 				}
 			}
 		}
-		if (pLocal->szGetClass() != "Sniper") // yey
+		if (pLocal->GetClassNum() != TF2_Sniper) // yey
 		{
 			pCommand->buttons |= IN_ATTACK;
 		}
 	}
 
-	if (gCheatMenu.aimbot_autoscope && !pLocal->IsScoped() && pLocal->szGetClass() == "Sniper")
+	if (gCheatMenu.aimbot_autoscope && !pLocal->IsScoped() && pLocal->GetClassNum() == TF2_Sniper)
 	{
 		pCommand->buttons |= IN_ATTACK2;
 	}

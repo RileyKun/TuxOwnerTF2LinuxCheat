@@ -20,7 +20,7 @@ public:
 	void DrawMenu(void);
 	int	 AddItem(int nIndex, char szTitle[30], float* value, float flMin, float flMax, float flStep, bool isClassHead);
     void HandleControls();
-	void DrawInfo(int speedValue, bool* bsendpack);
+	void DrawInfo(int speedValue, float ticks);
 	//private:
 	bool bMenuActive;
 	int iMenuIndex;
@@ -94,6 +94,13 @@ public:
 	//float autobackstab_silent;
 	bool isThirdPersonEnabled = false;
 	
+	/* DT */
+	float dt_n_warp_switch;
+	float warp_enable;
+	float warp_value; 
+	float WarpCharge = 0; // for the charge
+	bool IsDTing;
+	bool IsRecharging;
 
 	float playerlist_switch;
 	float PlayerMode[64] = {

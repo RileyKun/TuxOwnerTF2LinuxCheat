@@ -30,10 +30,20 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 			return bReturn;
 		CBaseEntity *oEntity = gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());
 
+		if (gCheatMenu.IsDTing) 
+		{// anti-warp and stuff
+			pCommand->buttons &= ~IN_ATTACK;
+			pCommand->forwardmove *= -0.3;
+			pCommand->sidemove *= -0.3;
+		}
 
-		
-
-		
+	
+		/*
+		if (gCheatMenu.WarpCharge) // delay?
+		{
+			*g.sendpacket = gCheatMenu.WarpCharge == 1;
+		}
+		*/
 		//Do your client hook stuff here. This function is called once per tick. For time-critical functions, run your code in PaintTraverse.
 		// For move specific functions, run them here.
 		//if (pCommand->buttons & IN_JUMP) //To prove we have control over the CUserCmd, write the IN_ATTACK bit every time we jump.
