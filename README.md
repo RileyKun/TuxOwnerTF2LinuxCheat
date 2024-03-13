@@ -6,10 +6,9 @@ A linux cheat made by Vannie (me). Most of the stuff is pasted from darkstorm ba
 - SetupVelocity,
 - getting SDL_Event to work,
 - Pure Bypass,
-- DT,
-- Warp,
 - Backtrack,
 - ConVars
+- Making Anti-Warp better
 
 # done list
 - Menu,
