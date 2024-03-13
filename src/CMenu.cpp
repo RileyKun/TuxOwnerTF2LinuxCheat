@@ -166,6 +166,7 @@ void CCheatMenu::Render(void)
 	{
 		i = AddItem(i, " - Enable DT/Warp", &gCheatMenu.warp_enable, 0, 1, 1, false);
 		i = AddItem(i, " - Ticks", &gCheatMenu.warp_value, 0, 35, 1, false);
+		i = AddItem(i, " - Anti-Warp", &gCheatMenu.anti_warp, 0, 1, 1, false);
 	}
 	i = AddItem(i, "HvH", &gCheatMenu.hvh_switch, 0, 1, 1, true);
 	if (gCheatMenu.hvh_switch)

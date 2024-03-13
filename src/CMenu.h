@@ -99,6 +99,7 @@ public:
 	float warp_enable;
 	float warp_value; 
 	float WarpCharge = 0; // for the charge
+	float anti_warp;
 	bool IsDTing;
 	bool IsRecharging;
 

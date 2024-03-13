@@ -33,8 +33,11 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 		if (gCheatMenu.IsDTing) 
 		{// anti-warp and stuff
 			pCommand->buttons &= ~IN_ATTACK;
-			pCommand->forwardmove *= -0.3;
-			pCommand->sidemove *= -0.3;
+			pCommand->buttons |= IN_ATTACK; // apparently i have to do this, on rapidfire. according to cathook
+			// https://github.com/nullworks/cathook/blob/f9fa41abedfd44b59606cbac7c3de560b6f5f69c/src/hacks/Aimbot.cpp#L687
+			if (gCheatMenu.anti_warp)
+				pCommand->forwardmove *= -0.3;
+				pCommand->sidemove *= -0.3;
 		}
 
 	
