@@ -24,6 +24,9 @@ A linux cheat made by Vannie (me). Most of the stuff is pasted from darkstorm ba
 - Taunt Spin,
 - Crouch Speed,
 - AA,
+- DT
+- Warp
+- Anti-Warp (verry shitty)
 - and more. (i think i dont remember)
 
 
