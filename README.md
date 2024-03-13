@@ -9,7 +9,7 @@ A linux cheat made by Vannie (me). Most of the stuff is pasted from darkstorm ba
 - Backtrack,
 - ConVars
 - Making Anti-Warp better
-
+- Projectile Aim (Without Engine Pred) <- working on. it will use estimateabsvelocity though
 # done list
 - Menu,
 - Aimbot,
