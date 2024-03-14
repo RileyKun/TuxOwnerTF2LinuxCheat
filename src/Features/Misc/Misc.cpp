@@ -25,7 +25,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     {
         SpeedCrouch(pCmd);
     }
-    if (gCheatMenu.misc_thirdperson)
+    if (gCheatMenu.misc_thirdperson && pLocal->IsAlive()) // make sure we are alive, fixes the snapping issue on aimbot & thirdperson, or anti-aim
     {
         float flCurTime = gInts.Engine->Time();
 	    static float flNextSend = 0.0f;
