@@ -8,7 +8,6 @@ public:
     void AutoStrafe(CUserCmd* pCmd);
     void SpeedCrouch(CUserCmd* pCmd);
 	void TauntSpin(CUserCmd* pCmd, CBaseEntity* pLocal);
-    void NameSteal();
 };
 
 extern CMisc gMisc;
