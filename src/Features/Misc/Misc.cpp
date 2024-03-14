@@ -106,33 +106,3 @@ void CMisc::TauntSpin(CUserCmd* pCmd, CBaseEntity* pLocal)
 		
 	}
 }
-
-void CMisc::NameSteal()
-{
-    /*
-    for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
-	{
-		if (i == me)
-			continue;
-		//if (!gCheatMenu.esp_active)
-		//	continue;
-		CBaseEntity* pEntity = GetBaseEntity(i);
-
-		if (!pEntity)
-			continue;
-
-        player_info_t pInfo;
-        if (!gInts.Engine->GetPlayerInfo(pEntity->GetIndex(), &pInfo))
-            return;
-
-        float flCurTime = gInts.Engine->Time();
-	    static float flNextSend = 0.0f;
-
-        if (flCurTime > flNextSend)
-	    {      // todo : add a way change your name back to the original state after quiting the game / unloading
-		    gInts.steamfriends->SetPersonaName(pInfo.name);
-		    flNextSend = (flCurTime + 10.0f);
-	    }
-    }
-    */
-}
