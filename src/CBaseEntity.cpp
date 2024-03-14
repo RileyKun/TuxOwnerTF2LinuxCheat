@@ -8,10 +8,6 @@ CBaseCombatWeapon* CBaseEntity::GetActiveWeapon()
     return getvfunc<OriginalFn>(this, 291)(this);
 }
 
-#include "Math/CMath.h"
-
-class CMath;
-
 #define VEC_ZERO ((Vector){ 0.f, 0.f, 0.f })
 #define HITBOX_SET 0
 #define MAXSTUDIOBONES 128
@@ -21,6 +17,7 @@ void VectorTransform(const Vector& vSome, const matrix3x4& vMatrix, Vector& vOut
 	for (auto i = 0; i < 3; i++)
 		vOut[i] = vSome.Dot((Vector&)vMatrix[i]) + vMatrix[i][3];
 }
+
 
 Vector center_of_hitbox(studiohdr_t* studio, matrix3x4* bonemat, int set, int idx) 
 {

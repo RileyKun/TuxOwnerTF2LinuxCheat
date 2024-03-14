@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 
 /*
-*   Original Coder of the studiohdr: 8dcc.
+*   Original Coder of the studiohdr & gethitbox: 8dcc.
 *
 *   Ported to TuxOwner by Vannie
 *           13-01-2024
@@ -330,21 +330,18 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	{
 		float flCurTime = gInts.Engine->Time();
 		static float flNextSend = 0.0f;
-		if (pLocal->GetClassNum() == TF2_Sniper)
+		if (gCheatMenu.aimbot_zoomedonly)
 		{
-			if (gCheatMenu.aimbot_zoomedonly)
+			if (pLocal->IsScoped())
 			{
-				if (pLocal->IsScoped())
+				if (flCurTime > flNextSend)
 				{
-					if (flCurTime > flNextSend)
-					{
-						pCommand->buttons |= IN_ATTACK;
-						flNextSend = (flCurTime + 0.2f);
-					}
+					pCommand->buttons |= IN_ATTACK;
+					flNextSend = (flCurTime + 0.2f);
 				}
 			}
 		}
-		if (pLocal->GetClassNum() != TF2_Sniper) // yey
+		if (!gCheatMenu.aimbot_zoomedonly) // yey
 		{
 			pCommand->buttons |= IN_ATTACK;
 		}

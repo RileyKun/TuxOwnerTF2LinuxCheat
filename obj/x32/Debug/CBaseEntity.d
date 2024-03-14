@@ -36,7 +36,7 @@ obj/x32/Debug/CBaseEntity.o: src/CBaseEntity.cpp src/SDK.h \
  src/SDK/Steam/EVoiceResult.h src/SDK/Steam/ECurrencyCode.h \
  src/SDK/Steam/ClientCommon.h src/SDK/Steam/ISteamFriends002.h \
  src/SDK/Steam/FriendsCommon.h src/SDK/Steam/ISteamUser017.h \
- src/SDK/Steam/UserCommon.h src/Math/CMath.h
+ src/SDK/Steam/UserCommon.h
 src/SDK.h:
 src/windowsTypes.h:
 src/CGlobalVars.h:
@@ -102,4 +102,3 @@ src/SDK/Steam/ISteamFriends002.h:
 src/SDK/Steam/FriendsCommon.h:
 src/SDK/Steam/ISteamUser017.h:
 src/SDK/Steam/UserCommon.h:
-src/Math/CMath.h:

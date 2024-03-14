@@ -407,3 +407,20 @@ inline void AngleVectors(const Vector &angles, Vector *forward)
 	forward->y = cp * sy;
 	forward->z = -sp;
 }
+#include <algorithm> // For std::max and std::min if available, otherwise see custom implementation below
+
+// Custom clamp implementation (if not using <algorithm> or if std::clamp is not available)
+inline float customClamp(float value, float low, float high) {
+    return std::max(low, std::min(value, high));
+}
+
+inline float RemapValClamped(float val, float A, float B, float C, float D)
+{
+		if (A == B)
+			return val >= B ? D : C;
+
+		float cVal = (val - A) / (B - A);
+		cVal = customClamp(cVal, 0.0f, 1.0f);
+
+		return C + (D - C) * cVal;
+}

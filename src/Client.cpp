@@ -3,7 +3,6 @@
 #include "Features/Triggerbot/Triggerbotterino.h"
 #include "Features/Aimbot/Aimbot.h"
 #include "Features/Misc/Misc.h"
-#include "Features/AutomaticRetardMarker/RetardMarker.h"
 #include "Features/AutoBackStab/AutoBack.h"
 #include "Features/autistvsautist/HvH.h"
 #include "Followbot.h"
@@ -22,7 +21,21 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 	bool bReturn = hook.GetMethod<bool(*)(void *, float, CUserCmd*)>(gOffsets.iCreateMoveOffset)(ClientMode, input_sample_frametime, pCommand); //Call the original.
 	try
 	{
-	
+		
+
+		auto WalkTo = [&](const Vector &vFrom, const Vector &vTo, float flScale) -> void
+		{	
+			Vector vDelta = vTo - vFrom;
+
+			if (vDelta.Length() == 0.0f)
+				return;
+
+			Vector vDeltaMove = { vDelta.x, vDelta.y, 0.0f }, vDeltaDir = {};
+			VectorAngles(vDeltaMove, vDeltaDir);
+			float flYaw = DEG2RAD(vDeltaDir.y - pCommand->viewangles.y);
+			pCommand->forwardmove = cosf(flYaw) * (450.0f * flScale);
+			pCommand->sidemove = -sinf(flYaw) * (450.0f * flScale);
+		};
 
 		CBaseEntity* pLocal = GetBaseEntity(me); //Grab the local player's entity pointer.
 
@@ -32,32 +45,19 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 
 		if (gCheatMenu.IsDTing) 
 		{// anti-warp and stuff
-			pCommand->buttons &= ~IN_ATTACK;
+			pCommand->buttons &= ~IN_ATTACK; // let the aimbot think ????
 			pCommand->buttons |= IN_ATTACK; // apparently i have to do this, on rapidfire. according to cathook
-			// https://github.com/nullworks/cathook/blob/f9fa41abedfd44b59606cbac7c3de560b6f5f69c/src/hacks/Aimbot.cpp#L687
 			if (gCheatMenu.anti_warp)
-				pCommand->forwardmove *= -0.3;
-				pCommand->sidemove *= -0.3;
+			{
+				//WalkTo(pLocal->GetVelocityLocal(), pLocal->GetAbsOrigin(), RemapValClamped(static_cast<float>(gCheatMenu.warp_value), 14.0f, 22.0f, 0.605f, 1.0f));
+				pCommand->forwardmove *= -0.5;
+				pCommand->sidemove *= -0.5;
+			}
 		}
-
-	
-		/*
-		if (gCheatMenu.WarpCharge) // delay?
-		{
-			*g.sendpacket = gCheatMenu.WarpCharge == 1;
-		}
-		*/
-		//Do your client hook stuff here. This function is called once per tick. For time-critical functions, run your code in PaintTraverse.
-		// For move specific functions, run them here.
-		//if (pCommand->buttons & IN_JUMP) //To prove we have control over the CUserCmd, write the IN_ATTACK bit every time we jump.
-		//{
-		//	pCommand->buttons |= IN_ATTACK; //Set the IN_ATTACK flag.
-		//} ^ no one wants this shit ffs
 		gTrigger.Run(pLocal, pCommand);
 		gAim.Run(pLocal, pCommand);
 		gMisc.Run(pLocal, pCommand);
 		gStab.Run(pLocal, pCommand);
-		gRetard.Run();
 		gHvH.Run(pLocal, pCommand);
 		gFollow.Run(pLocal, pCommand);
 
@@ -186,6 +186,4 @@ void FrameStageNotifyThink(void* CHLClient, void *_this, ClientFrameStage_t Stag
 	VMTManager &HTCCNKBRKYLC = VMTManager::GetHook(CHLClient);
 	return HTCCNKBRKYLC.GetMethod<void(*)(void *, void *, ClientFrameStage_t)>(35)(CHLClient, _this, Stage);
 }
-
-
 //============================================================================================

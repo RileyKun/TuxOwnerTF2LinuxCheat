@@ -19,6 +19,8 @@
 //#include "ConVar.h"
 #include "SDK/studiohdr.h"
 #include "SDK/Enums.h"
+#include <functional>
+
 using namespace std;
 
 typedef void *(*CreateInterface_t)(const char *, int *);

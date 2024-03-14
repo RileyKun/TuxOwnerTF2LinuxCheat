@@ -38,9 +38,8 @@ obj/x32/Debug/Client.o: src/Client.cpp src/SDK.h src/windowsTypes.h \
  src/SDK/Steam/UserCommon.h src/Client.h \
  src/Features/Triggerbot/Triggerbotterino.h src/Features/Aimbot/Aimbot.h \
  src/Features/Aimbot/../../SDK/studiohdrfrom8dcc.h \
- src/Features/Misc/Misc.h \
- src/Features/AutomaticRetardMarker/RetardMarker.h \
- src/Features/AutoBackStab/AutoBack.h src/Features/autistvsautist/HvH.h \
+ src/Features/Misc/Misc.h src/Features/AutoBackStab/AutoBack.h \
+ src/Features/autistvsautist/HvH.h \
  src/Features/autistvsautist/../../CMenu.h src/Followbot.h
 src/SDK.h:
 src/windowsTypes.h:
@@ -112,7 +111,6 @@ src/Features/Triggerbot/Triggerbotterino.h:
 src/Features/Aimbot/Aimbot.h:
 src/Features/Aimbot/../../SDK/studiohdrfrom8dcc.h:
 src/Features/Misc/Misc.h:
-src/Features/AutomaticRetardMarker/RetardMarker.h:
 src/Features/AutoBackStab/AutoBack.h:
 src/Features/autistvsautist/HvH.h:
 src/Features/autistvsautist/../../CMenu.h:

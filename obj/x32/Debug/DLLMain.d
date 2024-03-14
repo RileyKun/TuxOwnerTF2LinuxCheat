@@ -36,7 +36,7 @@ obj/x32/Debug/DLLMain.o: src/DLLMain.cpp src/SDK.h src/windowsTypes.h \
  src/SDK/Steam/ClientCommon.h src/SDK/Steam/ISteamFriends002.h \
  src/SDK/Steam/FriendsCommon.h src/SDK/Steam/ISteamUser017.h \
  src/SDK/Steam/UserCommon.h src/Client.h src/Panels.h src/CL_Move.h \
- src/Detour.h src/BytePatch.h src/Math/CMath.h src/argh.h
+ src/Detour.h src/BytePatch.h src/argh.h
 src/SDK.h:
 src/windowsTypes.h:
 src/CGlobalVars.h:
@@ -107,5 +107,4 @@ src/Panels.h:
 src/CL_Move.h:
 src/Detour.h:
 src/BytePatch.h:
-src/Math/CMath.h:
 src/argh.h:

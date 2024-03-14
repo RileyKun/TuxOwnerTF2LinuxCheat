@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <thread>
-#include "Math/CMath.h"
 #include "argh.h" // killsay and soon to be annoncer
 #include <SDL2/SDL.h>
 #include "Client.h"
@@ -16,7 +15,6 @@
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
 CInterfaces gInts;
-CMath gMath;
 
 
 CreateInterface_t EngineFactory = NULL;
@@ -24,7 +22,6 @@ CreateInterface_t ClientFactory = NULL;
 CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
 CreateInterface_t CvarFactory = NULL;
-CreateInterface_t SteamFactory = NULL;
 
 
 void mainThread()
@@ -42,8 +39,6 @@ void mainThread()
 		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
 		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
 		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./bin/libvstdlib.so"), "CreateInterface");
-		//SteamFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./.steam/bin/steamclient.so"), "CreateInterface");
-		
 		
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
@@ -53,12 +48,6 @@ void mainThread()
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		gInts.cvar = ( ICvar* )CvarFactory("VEngineCvar004", NULL);
-		//gInts.steamclient = (ISteamClient017*)SteamFactory("SteamClient017", NULL);
-		//HSteamPipe hNewPipe = gInts.steamclient->CreateSteamPipe();
-		//HSteamUser hNewUser = gInts.steamclient->ConnectToGlobalUser(hNewPipe);
-		//gInts.steamfriends = reinterpret_cast<ISteamFriends002 *>(gInts.steamclient->GetISteamFriends(hNewUser, hNewPipe, STEAMFRIENDS_INTERFACE_VERSION_002));
-		//gInts.steamuser = reinterpret_cast<ISteamUser017 *>(gInts.steamclient->GetISteamUser(hNewUser, hNewPipe, STEAMUSER_INTERFACE_VERSION_017));
-
 
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
@@ -106,6 +95,12 @@ void mainThread()
 		// we need to wait for the pointer to not be NULL before we try to hook this function.
 		// since this mainThread() function is not called from a thread, we need to make another thread that we can block until
 		// clientmodeshared is no longer NULL
+
+		VMTBaseManager* clientHook = new VMTBaseManager();
+		clientHook->Init(gInts.Client);
+		clientHook->HookMethod(&FrameStageNotifyThink, 35);
+		clientHook->Rehook();
+
 		auto findCreateMove = [&]()
 		{
 			
