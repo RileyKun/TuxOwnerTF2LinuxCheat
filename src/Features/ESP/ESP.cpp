@@ -83,11 +83,11 @@ void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
 
 int ESP::GetPlayerColor(CBaseEntity* pPlayer)
 {
-	if (gCheatMenu.PlayerMode[pPlayer->GetIndex()] == 2 && pPlayer->GetClientClass()->iClassID != CObjectSentrygun)
+	if (gCheatMenu.PlayerMode[pPlayer->GetIndex()] == 2)
 	{
 		return COLORCODE(75,0,130,255);
 	}
-	if (!gCheatMenu.PlayerMode[pPlayer->GetIndex()] && pPlayer->GetClientClass()->iClassID != CObjectSentrygun) // ignored
+	if (!gCheatMenu.PlayerMode[pPlayer->GetIndex()]) // ignored
 	{
 		return COLORCODE(15,150,150,255); // NCC colors
 	}
