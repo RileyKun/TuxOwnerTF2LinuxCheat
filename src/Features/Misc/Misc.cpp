@@ -105,4 +105,5 @@ void CMisc::TauntSpin(CUserCmd* pCmd, CBaseEntity* pLocal)
 		angles.y = spinAngle;
 		
 	}
+	pCmd->viewangles = angles;
 }
