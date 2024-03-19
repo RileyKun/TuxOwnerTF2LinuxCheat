@@ -1,5 +1,5 @@
 # TuxOwner A Darkstorm Linux Paste
-A linux cheat made by Vannie (me). Most of the stuff is pasted from darkstorm based stuff (Dumpster-Fire, Potassium, ETC). This source is a mess btw.
+A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from darkstorm based stuff (Dumpster-Fire, Potassium, ETC). This source is a mess btw.
 
 # not gonna add todo list.. jk.
 - Annoncer,
