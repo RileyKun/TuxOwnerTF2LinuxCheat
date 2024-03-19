@@ -35,7 +35,7 @@ A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from dark
 - Pacman Package Version:
 - sudo pacman -S lib32-glibc lib32-sdl lib32-glew g++-multilib
 - Debian Based Distros:
-- sudo apt install libglew-dev:i386 libsdl2-dev:i386 gcc-multilib
+- sudo apt install libglew-dev:i386 libsdl2-dev:i386 gcc-multilib libsdl2-dev
 - do "make" in the dir, to compile.
 - Then Simply open TF2,
 - do sudo ./inject.sh
