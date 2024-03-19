@@ -39,7 +39,6 @@ void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
 
 		if (!pSentryGun)
 			return;
-		int teamcolor = GetPlayerColor(pSentryGun);
 
 		Vector vecWorld, vecScreen; //Setup the Vectors.
 
@@ -47,7 +46,7 @@ void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
 
 		if (gDrawManager.WorldToScreen(vecWorld, vecScreen) && pSentryGun && pSentryGun->IsAlive()) //If the player is visble.
 		{
-			gDrawManager.DrawString(vecScreen.x, vecScreen.y, teamcolor, "Sentry"); //Draw on the player.
+			gDrawManager.DrawString(vecScreen.x, vecScreen.y, COLORCODE(255,255,255,255), "Sentry"); //Draw on the player.
 			if (!pSentryGun->IsBuilding())
 			{
 				gDrawManager.DrawString(vecScreen.x, vecScreen.y + 10, 0xFFFFFFFF, "Level: %i", pSentryGun->GetLevel()); //Draw on the player.
@@ -62,7 +61,7 @@ void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
 		if (!pDispenser)
 			return;
 
-		int teamcolor = GetPlayerColor(pDispenser);
+		//int teamcolor = GetPlayerColor(pDispenser);
 
 		Vector vecWorld, vecScreen;
 
@@ -70,7 +69,7 @@ void ESP::Buildings(CBaseEntity* pEntity) /* do other buildings later */
 
 		if (gDrawManager.WorldToScreen(vecWorld, vecScreen) && pDispenser && pDispenser->IsAlive())
 		{
-			gDrawManager.DrawString(vecScreen.x, vecScreen.y, teamcolor, "Dispenser"); //Draw on the player.
+			gDrawManager.DrawString(vecScreen.x, vecScreen.y, COLORCODE(255,255,255,255), "Dispenser"); //Draw on the player.
 			if (!pDispenser->IsBuilding())
 			{
 				gDrawManager.DrawString(vecScreen.x, vecScreen.y + 10, 0xFFFFFFFF, "Level: %i", pDispenser->GetLevel()); //Draw on the player.

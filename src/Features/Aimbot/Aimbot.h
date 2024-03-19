@@ -15,6 +15,7 @@ public:
     float GetFOV(Vector angle, Vector src, Vector dst);
     bool CanAmbassadorHeadshot(CBaseEntity* pLocal);
     void w(bool silent, Vector vAngs, CUserCmd* pCommand);
+    Vector IFuckingHateFiggas;
 };
 
 extern CAim gAim;

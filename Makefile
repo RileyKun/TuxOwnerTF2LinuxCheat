@@ -42,7 +42,7 @@ ifeq ($(config),release_x32)
   INCLUDES += -lSDL2
   FORCE_INCLUDE += -lSDL2
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O2 -fPIC -fpermissive -fPIC -std=c++11 -lSDL2
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O2 -fPIC -fpermissive -fPIC -std=c++11 -lSDL2 -Wwrite-strings
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS +=

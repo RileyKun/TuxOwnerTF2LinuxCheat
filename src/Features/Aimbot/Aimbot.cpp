@@ -72,7 +72,6 @@ float CAim::flGetDistance(Vector vOrigin, Vector vLocalOrigin)
 int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	int iBestTarget = -1;
-						 //this num could be smaller 
 	float flDistToBest = 99999.f;
 
 	Vector vLocal = pLocal->GetEyePosition();
@@ -132,25 +131,25 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			iBestTarget = i;
 		}
         */
-        //if (distance < minimalDistance)//gCvars.aimbot.fov)
-	//	{
-	
-	if (flFOV < gCheatMenu.aimbot_fov)
+    if (distance < minimalDistance)//gCvars.aimbot.fov)
 	{
-		if (gCheatMenu.PlayerMode[i] == 2)
-			return i;
-		if (pEntity->GetHealth() < 100)
-			return i;
-		if (pEntity->GetClassNum() == TF2_Heavy && gCheatMenu.priorties_preferheavy)
-			return i;
-		if (pEntity->GetClassNum() == TF2_Medic && gCheatMenu.priorties_prefermedic)
-			return i;
-		//flDistToBest = flDistToTarget;
-		//flDistToBest = flFOV;
-		gCheatMenu.iAimbotIndex = i;
-		iBestTarget = i;
+	
+		if (flFOV < gCheatMenu.aimbot_fov)
+		{
+			if (gCheatMenu.PlayerMode[i] == 2)
+				return i;
+			if (pEntity->GetHealth() < 100)
+				return i;
+			if (pEntity->GetClassNum() == TF2_Heavy && gCheatMenu.priorties_preferheavy)
+				return i;
+			if (pEntity->GetClassNum() == TF2_Medic && gCheatMenu.priorties_prefermedic)
+				return i;
+			//flDistToBest = flDistToTarget;
+			//flDistToBest = flFOV;
+			gCheatMenu.iAimbotIndex = i;
+			iBestTarget = i;
+		}
 	}
-		//}
 	}
 
 	return iBestTarget;
@@ -316,6 +315,8 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	//if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
 	//		if (!CanAmbassadorHeadshot(pLocal)) return;	
 	pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
+
+	IFuckingHateFiggas = vAngs;
 
 	if (!gCheatMenu.aimbot_silent) {
 		gInts.Engine->SetViewAngles(pCommand->viewangles);
