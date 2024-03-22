@@ -281,10 +281,7 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (!gCheatMenu.aimbot_active)
 		return;
 	
-	if (gCheatMenu.warp_enable && !epic[SDL_SCANCODE_R])
-	{
-		return;
-	}
+	
 
 	//if (!pLocal->GetActiveWeapon())
 	//	return;
@@ -311,6 +308,10 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	gCheatMenu.iAimbotIndex = pEntity->GetIndex();
 	//auto pWep = pLocal->GetActiveWeapon();
 
+	if (gCheatMenu.warp_enable && !epic[SDL_SCANCODE_R])
+	{
+		return;
+	}
 
 	//if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
 	//		if (!CanAmbassadorHeadshot(pLocal)) return;	

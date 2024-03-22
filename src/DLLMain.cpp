@@ -10,7 +10,7 @@
 #include "argh.h" // killsay and soon to be annoncer
 #include <SDL2/SDL.h>
 #include "Client.h"
-
+/* for SDL */
 
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
@@ -23,6 +23,8 @@ CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
 CreateInterface_t CvarFactory = NULL;
 
+uintptr_t swapwindow = NULL;
+uintptr_t pollevent  = NULL;
 
 void mainThread()
 {	
@@ -62,7 +64,7 @@ void mainThread()
 
 		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");
 		
-		//gKillSay.InitKillSay(); // yes, we run it in dllmain. Don't ask, i dont know. 
+		gKillSay.InitKillSay(); // yes, we run it in dllmain. Don't ask, i dont know. 
 		// todo later ^
 		//Setup the Panel hook so we can draw.
 		if( !gInts.Panels )
@@ -83,23 +85,13 @@ void mainThread()
 		
 		static auto cl_move_addr = gSignatures.GetEngineSignature("55 89 E5 57 56 53 81 EC 9C 00 00 00 83 3D ? ? ? ? 01");
         CL_Move_Detour.Init(cl_move_addr, (void *) Hooked_CL_Move);
-		//gConfig.LoadConfig(); // load config on inject.
-
-		// This sig here wont work on linux (a replacement one is further down)
-		//DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");
-		//XASSERT(dwClientModeAddress);
-		//gInts.ClientMode = **(ClientModeShared***)(dwClientModeAddress + 2);
-		//LOGDEBUG("g_pClientModeShared_ptr client.dll+0x%X", (DWORD)gInts.ClientMode - dwClientBase);
-
-		// because of how LD_PRELOAD works and the fact that g_pClientmodeshared is NULL roughly until the menu appears,
-		// we need to wait for the pointer to not be NULL before we try to hook this function.
-		// since this mainThread() function is not called from a thread, we need to make another thread that we can block until
-		// clientmodeshared is no longer NULL
-
+		
 		VMTBaseManager* clientHook = new VMTBaseManager();
 		clientHook->Init(gInts.Client);
 		clientHook->HookMethod(&FrameStageNotifyThink, 35);
 		clientHook->Rehook();
+
+
 
 		auto findCreateMove = [&]()
 		{

@@ -86,12 +86,41 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 
 void FrameStageNotifyThink(void* CHLClient, void *_this, ClientFrameStage_t Stage)
 {
-	if (gInts.Engine->IsInGame() && Stage == FRAME_RENDER_START)
+	if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 	{
-		CBaseEntity *oEntity = gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());
+		for (auto i = 1; i <= gInts.Engine->GetMaxClients(); i++)
+		{
+			CBaseEntity *entity = nullptr;
+			player_info_t temp;
 
-		
+			if (!(entity = gInts.EntList->GetClientEntity(i)))
+				continue;
 
+			if (entity->IsDormant())
+				continue;
+
+			if (!gInts.Engine->GetPlayerInfo(i, &temp))
+				continue;
+
+			if (!entity->IsAlive())
+				continue;
+
+			Vector vX = entity->GetAngles();
+			Vector vY = entity->GetAnglesHTC();
+			auto *WritePitch = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]"));
+			auto *WriteYaw = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]"));
+			if (gCheatMenu.hvh_resolver)
+			{
+				if (vX.x == -89.0f)
+				{
+					*WritePitch = 90.0f;
+				}
+				if (vX.x == 89.0f)
+				{
+					*WritePitch = -90.0f;
+				}
+			}
+		}
 	}
 	/*
 	gESP.FrameStageNotify(Stage);

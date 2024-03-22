@@ -14,7 +14,7 @@ void CDrawManager::Initialize()
 
 	gInts.Engine->GetScreenSize(gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
 	m_Font = gInts.Surface->CreateFont();
-	gInts.Surface->SetFontGlyphSet(m_Font, "Tahoma", ESP_HEIGHT, 800, 0, 0, 0x200);
+	gInts.Surface->SetFontGlyphSet(m_Font, "TF2 BUILD", ESP_HEIGHT, 800, 0, 0, 0x200);
 }
 void CDrawManager::outline(int x, int y, int w, int h, int clrColor)
 {

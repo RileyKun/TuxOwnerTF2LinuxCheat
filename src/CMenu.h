@@ -82,11 +82,12 @@ public:
 
 	float misc_saveconfig;
 	float misc_loadconfig;
-
+	/* hvh stuff */
 	float hvh_switch;
 	float hvh_enable;
 	float hvh_yaw;
 	float hvh_pitch;
+	float hvh_resolver;
 
 	float followbot_enabled;
 

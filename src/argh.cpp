@@ -2,6 +2,8 @@
 #include "CMenu.h"
 #include <cstring>
 
+#define GET_PLAYER_USERID(userid) gInts.EntList->GetClientEntity(gInts.Engine->GetPlayerForUserID(userid))
+
 CKillSay gKillSay;
 void CKillSay::InitKillSay()
 {
@@ -61,24 +63,20 @@ void CKillSay::FireGameEvent(IGameEvent *event)
 {	
 	if (!strcmp(event->GetName(), "player_changeclass")) 
 	{
-		int vid = event->GetInt("userid");
+		if(const auto& pEntity = GET_PLAYER_USERID(event->GetInt("userid")))
+		{
+			//int nIndex = pEntity->GetIndex();
+			player_info_t pInfo;
 
-		const auto& entity = gInts.EntList->GetClientEntity(gInts.Engine->GetPlayerForUserID(vid));
+			auto class_str = get_player_class(event->GetInt("class"));
 
-
-		if (!entity)
-			return;
-
-		player_info_t pInfo;
-		if (!gInts.Engine->GetPlayerInfo(entity->GetIndex(), &pInfo))
-			gInts.Engine->ClientCmd_Unrestricted("echo line 44 on killsay");
-			return;
-
-		std::string class_str = get_player_class(event->GetInt("class"));
-
-		std::string actualstringforchangeclass = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + " changed class to " + std::string(class_str);  
+			if (gInts.Engine->GetPlayerInfo(pEntity->GetIndex(), &pInfo))
+			{
+				std::string actualstringforchangeclass = "\x6[\x3Tux\x6] \x4" + std::string(pInfo.name) + " changed class to " + std::string(class_str);  
 		
-		gInts.ClientMode->m_pChat->ChatPrintf(0, actualstringforchangeclass.c_str());	  
+				gInts.ClientMode->m_pChat->ChatPrintf(0, actualstringforchangeclass.c_str());	  
+			}
+		}
 	}
 	
 }
