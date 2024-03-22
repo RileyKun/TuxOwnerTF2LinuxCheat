@@ -22,6 +22,10 @@ CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
 CreateInterface_t CvarFactory = NULL;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d0b6cc6 (only show charged ticks when dt is enabled)
 void mainThread()
 {	
 	if (gInts.Client == NULL) //Prevent repeat callings.

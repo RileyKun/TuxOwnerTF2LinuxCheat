@@ -298,9 +298,8 @@ void CCheatMenu::DrawInfo(int speedValue, float ticks)
 	gDrawManager.DrawString(x + 4, y - (h + 4) + 40, clrColor, "Anti-Aim: %s", AntiAimStatus);
 
 	//gDrawManager.DrawString(x + 4, y - (h + 4) + 50, clrColor, "Uhh: %d", pEntity->GetVelocity().x);
-
-	gDrawManager.DrawString(x + 4, y - (h + 4) + 50, clrColor, "Charged Ticks: %f", ticks);
-
+	if (gCheatMenu.warp_enable)
+		gDrawManager.DrawString(x + 4, y - (h + 4) + 50, clrColor, "Charged Ticks: %f", ticks);
 	gDrawManager.OutlineRect(x - 1, y - (h + 4) - 1, w + 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 	gDrawManager.OutlineRect(x + 1, y - (h + 4) + 1, w - 2, (h + 4), COLORCODE(0, 0, 0, 255)); // test
 
