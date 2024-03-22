@@ -174,6 +174,7 @@ void CCheatMenu::Render(void)
 		i = AddItem(i, " - Enable AA", &gCheatMenu.hvh_enable, 0, 1, 1, false);
 		i = AddItem(i, " - Pitch", &gCheatMenu.hvh_pitch, 0, 4, 1, false);
 		i = AddItem(i, " - Yaw", &gCheatMenu.hvh_yaw, 0, 11, 1, false);
+		i = AddItem(i, " - Resolver", &gCheatMenu.hvh_resolver, 0, 1, 1, false);
 	}
 	i = AddItem(i, "Misc", &gCheatMenu.misc_switch, 0, 1, 1, true);
 	if (gCheatMenu.misc_switch)
