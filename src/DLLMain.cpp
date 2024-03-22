@@ -10,7 +10,6 @@
 #include "argh.h" // killsay and soon to be annoncer
 #include <SDL2/SDL.h>
 #include "Client.h"
-/* for SDL */
 
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
@@ -22,9 +21,6 @@ CreateInterface_t ClientFactory = NULL;
 CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
 CreateInterface_t CvarFactory = NULL;
-
-uintptr_t swapwindow = NULL;
-uintptr_t pollevent  = NULL;
 
 void mainThread()
 {	
