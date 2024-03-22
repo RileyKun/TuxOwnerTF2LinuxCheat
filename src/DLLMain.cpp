@@ -35,7 +35,6 @@ void mainThread()
 		VGUIFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/vguimatsurface.so" ), "CreateInterface" );
 		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./tf/bin/client.so" ), "CreateInterface" );
 		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "./bin/engine.so" ), "CreateInterface" );
-		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("./bin/libvstdlib.so"), "CreateInterface");
 		
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
@@ -44,7 +43,6 @@ void mainThread()
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
-		gInts.cvar = ( ICvar* )CvarFactory("VEngineCvar004", NULL);
 
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
@@ -52,7 +50,6 @@ void mainThread()
 		XASSERT(gInts.EntList);
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
-		XASSERT(gInts.cvar);
 		XASSERT(gInts.EventManager);
 
 		g.sendpacket = gSignatures.GetEngineSignature("BE ? ? ? ? E9 ? ? ? ? 8D B6 00 00 00 00 A1 ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? 85 C0 0F 84 ? ? ? ? 8D 55 A8 C7 44 24 ? ? ? ? ?") + 1;

@@ -46,17 +46,12 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
         pLocal->setfov(gCheatMenu.misc_vmfov);
         if (pLocal->GetCond() & TFCond_Zoomed)
         {
-            pLocal->setfov(70);
+            pLocal->setfov(30);
         }
     }
     if (!gCheatMenu.misc_enablevmfov)
     {
         pLocal->setfov(90); // reset fov i guess sdfshdjdfhj
-    }
-    if (gCheatMenu.misc_svcheats)
-    {
-        static ConVar* cheats = gInts.cvar->FindVar("sv_cheats");
-        cheats->SetValue(1);
     }
     //*g.sendpacket = penisstate[SDL_SCANCODE_R];
 
