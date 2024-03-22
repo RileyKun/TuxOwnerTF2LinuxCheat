@@ -2,7 +2,6 @@
 A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from darkstorm based stuff (Dumpster-Fire, Potassium, ETC). This source is a mess btw.
 
 # not gonna add todo list.. jk.
-- Annoncer,
 - SetupVelocity,
 - getting SDL_Event to work,
 - Pure Bypass,
@@ -27,6 +26,7 @@ A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from dark
 - DT
 - Warp
 - Anti-Warp (verry shitty)
+- Annoncer
 - and more. (i think i dont remember)
 
 
