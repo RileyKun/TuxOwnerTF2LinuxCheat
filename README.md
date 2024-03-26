@@ -33,7 +33,7 @@ A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from dark
 # How to Install & Use TuxOwner?
 - 1. Install SDL & GLEW.
 - Pacman Package Version:
-- sudo pacman -S lib32-glibc lib32-sdl lib32-glew g++-multilib
+- sudo pacman -S lib32-glibc lib32-sdl lib32-glew 
 - Debian Based Distros:
 - sudo apt install libglew-dev:i386 libsdl2-dev:i386 gcc-multilib libsdl2-dev
 - do "make" in the dir, to compile.
