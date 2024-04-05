@@ -42,4 +42,4 @@ A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from dark
 - Done! You have injected.
 
 # Contributers
-- Right now, no one. But Any contributution will be credited.
+- RileyKun
