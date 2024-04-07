@@ -68,6 +68,25 @@ float CAim::flGetDistance(Vector vOrigin, Vector vLocalOrigin)
 	return m_fDistance;
 }
 
+/*
+    	if (distance < minimalDistance)//gCvars.aimbot.fov)
+		{
+	
+			if (flFOV < gCheatMenu.aimbot_fov)
+			{
+				if (gCheatMenu.PlayerMode[i] == 2)
+					return i;
+				if (pEntity->GetHealth() < 100)
+					return i;
+				if (pEntity->GetClassNum() == TF2_Heavy && gCheatMenu.priorties_preferheavy)
+					return i;
+				if (pEntity->GetClassNum() == TF2_Medic && gCheatMenu.priorties_prefermedic)
+					return i;
+				gCheatMenu.iAimbotIndex = i;
+				iBestTarget = i;
+			}
+		}
+		*/
 
 int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
@@ -124,32 +143,20 @@ int CAim::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
         double minimalDistance = 99999.0;
         float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);
 		float distance = flGetDistance(vEntity, pLocal->GetEyePosition());
-        /*
-		if (flDistToTarget < flDistToBest)
+		float max_delta = FLT_MAX;
+		float delta = calc_angle(pLocal->GetEyePosition(), pEntity->GetEyePosition(), pCommand->viewangles).Length();
+		if (delta < max_delta && delta < gCheatMenu.aimbot_fov) 
 		{
-			flDistToBest = flDistToTarget;
-			iBestTarget = i;
-		}
-        */
-    if (distance < minimalDistance)//gCvars.aimbot.fov)
-	{
-	
-		if (flFOV < gCheatMenu.aimbot_fov)
-		{
-			if (gCheatMenu.PlayerMode[i] == 2)
-				return i;
-			if (pEntity->GetHealth() < 100)
+			max_delta = delta;
+			gCheatMenu.iAimbotIndex = i;
+			if (pEntity->GetHealth() < 100 && gCheatMenu.aimbot_preferlowhp)
 				return i;
 			if (pEntity->GetClassNum() == TF2_Heavy && gCheatMenu.priorties_preferheavy)
 				return i;
 			if (pEntity->GetClassNum() == TF2_Medic && gCheatMenu.priorties_prefermedic)
 				return i;
-			//flDistToBest = flDistToTarget;
-			//flDistToBest = flFOV;
-			gCheatMenu.iAimbotIndex = i;
 			iBestTarget = i;
 		}
-	}
 	}
 
 	return iBestTarget;
@@ -316,8 +323,6 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	//if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
 	//		if (!CanAmbassadorHeadshot(pLocal)) return;	
 	pCommand->viewangles = vAngs; // always set this cuz otherwise the viewangles will desync.
-
-	IFuckingHateFiggas = vAngs;
 
 	if (!gCheatMenu.aimbot_silent) {
 		gInts.Engine->SetViewAngles(pCommand->viewangles);
