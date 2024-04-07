@@ -4,7 +4,6 @@ A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from dark
 # not gonna add todo list.. jk.
 - SetupVelocity,
 - getting SDL_Event to work,
-- Pure Bypass,
 - Backtrack,
 - ConVars
 - Making Anti-Warp better
