@@ -29,6 +29,10 @@ A linux cheat made by Vannie/Reality (me). Most of the stuff is pasted from dark
 - Annoncer
 - and more. (i think i dont remember)
 
+# Known issues
+- 1. ESP breaking on new match
+- The fix: doing hud_reloadscheme when it breaks.
+- 2. Aimbot Missing alot.
 
 # How to Install & Use TuxOwner?
 - 1. Install SDL & GLEW.
