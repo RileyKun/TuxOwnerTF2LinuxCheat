@@ -67,6 +67,8 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
   	// https://github.com/eternal-blu/ateris-technologies/blob/main/ateris-internal/Framework/SDK/TF2/Entities.cpp#L235
   	if (pCmd->buttons & IN_ATTACK)
     	return;
+	if (pCmd->buttons & IN_RELOAD)
+		return;
   // anti-aim isn't enabled, don't bother.
   if (!gCheatMenu.hvh_enable)
     return;
@@ -173,84 +175,6 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     	break;
   	}
  	}
-  switch(gCheatMenu.hvh_pitch){
-  case 0:
-    break;
-  case 1:
-    angles.x = -271.f;
-    break;
-  case 2:
-    angles.x = -89.f;
-    break;
-  case 3:
-    angles.y = 271.f;
-    break;
-  case 4:
-    angles.y = 89.f;
-    break;
-  }
-
-  switch(gCheatMenu.hvh_yaw){
-  case 0:
-    break;
-  case 1:
-    angles.y -= -90.0f; // NOTE: Riley; These probably need to be changed around but I cannot test.
-    break;
-  case 2:
-    angles.y += 90.0f;
-    break;
-  case 3:
-    angles.y -= 180;
-    break;
-  case 4:
-    angles.y = 89.99985719438652715.f;
-    break;
-  case 5:
-    angles.y = RandFloatRange(-180.0f, 180.0f); // TODO: remove this
-    break;
-  case 6:{
-    if (*g.sendpacket)
-        angles.y += 90.0f;
-      else
-        angles.y += -90.0f;
-    break;
-  }
-  case 7:{
-    if (*g.sendpacket)
-        angles.y += -90.0f;
-      else
-        angles.y += 90.0f;
-    break;
-  }
-  case 8:{
-    if (*g.sendpacket) 
-      angles.y += -90.0f;
-    else 
-      angles.y += 0.0f;
-    break;
-  }
-  case 9:{
-    if (*g.sendpacket)
-        angles.y += 135.0f;
-      else
-        angles.y += -135.0f;
-    break;
-  }
-  case 10:{
-    if (*g.sendpacket)
-        angles.y += -135.0f;
-      else
-        angles.y += 135.0f;
-    break;
-  }
-  case 11:{
-    if (*g.sendpacket)
-        angles.y += 90.0f;
-      else
-        angles.y += 0.0f;
-    break;
-  }
-  }
 
 	pCmd->viewangles = angles;
 	movementfix(pCmd, vOldAngles, fOldSidemove, fOldForward);

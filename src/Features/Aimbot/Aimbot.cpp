@@ -288,8 +288,10 @@ void CAim::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (!gCheatMenu.aimbot_active)
 		return;
 	
-	
-
+	if (pCommand->buttons & IN_RELOAD) // if we are reloading, fucking stop trying to shoot
+	{
+		return;
+	}
 	//if (!pLocal->GetActiveWeapon())
 	//	return;
 
