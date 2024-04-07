@@ -37,25 +37,17 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 			pCommand->sidemove = -sinf(flYaw) * (450.0f * flScale);
 		};
 
+    // TODO: Move this to FrameStageNotify and cast it to a global variable
 		CBaseEntity* pLocal = GetBaseEntity(me); //Grab the local player's entity pointer.
 
-		if (pLocal == NULL) //This should never happen, but never say never. 0xC0000005 is no laughing matter.
+    // TODO: wrap this
+		if (pLocal == NULL)
 			return bReturn;
+
 		CBaseEntity *oEntity = gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());		
+
 		gTrigger.Run(pLocal, pCommand);
 		gAim.Run(pLocal, pCommand);
-		/*
-		if (gCheatMenu.IsDTing) 
-		{// anti-warp and stuff
-			pCommand->buttons &= ~IN_ATTACK;
-			if (gCheatMenu.anti_warp)
-			{
-				//WalkTo(pLocal->GetVelocityLocal(), pLocal->GetAbsOrigin(), RemapValClamped(static_cast<float>(gCheatMenu.warp_value), 14.0f, 22.0f, 0.605f, 1.0f));
-				pCommand->forwardmove *= -0.0;
-				pCommand->sidemove *= -0.0;
-			}
-		}
-		*/ // sadly, broken for now.
 		gMisc.Run(pLocal, pCommand);
 		gStab.Run(pLocal, pCommand);
 		gHvH.Run(pLocal, pCommand);

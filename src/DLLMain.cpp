@@ -52,6 +52,7 @@ void mainThread()
 		XASSERT(gInts.ModelInfo);
 		XASSERT(gInts.EventManager);
 
+    // TODO: b_SendPacket should not be sigged. This can be done with a ReturnAddress check or with inline assembly.
 		g.sendpacket = gSignatures.GetEngineSignature("BE ? ? ? ? E9 ? ? ? ? 8D B6 00 00 00 00 A1 ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? 85 C0 0F 84 ? ? ? ? 8D 55 A8 C7 44 24 ? ? ? ? ?") + 1;
 
 		gInts.Engine->ClientCmd_Unrestricted("echo INJECTED LOL FUCK VOLVO!!");

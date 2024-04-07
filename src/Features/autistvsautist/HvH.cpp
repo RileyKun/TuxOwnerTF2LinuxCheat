@@ -50,106 +50,110 @@ float RandFloatRange(float min, float max)
 }
 
 
-void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
+void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
 {
-	CUserCmd* pCmd = pCommand;
-	Vector vOldAngles = pCommand->viewangles;
-	float fOldForward = pCommand->forwardmove;
-	float fOldSidemove = pCommand->sidemove;
-	Vector/*&*/ angles = pCommand->viewangles;
+  // anti-aim isn't enabled, don't bother.
+  if (!gCheatMenu.hvh_enable)
+    return;
+
+  // NOTE: Riley; Instead of checking for IN_ATTACK like this from CUserCmd...
+  // We should check to see if we are reloading, if our weapon is charged
+  // (in that case, beggars bazooka, huntsman, etc.), check if we are not
+  // reloading, and then check if our weapon is able to fire (time between gunfire, dragon's fury, etc.)
+  // This will then mean: Anti-Aim doesn't stick disabled while holding Mouse1
+  // You can also re-use this check for aimbot.
+  // useful reference material from ateris-v3_src
+  // https://github.com/eternal-blu/ateris-technologies/blob/main/ateris-internal/Framework/SDK/TF2/Entities.cpp#L372
+  // https://github.com/eternal-blu/ateris-technologies/blob/main/ateris-internal/Framework/SDK/TF2/Entities.cpp#L235
+  if (pCmd->buttons & IN_ATTACK)
+    return;
+
+	Vector vOldAngles = pCmd->viewangles;
+	float fOldForward = pCmd->forwardmove;
+	float fOldSidemove = pCmd->sidemove;
+	Vector/*&*/ angles = pCmd->viewangles;
 	static bool flip = false;
 	bool clamp = false;
 
-	//Yea yea, use case instead, I don't care enough to actually change it right now, I'm only doing this update cuz I'm a bored.
+  switch(gCheatMenu.hvh_pitch){
+  case 0:
+    break;
+  case 1:
+    angles.x = -271.f;
+    break;
+  case 2:
+    angles.x = -89.f;
+    break;
+  case 3:
+    angles.y = 271.f;
+    break;
+  case 4:
+    angles.y = 89.f;
+    break;
+  }
 
-	if (!gCheatMenu.hvh_enable)
-		return;
+  switch(gCheatMenu.hvh_yaw){
+  case 0:
+    break;
+  case 1:
+    angles.y -= -90.0f; // NOTE: Riley; These probably need to be changed around but I cannot test.
+    break;
+  case 2:
+    angles.y += 90.0f;
+    break;
+  case 3:
+    angles.y -= 180;
+    break;
+  case 4:
+    angles.y = 89.99985719438652715.f;
+    break;
+  case 5:
+    angles.y = RandFloatRange(-180.0f, 180.0f); // TODO: remove this
+    break;
+  case 6:{
+    if (*g.sendpacket)
+        angles.y += 90.0f;
+      else
+        angles.y += -90.0f;
+    break;
+  }
+  case 7:{
+    if (*g.sendpacket)
+        angles.y += -90.0f;
+      else
+        angles.y += 90.0f;
+    break;
+  }
+  case 8:{
+    if (*g.sendpacket) 
+      angles.y += -90.0f;
+    else 
+      angles.y += 0.0f;
+    break;
+  }
+  case 9:{
+    if (*g.sendpacket)
+        angles.y += 135.0f;
+      else
+        angles.y += -135.0f;
+    break;
+  }
+  case 10:{
+    if (*g.sendpacket)
+        angles.y += -135.0f;
+      else
+        angles.y += 135.0f;
+    break;
+  }
+  case 11:{
+    if (*g.sendpacket)
+        angles.y += 90.0f;
+      else
+        angles.y += 0.0f;
+    break;
+  }
+  }
 
-	if (pCommand->buttons & IN_ATTACK)
-		return;
-
-	//Pitch Anti-Aims
-	if (gCheatMenu.hvh_pitch > 0)
-	{
-		if (gCheatMenu.hvh_pitch == 1)//Fake Up
-			angles.x = -271.0;
-		if (gCheatMenu.hvh_pitch == 2)//Up
-			angles.x = -89.0f;
-		if (gCheatMenu.hvh_pitch == 3)//Fake Down
-			angles.x = 271.0;
-		if (gCheatMenu.hvh_pitch == 4)//Down
-			angles.x = 89.0f;
-	}
-
-	//Yaw Anti-Aims
-	if (gCheatMenu.hvh_yaw)
-	{
-		if (gCheatMenu.hvh_yaw == 1)//Right
-			angles.y -= 90.0f;
-
-
-		if (gCheatMenu.hvh_yaw == 2)//Left
-			angles.y += 90.0f;
-
-		if (gCheatMenu.hvh_yaw == 3)//Back
-			angles.y -= 180;
-
-		if (gCheatMenu.hvh_yaw == 4)//Emotion
-			angles.y = (float)-89.99985719438652715;
-
-		if (gCheatMenu.hvh_yaw == 5)//Random
-			angles.y = RandFloatRange(-180.0f, 180.0f);
-        
-		if (gCheatMenu.hvh_yaw == 6) //Fake Sideways Right
-		{
-			if (*g.sendpacket)
-				angles.y += 90.0f;
-			else
-				angles.y += -90.0f;
-		}
-
-		if (gCheatMenu.hvh_yaw == 7) //Fake Sideways Left
-		{
-			if (*g.sendpacket)
-				angles.y += -90.0f;
-			else
-				angles.y += 90.0f;
-		}
-
-		if (gCheatMenu.hvh_yaw == 8) //Fake Right
-		{
-			if (*g.sendpacket) angles.y += -90.0f;
-			else angles.y += 0.0f;
-		}
-
-		if (gCheatMenu.hvh_yaw == 9)//Half Backwards Left
-		{
-			if (*g.sendpacket)
-				angles.y += 135.0f;
-			else
-				angles.y += -135.0f;
-		}
-
-		if (gCheatMenu.hvh_yaw == 10)//Half Backwards Right
-		{
-			if (*g.sendpacket)
-				angles.y += -135.0f;
-			else
-				angles.y += 135.0f;
-		}
-
-		if (gCheatMenu.hvh_yaw == 11) //Fake Left
-		{
-			if (*g.sendpacket)
-				angles.y += 90.0f;
-			else
-				angles.y += 0.0f;
-		}
-	}
-
-	//	if (clamp) fClampAngle(angles);
-
-	//Util->SilentMovementFix(pCommand, angles);
-	pCommand->viewangles = angles;
+	pCmd->viewangles = angles;
 	movementfix(pCmd, vOldAngles, fOldSidemove, fOldForward);
 }
