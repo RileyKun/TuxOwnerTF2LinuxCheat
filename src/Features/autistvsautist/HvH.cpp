@@ -52,6 +52,21 @@ float RandFloatRange(float min, float max)
 
 void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
 {
+  	// anti-aim isn't enabled, don't bother.
+  	if (!gCheatMenu.hvh_enable)
+    	return;
+
+  	// NOTE: Riley; Instead of checking for IN_ATTACK like this from CUserCmd...
+  	// We should check to see if we are reloading, if our weapon is charged
+  	// (in that case, beggars bazooka, huntsman, etc.), check if we are not
+ 	// reloading, and then check if our weapon is able to fire (time between gunfire, dragon's fury, etc.)
+  	// This will then mean: Anti-Aim doesn't stick disabled while holding Mouse1
+  	// You can also re-use this check for aimbot.
+  	// useful reference material from ateris-v3_src
+  	// https://github.com/eternal-blu/ateris-technologies/blob/main/ateris-internal/Framework/SDK/TF2/Entities.cpp#L372
+  	// https://github.com/eternal-blu/ateris-technologies/blob/main/ateris-internal/Framework/SDK/TF2/Entities.cpp#L235
+  	if (pCmd->buttons & IN_ATTACK)
+    	return;
   // anti-aim isn't enabled, don't bother.
   if (!gCheatMenu.hvh_enable)
     return;
@@ -75,6 +90,89 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
 	static bool flip = false;
 	bool clamp = false;
 
+	// I hate this. But you cannot use float on switches, so we have to cast it. 
+	int hvh_pitchintegerified = static_cast<int>(gCheatMenu.hvh_pitch);
+	int hvh_yawintegerified   = static_cast<int>(gCheatMenu.hvh_yaw);
+  	switch(hvh_pitchintegerified)
+	{
+  	case 0:
+    	break;
+  	case 1:
+    	angles.x = -271.f;
+    	break;
+  	case 2:
+    	angles.x = -89.f;
+    	break;
+  	case 3:
+    	angles.y = 271.f;
+    	break;
+  	case 4:
+    	angles.y = 89.f;
+    	break;
+  	}
+
+  	switch(hvh_yawintegerified)
+	{
+  	case 0:
+    	break;
+  	case 1:
+    	angles.y -= -90.0f; // NOTE: Riley; These probably need to be changed around but I cannot test.
+    	break;
+  	case 2:
+    	angles.y += 90.0f;
+    	break;
+  	case 3:
+    	angles.y -= 180;
+    	break;
+  	case 4:
+    	angles.y = 89.99985719438652715f; 
+    	break;
+  	case 5:
+    	angles.y = RandFloatRange(-180.0f, 180.0f); // TODO: remove this
+    	break;
+  	case 6:{
+    	if (*g.sendpacket)
+        	angles.y += 90.0f;
+      	else
+        	angles.y += -90.0f;
+   	 	break;
+  	}
+  	case 7:{
+    	if (*g.sendpacket)
+        	angles.y += -90.0f;
+      	else
+        	angles.y += 90.0f;
+    	break;
+  	}
+  	case 8:{
+    	if (*g.sendpacket) 
+      		angles.y += -90.0f;
+    	else 
+      		angles.y += 0.0f;
+    	break;
+  	}
+  	case 9:{
+    	if (*g.sendpacket)
+        	angles.y += 135.0f;
+      	else
+        	angles.y += -135.0f;
+    	break;
+  	}
+  	case 10:{
+    	if (*g.sendpacket)
+        	angles.y += -135.0f;
+      	else
+        	angles.y += 135.0f;
+    	break;
+  	}
+  	case 11:{
+    	if (*g.sendpacket)
+        	angles.y += 90.0f;
+      	else
+        	angles.y += 0.0f;
+    	break;
+  	}
+ 	}
   switch(gCheatMenu.hvh_pitch){
   case 0:
     break;
