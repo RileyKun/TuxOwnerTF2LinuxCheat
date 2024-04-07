@@ -44,12 +44,10 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 		CBaseEntity *oEntity = gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());		
 		gTrigger.Run(pLocal, pCommand);
 		gAim.Run(pLocal, pCommand);
+		/*
 		if (gCheatMenu.IsDTing) 
 		{// anti-warp and stuff
 			pCommand->buttons &= ~IN_ATTACK;
-			if (gCheatMenu.iAimbotIndex) // let the aimbot think ????
-				pCommand->viewangles = gAim.IFuckingHateFiggas;
-				pCommand->buttons |= IN_ATTACK; // apparently i have to do this, on rapidfire. according to cathook
 			if (gCheatMenu.anti_warp)
 			{
 				//WalkTo(pLocal->GetVelocityLocal(), pLocal->GetAbsOrigin(), RemapValClamped(static_cast<float>(gCheatMenu.warp_value), 14.0f, 22.0f, 0.605f, 1.0f));
@@ -57,6 +55,7 @@ bool Hooked_CreateMove(void *ClientMode, float input_sample_frametime, CUserCmd 
 				pCommand->sidemove *= -0.0;
 			}
 		}
+		*/ // sadly, broken for now.
 		gMisc.Run(pLocal, pCommand);
 		gStab.Run(pLocal, pCommand);
 		gHvH.Run(pLocal, pCommand);

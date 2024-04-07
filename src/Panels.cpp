@@ -54,12 +54,33 @@ void Hooked_PaintTraverse( void *pPanels, unsigned int vguiPanel, bool forceRepa
 				gCheatMenu.Render();
 			}
 
+			bool check = false;
+			if (!gInts.Engine->IsInGame() && check == false)
+			{
+				void** pure_addr = nullptr;
+				if (!pure_addr)
+				{
+					pure_addr = *reinterpret_cast<void***>(gSignatures.GetEngineSignature("A1 F8 93 8C 00 85 C0") + 1);
+				} *
+					pure_addr = (void*)0;
+
+				check = true;
+			}
 
 
 			CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me);  //Grab the local player's entity.
 
 			if (pBaseLocalEnt == NULL) //Always check for null pointers.
 				return;
+
+
+
+			/*		 |
+			sv_pure? v
+			A1 F8 93 8C 00 85 C0
+			*/
+
+			
 
 			gRadar.DrawRadarBack();
 			gESP.StartThisshit(pBaseLocalEnt);
