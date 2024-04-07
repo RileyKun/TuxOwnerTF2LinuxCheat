@@ -52,5 +52,6 @@ Vector CBaseEntity::get_hitbox_pos(int hitbox_idx)
         return VEC_ZERO;
 
     return center_of_hitbox(hdr, bones, HITBOX_SET, hitbox_idx);
+    
 }
 

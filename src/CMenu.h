@@ -47,6 +47,8 @@ public:
 	float aimbot_autoscope;
 	float aimbot_fov;
 	float aimbot_preferlowhp;
+	float aimbot_infinitedistance;
+	float aimbot_distance;
 
 	float triggerbot_switch;
 	float triggerbot_active;

@@ -78,5 +78,4 @@ void CKillSay::FireGameEvent(IGameEvent *event)
 			}
 		}
 	}
-	
 }

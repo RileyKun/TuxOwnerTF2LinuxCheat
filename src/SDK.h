@@ -219,7 +219,6 @@ public:
 	}
 	void GetRenderable() 
 	{
-    	//return (Renderable*)((uint32_t)ent + 0x4);
 		void* pRenderable = (void*)(this + 0x4);
 		return pRenderable;
 	}
@@ -244,22 +243,12 @@ public:
 	{
 		DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "m_Collision", "m_vecMaxs");
 	}
-	//m_vecOrigin          = gNetvars.get_offset("DT_BaseEntity", "m_vecOrigin");
-	//Vector GetHitboxPosition(CBaseEntity* pEntity, int iHitbox);
 	uintptr_t* GetModel()
 	{
 		void* pRenderable = (void*)(this + 0x4);
 		typedef uintptr_t* (*OriginalFn)(void*);
 		return getvfunc<OriginalFn>(pRenderable, 9)(pRenderable);
 	}
-	/*
-	CBaseCombatWeapon* CBaseEntity::GetActiveWeapon()
-	{
-		DYNVAR(pHandle, DWORD, "DT_BaseCombatCharacter", "m_hActiveWeapon");
-		return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
-	}
-	*/
-	
 	char* szGetClass()
 	{
 		DYNVAR(iClass, int, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
@@ -310,18 +299,6 @@ public:
 	{
 		return (GetCond() & TFCond_Zoomed) != 0;
 	}
-	bool ReadyToBackstabEnt()
-	{
-		//DYNVAR_RETURN(bool, CBaseCombatWeapon*, "DT_TFWeaponKnife", "m_bReadyToBackstab");
-		int offset = gNetVars.get_offset("DT_TFWeaponKnife", "m_bReadyToBackstab");
-		return *(bool*)(this + offset);
-	}
-	//CBaseCombatWeapon* ReadyToBackstabWpn()
-	//{
-		//DYNVAR_RETURN(bool, CBaseCombatWeapon*, "DT_TFWeaponKnife", "m_bReadyToBackstab");
-	//	int offset = gNetVars.get_offset("DT_TFWeaponKnife", "m_bReadyToBackstab");
-	//	return *(bool*)(this + offset);
-	//}
 	Vector get_hitbox_pos(int hitbox_idx);
 	CBaseCombatWeapon* GetActiveWeapon();
 	Vector GetAngles()
@@ -334,9 +311,6 @@ public:
 		static int offset = gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]");
 		return *(Vector*)(this + offset);
 	}
-	/*
-	* m_vecVelocity = g_pNetVars->GetOffset(XorStr("DT_BasePlayer"), XorStr("m_vecVelocity[0]"));
-	*/
 	Vector GetVelocityLocal()
 	{
 		DYNVAR_RETURN(Vector, this, "DT_BasePlayer", "localdata", "m_vecVelocity[0]");
@@ -743,18 +717,6 @@ public:
 	// KeyValue memory will be freed by manager if not needed anymore
 	virtual void FireGameEvent(IGameEvent *event) = 0;
 };
-
-/*
-class IGameEventManager2
-{
-public:
-	bool AddListener(IGameEventListener2 *listener, const char *name, bool bServerSide)
-	{
-		typedef bool(*OriginalFn)(void*, IGameEventListener2 *, const char *, bool);
-		return getvfunc<OriginalFn>(this, 3)(this, listener, name, bServerSide);
-	}
-};
-*/
 class IGameEventManager2 {
 public:
 	virtual ~IGameEventManager2( void ) {};
@@ -847,18 +809,6 @@ class ClientModeShared
 public:
 	char pad[28];
 	CHudChat* m_pChat;
-	/*
-	bool IsChatPanelOutOfFocus(void)
-	{
-		typedef void *(*OriginalFn)(void *);
-		void *CHudChat = getvfunc<OriginalFn>(this, 19)(this);
-		if(CHudChat)
-		{
-			return *(float *)((uintptr_t)CHudChat + 0xFC) == 0;
-		}
-		return false;
-	}
-	*/
 };
 
 class alignas(16)VectorAligned : public Vector
@@ -1057,6 +1007,78 @@ public:
 	}
 };
 
+
+#define PRINTF_FORMAT_STRING 
+
+class OverlayText_t
+{
+public:
+	OverlayText_t()
+	{
+		nextOverlayText = 0;
+		bUseOrigin = false;
+		lineOffset = 0;
+		flXPos = 0;
+		flYPos = 0;
+		text[0] = 0;
+		m_flEndTime = 0.0f;
+		m_nServerCount = -1;
+		m_nCreationTick = -1;
+		r = g = b = a = 255;
+	}
+
+	bool			IsDead();
+	void			SetEndTime(float duration);
+
+	Vector			origin;
+	bool			bUseOrigin;
+	int				lineOffset;
+	float			flXPos;
+	float			flYPos;
+	char			text[512];
+	float			m_flEndTime;			// When does this text go away
+	int				m_nCreationTick;		// If > 0, show only one server frame
+	int				m_nServerCount;			// compare server spawn count to remove stale overlays
+	int				r;
+	int				g;
+	int				b;
+	int				a;
+	OverlayText_t* nextOverlayText;
+};
+
+class Color_t; // we dont have it. and i dont care enough to implement it, so, FAK OFF NEGGER! -vanny
+
+class CDebugOverlay
+{
+public:
+	virtual void AddEntityTextOverlay(int ent_index, int line_offset, float duration, int r, int g, int b, int a, PRINTF_FORMAT_STRING const char* format, ...) = 0;
+	virtual void AddBoxOverlay(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation, int r, int g, int b, int a, float duration) = 0;
+	virtual void AddTriangleOverlay(const Vector& p1, const Vector& p2, const Vector& p3, int r, int g, int b, int a, bool noDepthTest, float duration) = 0;
+	virtual void AddLineOverlay(const Vector& origin, const Vector& dest, int r, int g, int b, bool noDepthTest, float duration) = 0;
+	virtual void AddTextOverlay(const Vector& origin, float duration, PRINTF_FORMAT_STRING const char* format, ...) = 0;
+	virtual void AddTextOverlay(const Vector& origin, int line_offset, float duration, PRINTF_FORMAT_STRING const char* format, ...) = 0;
+	virtual void AddScreenTextOverlay(float flXPos, float flYPos, int line_offset, float flDuration, int r, int g, int b, int a, const char* text) = 0;
+	virtual void AddSweptBoxOverlay(const Vector& start, const Vector& end, const Vector& mins, const Vector& max, const Vector& angles, int r, int g, int b, int a, float flDuration) = 0;
+	virtual void AddGridOverlay(const Vector& origin) = 0;
+	virtual int ScreenPosition(const Vector& point, Vector& screen) = 0;
+	virtual int ScreenPosition(float flXPos, float flYPos, Vector& screen) = 0;
+
+	virtual OverlayText_t* GetFirst(void) = 0;
+	virtual OverlayText_t* GetNext(OverlayText_t* current) = 0;
+	virtual void ClearDeadOverlays(void) = 0;
+	virtual void ClearAllOverlays() = 0;
+
+	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, float r, float g, float b, float alpha, PRINTF_FORMAT_STRING const char* format, ...) = 0;
+	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, int r, int g, int b, int a, PRINTF_FORMAT_STRING const char* format, ...) = 0;
+
+	virtual void Unknown_1() = 0;
+	virtual void AddLineOverlayAlpha(const Vector& origin, const Vector& dest, int r, int g, int b, int a, bool noDepthTest, float duration) = 0;
+	virtual void AddBoxOverlay2(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation, const Color_t& faceColor, const Color_t& edgeColor, float duration) = 0;
+
+private:
+	inline void AddTextOverlay(const Vector& origin, int line_offset, float duration, int r, int g, int b, int a, PRINTF_FORMAT_STRING const char* format, ...) {} /* catch improper use of bad interface. Needed because '0' duration can be resolved by compiler to NULL format string (i.e., compiles but calls wrong function) */
+};
+
 class CInterfaces
 {
 public:
@@ -1069,6 +1091,7 @@ public:
 	IEngineTrace* EngineTrace;
 	IVModelInfo* ModelInfo;
 	IGameEventManager2* EventManager;
+	CDebugOverlay* DebugOverlay; 
 };
 extern CInterfaces gInts;
 extern CPlayerVariables gPlayerVars;

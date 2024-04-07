@@ -72,6 +72,9 @@ void CCheatMenu::Render(void)
 		i = AddItem(i, " - Hitbox", &gCheatMenu.aimbot_hitbox, 0, 18, 1, false);
 		i = AddItem(i, " - Autoshoot", &gCheatMenu.aimbot_autoshoot, 0, 1, 1, false);
 		i = AddItem(i, " - AutoScope", &gCheatMenu.aimbot_autoscope, 0, 1, 1, false);
+		i = AddItem(i, " - Infinite Distance", &gCheatMenu.aimbot_infinitedistance, 0, 1, 1, false);
+		if (!gCheatMenu.aimbot_infinitedistance)
+			i = AddItem(i, " - Distance", &gCheatMenu.aimbot_distance, 0, 100000, 1, false);
 		i = AddItem(i, " - Zoomed Only", &gCheatMenu.aimbot_zoomedonly, 0, 1, 1, false);
 	}
 
@@ -327,31 +330,6 @@ void CCheatMenu::DrawMenu(void)
 	gInts.Surface->GetCursorPosition(cur_x, cur_y);
 
 	CBaseEntity *pLocal = GetBaseEntity(me);
-//	Display *d = XOpenDisplay(NULL);
-	//if (!d) 
-	//{
-//		printf("xopen display not working yo");
-//		return;
-//	}
-
-	/*
-	if (gInput.InArea(x, y, w, h, cur_x, cur_y))
-	{
-		if (keystate[SDL_SCANCODE_END]) // retarded but whatever. I cannot get mouse state, i tried x11, SDL, even raw input. Doesnt Work.
-		{
-			cur_x = iMenu_Pos_X;
-    		cur_y = iMenu_Pos_Y;
-		}
-	}
-	*/ // shit doesnt work 
-	//XCloseDisplay(d);
-	
-	//if (mouseState[SDL_BUTTON_LEFT])
-	//{
-    //	cur_x = iMenu_Pos_X;
-    //	cur_y = iMenu_Pos_Y;
-	//}
-
 
 	int clrColor = Color::COLORNULLCORE;
 
@@ -367,7 +345,7 @@ void CCheatMenu::DrawMenu(void)
 	gDrawManager.OutlineRect(x - 1, (y - (h + 4)) - 1, w + 2, (iMenuItems * h + 21) + 2, COLORCODE(0, 0, 0, 255));
 	gDrawManager.OutlineRect(x + 1, (y - (h + 4)) + 1, w - 2, (iMenuItems * h + 21) - 2, COLORCODE(0, 0, 0, 255));
 
-	gDrawManager.DrawString(x + 4, y - 16, clrColor, "TuxOwner");
+	gDrawManager.DrawString(x + 4, y - 16, COLORCODE(255,255,255,255), "TuxOwner");
 
 	for (int i = 0; i < iMenuItems; i++)
 	{
@@ -377,11 +355,11 @@ void CCheatMenu::DrawMenu(void)
 			{
 				if (!(pMenu[i].value[0]))
 				{
-					gDrawManager.DrawString(x + 2, y + (h * i), clrColor, "[+] %s", pMenu[i].szTitle);
+					gDrawManager.DrawString(x + 2, y + (h * i), COLORCODE(255,255,255,255), "[+] %s", pMenu[i].szTitle);
 				}
 				else if (pMenu[i].value[0])
 				{
-					gDrawManager.DrawString(x + 2, y + (h * i), clrColor, "[-] %s", pMenu[i].szTitle);
+					gDrawManager.DrawString(x + 2, y + (h * i),  COLORCODE(255,255,255,255), "[-] %s", pMenu[i].szTitle);
 				}
 			}
 			else

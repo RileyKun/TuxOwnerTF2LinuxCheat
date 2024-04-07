@@ -69,9 +69,9 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCmd)
     	return;
 	if (pCmd->buttons & IN_RELOAD)
 		return;
-  // anti-aim isn't enabled, don't bother.
-  if (!gCheatMenu.hvh_enable)
-    return;
+  	// anti-aim isn't enabled, don't bother.
+  	if (!gCheatMenu.hvh_enable)
+    	return;
 
   // NOTE: Riley; Instead of checking for IN_ATTACK like this from CUserCmd...
   // We should check to see if we are reloading, if our weapon is charged

@@ -43,7 +43,7 @@ void mainThread()
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
-
+		gInts.DebugOverlay = (CDebugOverlay* )EngineFactory("VDebugOverlay003", NULL);
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.Client);
 		XASSERT(gInts.Engine);
@@ -51,6 +51,7 @@ void mainThread()
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
 		XASSERT(gInts.EventManager);
+		XASSERT(gInts.DebugOverlay);
 
     // TODO: b_SendPacket should not be sigged. This can be done with a ReturnAddress check or with inline assembly.
 		g.sendpacket = gSignatures.GetEngineSignature("BE ? ? ? ? E9 ? ? ? ? 8D B6 00 00 00 00 A1 ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? 85 C0 0F 84 ? ? ? ? 8D 55 A8 C7 44 24 ? ? ? ? ?") + 1;
