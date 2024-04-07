@@ -6,7 +6,7 @@ class CHvH
 {
 public:
 
-	void Run(CBaseEntity* pLocal, CUserCmd* pCommand);
+	void Run(CBaseEntity* pLocal, CUserCmd* pCmd);
     /*
 	Checkbox resolver = Checkbox("Resolver");
 	Listbox resolverkey = Listbox("Resolver Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E" }, 0);
